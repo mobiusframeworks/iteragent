@@ -1,6 +1,6 @@
 {
   "name": "intertools",
-  "version": "1.0.12",
+  "version": "1.0.13",
   "description": "InterTools - Intelligent development tools with multi-agent orchestration for Cursor",
   "main": "dist/index.js",
   "bin": {
@@ -12,7 +12,7 @@
     "start": "node dist/index.js",
     "test": "jest",
     "setup-cursor": "node -e \"const fs=require('fs');const path=require('path');const projectRoot=process.cwd();const cursorDir=path.join(projectRoot,'.cursor');if(!fs.existsSync(cursorDir))fs.mkdirSync(cursorDir,{recursive:true});const aiConfig=require('./.cursor/ai.json');fs.writeFileSync(path.join(cursorDir,'ai.json'),JSON.stringify(aiConfig,null,2));console.log('✅ Cursor AI configuration installed');\"",
-    "postinstall": "npm run setup-cursor && npm run install-cursor-rules"
+    "postinstall": "npm run setup-cursor"
   },
   "keywords": [
     "cursor",
