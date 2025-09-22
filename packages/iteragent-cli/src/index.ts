@@ -837,6 +837,166 @@ program
           });
 
         program
+          .command('update')
+          .description('Check for updates and upgrade InterTools')
+          .option('--check', 'Check current version and latest available')
+          .option('--upgrade', 'Upgrade to latest version')
+          .option('--force', 'Force upgrade even if already latest')
+          .option('--global', 'Update global installation')
+          .option('--local', 'Update local installation')
+          .action(async (options) => {
+            try {
+              const { execSync } = require('child_process');
+              const fs = require('fs');
+              const path = require('path');
+              
+              // Get current version
+              const packageJson = JSON.parse(fs.readFileSync(path.join(__dirname, '../package.json'), 'utf8'));
+              const currentVersion = packageJson.version;
+              
+              console.log(chalk.blue('🔍 InterTools Version Checker'));
+              console.log(chalk.gray(`Current version: ${currentVersion}`));
+              
+              if (options.check) {
+                console.log(chalk.blue('📡 Checking for updates...'));
+                
+                try {
+                  // Check latest version from NPM
+                  const latestVersion = execSync('npm view intertools version', { encoding: 'utf8' }).trim();
+                  
+                  console.log(chalk.gray(`Latest version: ${latestVersion}`));
+                  
+                  if (currentVersion === latestVersion) {
+                    console.log(chalk.green('✅ You are running the latest version!'));
+                  } else {
+                    console.log(chalk.yellow('🔄 Update available!'));
+                    console.log(chalk.cyan(`Current: ${currentVersion} → Latest: ${latestVersion}`));
+                    console.log(chalk.gray('Run: intertools update --upgrade'));
+                  }
+                  
+                } catch (error) {
+                  console.log(chalk.red('❌ Failed to check for updates:'), error instanceof Error ? error.message : String(error));
+                }
+                
+              } else if (options.upgrade) {
+                console.log(chalk.blue('🚀 Upgrading InterTools...'));
+                
+                try {
+                  // Check if we need to upgrade
+                  const latestVersion = execSync('npm view intertools version', { encoding: 'utf8' }).trim();
+                  
+                  if (currentVersion === latestVersion && !options.force) {
+                    console.log(chalk.green('✅ Already running latest version!'));
+                    console.log(chalk.gray('Use --force to reinstall anyway'));
+                    return;
+                  }
+                  
+                  console.log(chalk.cyan(`Upgrading from ${currentVersion} to ${latestVersion}...`));
+                  
+                  if (options.global) {
+                    console.log(chalk.blue('📦 Upgrading global installation...'));
+                    execSync('npm install -g intertools@latest', { stdio: 'inherit' });
+                    console.log(chalk.green('✅ Global installation upgraded!'));
+                    
+                  } else if (options.local) {
+                    console.log(chalk.blue('📦 Upgrading local installation...'));
+                    execSync('npm install intertools@latest', { stdio: 'inherit' });
+                    console.log(chalk.green('✅ Local installation upgraded!'));
+                    
+                  } else {
+                    // Try global first, fallback to local
+                    try {
+                      console.log(chalk.blue('📦 Attempting global upgrade...'));
+                      execSync('npm install -g intertools@latest', { stdio: 'inherit' });
+                      console.log(chalk.green('✅ Global installation upgraded!'));
+                    } catch (globalError) {
+                      console.log(chalk.yellow('⚠️ Global upgrade failed, trying local...'));
+                      execSync('npm install intertools@latest', { stdio: 'inherit' });
+                      console.log(chalk.green('✅ Local installation upgraded!'));
+                    }
+                  }
+                  
+                  console.log(chalk.green('🎉 Upgrade completed successfully!'));
+                  console.log(chalk.cyan('Run: intertools --version to verify'));
+                  
+                } catch (error) {
+                  console.log(chalk.red('❌ Upgrade failed:'), error instanceof Error ? error.message : String(error));
+                  console.log(chalk.gray('Try running with sudo for global updates'));
+                }
+                
+              } else {
+                console.log(chalk.blue('🔍 InterTools Update Manager'));
+                console.log(chalk.gray('Manage InterTools updates and versions'));
+                console.log(chalk.gray(''));
+                console.log(chalk.cyan('Commands:'));
+                console.log(chalk.gray('  --check              Check current and latest versions'));
+                console.log(chalk.gray('  --upgrade            Upgrade to latest version'));
+                console.log(chalk.gray('  --force              Force upgrade even if latest'));
+                console.log(chalk.gray('  --global             Update global installation'));
+                console.log(chalk.gray('  --local              Update local installation'));
+                console.log(chalk.gray(''));
+                console.log(chalk.yellow('Examples:'));
+                console.log(chalk.gray('  intertools update --check'));
+                console.log(chalk.gray('  intertools update --upgrade'));
+                console.log(chalk.gray('  intertools update --upgrade --global'));
+                console.log(chalk.gray('  intertools update --upgrade --force'));
+              }
+              
+            } catch (error) {
+              console.error(chalk.red('❌ Error:'), error);
+              process.exit(1);
+            }
+          });
+
+        program
+          .command('version')
+          .description('Show InterTools version information')
+          .option('--check-updates', 'Also check for available updates')
+          .action(async (options) => {
+            try {
+              const fs = require('fs');
+              const path = require('path');
+              const { execSync } = require('child_process');
+              
+              // Get current version
+              const packageJson = JSON.parse(fs.readFileSync(path.join(__dirname, '../package.json'), 'utf8'));
+              const currentVersion = packageJson.version;
+              
+              console.log(chalk.blue('📦 InterTools Version Information'));
+              console.log(chalk.gray(`Current Version: ${currentVersion}`));
+              console.log(chalk.gray(`Package Name: ${packageJson.name}`));
+              console.log(chalk.gray(`Description: ${packageJson.description}`));
+              console.log(chalk.gray(`Node.js: ${process.version}`));
+              console.log(chalk.gray(`Platform: ${process.platform} ${process.arch}`));
+              
+              if (options.checkUpdates) {
+                console.log(chalk.blue('\n📡 Checking for updates...'));
+                
+                try {
+                  const latestVersion = execSync('npm view intertools version', { encoding: 'utf8' }).trim();
+                  
+                  console.log(chalk.gray(`Latest Version: ${latestVersion}`));
+                  
+                  if (currentVersion === latestVersion) {
+                    console.log(chalk.green('✅ You are running the latest version!'));
+                  } else {
+                    console.log(chalk.yellow('🔄 Update available!'));
+                    console.log(chalk.cyan(`Current: ${currentVersion} → Latest: ${latestVersion}`));
+                    console.log(chalk.gray('Run: intertools update --upgrade'));
+                  }
+                  
+                } catch (error) {
+                  console.log(chalk.red('❌ Failed to check for updates:'), error instanceof Error ? error.message : String(error));
+                }
+              }
+              
+            } catch (error) {
+              console.error(chalk.red('❌ Error:'), error);
+              process.exit(1);
+            }
+          });
+
+        program
           .command('seamless')
           .description('Start Agent Zero seamless integration for your app')
           .option('--start', 'Start seamless integration')
