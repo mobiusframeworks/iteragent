@@ -41,7 +41,25 @@ curl -sSL https://raw.githubusercontent.com/luvs2spluj/iteragent/main/cursor-ins
    iteragent init
    iteragent run
    ```
-4. **Press Enter** to send fix requests to Cursor's AI
+4. **Terminal Feedback**: Real-time suggestions appear automatically
+5. **Manage Suggestions**: Use allowlist/blocklist to filter suggestions
+6. **Execute Commands**: Run suggested fixes automatically
+7. **Press Enter** to send fix requests to Cursor's AI
+
+### **New Terminal Feedback Commands**
+```bash
+# Manage terminal feedback
+iteragent feedback --enable/--disable/--status
+
+# Manage suggestion filters
+iteragent allowlist add "error"
+iteragent blocklist add "deprecated"
+
+# View and manage suggestions
+iteragent suggestions
+iteragent suggestions --clear
+iteragent execute suggestion_id
+```
 
 ## 📊 **Cursor Store Submission Process**
 
@@ -77,11 +95,16 @@ Your `manifest.cursor.json` includes:
 ## 🎯 **Key Selling Points for Cursor Store**
 
 1. **Seamless Cursor Integration**: Creates `.cursor/inbox/` for AI communication
-2. **Zero Configuration**: Works out of the box with most projects
-3. **Intelligent Testing**: Playwright + accessibility + performance checks
-4. **Real-time Monitoring**: Live log analysis and error detection
-5. **Interactive TUI**: Beautiful terminal interface
-6. **Multiple Project Support**: Node.js, Python, Rust, Go, etc.
+2. **Terminal Feedback System**: Real-time console log analysis and intelligent suggestions
+3. **Smart Suggestion Management**: Allowlist/blocklist for suggestion filtering
+4. **Automatic Code Execution**: Execute suggested commands and inject code
+5. **Zero Configuration**: Works out of the box with most projects
+6. **Intelligent Testing**: Playwright + accessibility + performance checks
+7. **Real-time Monitoring**: Live log analysis and error detection
+8. **Interactive TUI**: Beautiful terminal interface
+9. **Trading Bot Support**: Specialized features for financial applications
+10. **Mobile Development**: React Native, Flutter, Expo, Ionic support
+11. **Multiple Project Support**: Node.js, Python, Rust, Go, etc.
 
 ## 📈 **Success Metrics to Track**
 
