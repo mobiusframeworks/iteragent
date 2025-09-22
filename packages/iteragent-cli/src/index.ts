@@ -20,11 +20,15 @@ import { CursorAIFunctionExecutor, SpeedOptimizationSuggestion } from './cursor-
 import { CursorAIFunctionPanel } from './cursor-ai-panel';
 import { AgentZeroManager } from './agent-zero-manager';
 import { DockerAgentZeroService } from './docker-agent-zero';
+import { AgentZeroGitManager } from './agent-zero-git-manager';
+import { AgentZeroContainerService } from './agent-zero-container-service';
+import { AgentZeroSeamlessIntegration } from './agent-zero-seamless-integration';
+import { InterToolsOrchestrator } from './intertools-orchestrator';
 
 const program = new Command();
 
 program
-  .name('iteragent')
+  .name('intertools')
   .description('Iterative testing agent for Cursor IDE')
   .version('1.0.0');
 
@@ -57,20 +61,39 @@ program
     }
   });
 
-program
-  .command('init')
-  .description('Initialize IterAgent configuration for current project')
-  .option('--trading', 'Initialize with trading bot configuration')
-  .action(async (options) => {
-    try {
-      console.log(chalk.blue('🔧 Initializing IterAgent...'));
-      await initializeProject(options.trading);
-      console.log(chalk.green('✅ IterAgent initialized!'));
-    } catch (error) {
-      console.error(chalk.red('❌ Error:'), error);
-      process.exit(1);
-    }
-  });
+        program
+          .command('init')
+          .description('Initialize IterAgent configuration for current project')
+          .option('--trading', 'Initialize with trading bot configuration')
+          .option('--agent-zero', 'Initialize with Agent Zero integration')
+          .action(async (options) => {
+            try {
+              console.log(chalk.blue('🔧 Initializing IterAgent...'));
+              await initializeProject(options.trading);
+              
+              if (options.agentZero) {
+                console.log(chalk.cyan('🤖 Setting up Agent Zero integration...'));
+                const agentZeroGitManager = new AgentZeroGitManager({
+                  promptUser: true,
+                  enableVenv: true,
+                  enableWebUI: true,
+                  enableAPI: true,
+                  enableLogging: true
+                });
+                
+                // Create Agent Zero configuration
+                await agentZeroGitManager.start();
+                console.log(chalk.green('✅ Agent Zero integration initialized!'));
+                console.log(chalk.cyan('📊 Dashboard: http://localhost:50001'));
+                console.log(chalk.cyan('🤖 Agent Zero: http://localhost:50001'));
+              }
+              
+              console.log(chalk.green('✅ IterAgent initialized!'));
+            } catch (error) {
+              console.error(chalk.red('❌ Error:'), error);
+              process.exit(1);
+            }
+          });
 
 program
   .command('init-trading')
@@ -375,108 +398,617 @@ program
     }
   });
 
-program
-  .command('agent-zero')
-  .description('Agent Zero mode - Connect to Docker Agent Zero runtime')
-  .option('--start', 'Start Agent Zero mode')
-  .option('--stop', 'Stop Agent Zero mode')
-  .option('--status', 'Show Agent Zero status')
-  .option('--dashboard', 'Open Agent Zero dashboard')
-  .option('--logs', 'Show Agent Zero logs')
-  .option('--enhancements', 'Show available enhancements')
-  .option('--apply-enhancement <name>', 'Apply specific enhancement')
-  .action(async (options) => {
+        program
+          .command('agent-zero')
+          .description('Agent Zero mode - Fast, safe, universal Agent Zero integration')
+          .option('--start', 'Start Agent Zero mode (Git-based, prompts user for installation)')
+          .option('--stop', 'Stop Agent Zero mode')
+          .option('--status', 'Show Agent Zero status')
+          .option('--dashboard', 'Open Agent Zero dashboard')
+          .option('--logs', 'Show Agent Zero logs')
+          .option('--install', 'Install Agent Zero (Git clone + venv)')
+          .option('--update', 'Update Agent Zero to latest version')
+          .option('--reinstall', 'Reinstall Agent Zero fresh')
+          .option('--docker', 'Use Docker installation (requires Docker)')
+          .option('--venv', 'Use Python virtual environment (recommended)')
+          .option('--local', 'Use local Python installation')
+          .option('--no-prompts', 'Skip user prompts, use defaults')
+          .option('--container', 'Use persistent Docker container (recommended for multiple sessions)')
+          .action(async (options) => {
+            try {
+              if (options.container) {
+                // Use the new persistent Docker container approach
+                const containerService = new AgentZeroContainerService({
+                  imageName: 'agent0ai/agent-zero:latest',
+                  containerName: 'iteragent-agent-zero',
+                  port: 50001,
+                  enablePersistence: true,
+                  autoStart: true,
+                  healthCheckInterval: 30000,
+                  restartPolicy: 'unless-stopped'
+                });
+                
+                if (options.start) {
+                  console.log(chalk.blue('🐳 Starting Agent Zero Container Service...'));
+                  console.log(chalk.cyan('📦 This will create a persistent Docker container'));
+                  console.log(chalk.cyan('🔄 Container will stay running between sessions'));
+                  
+                  await containerService.initialize();
+                  console.log(chalk.green('✅ Agent Zero Container Service started successfully'));
+                  console.log(chalk.blue(`📊 Dashboard: http://localhost:${containerService.getConfig().port + 1}`));
+                  console.log(chalk.blue(`🤖 Agent Zero: http://localhost:${containerService.getConfig().port}`));
+                  
+                  // Keep the process running
+                  process.on('SIGINT', async () => {
+                    console.log(chalk.yellow('\n⏹️ Disconnecting from container...'));
+                    await containerService.disconnect();
+                    process.exit(0);
+                  });
+                  
+                } else if (options.stop) {
+                  console.log(chalk.yellow('⏹️ Stopping Agent Zero container...'));
+                  await containerService.stop();
+                  console.log(chalk.green('✅ Agent Zero container stopped successfully'));
+                } else if (options.status) {
+                  const status = await containerService.getStatus();
+                  const config = containerService.getConfig();
+                  
+                  console.log(chalk.blue('📊 Agent Zero Container Status:'));
+                  console.log(chalk.gray(`Status: ${status?.status || 'Not found'}`));
+                  console.log(chalk.gray(`Health: ${status?.health || 'Unknown'}`));
+                  console.log(chalk.gray(`Image: ${status?.image || 'Unknown'}`));
+                  console.log(chalk.gray(`Uptime: ${status?.uptime ? Math.floor(status.uptime / 1000 / 60) + ' minutes' : 'Unknown'}`));
+                  console.log(chalk.gray(`Connections: ${containerService.getConnectionCount()}`));
+                  console.log(chalk.gray(`Container Name: ${config.containerName}`));
+                  console.log(chalk.gray(`Port: ${config.port}`));
+                  console.log(chalk.gray(`Restart Policy: ${config.restartPolicy}`));
+                  console.log(chalk.gray(`Persistence: ${config.enablePersistence ? 'Enabled' : 'Disabled'}`));
+                } else if (options.dashboard) {
+                  const config = containerService.getConfig();
+                  console.log(chalk.blue('🌐 Opening Agent Zero container dashboard...'));
+                  console.log(chalk.green(`Dashboard URL: http://localhost:${config.port + 1}`));
+                  console.log(chalk.gray('The dashboard will open in your default browser'));
+                  
+                  // Open dashboard in browser
+                  const { exec } = require('child_process');
+                  exec(`open http://localhost:${config.port + 1}`);
+                } else {
+                  console.log(chalk.blue('🐳 Agent Zero Container Service'));
+                  console.log(chalk.gray('Persistent Docker container for Agent Zero'));
+                  console.log(chalk.gray(''));
+                  console.log(chalk.cyan('Key Features:'));
+                  console.log(chalk.gray('  • Persistent Docker container'));
+                  console.log(chalk.gray('  • Stays running between sessions'));
+                  console.log(chalk.gray('  • Multiple connections supported'));
+                  console.log(chalk.gray('  • Automatic health monitoring'));
+                  console.log(chalk.gray('  • Container management dashboard'));
+                  console.log(chalk.gray('  • Automatic restart policy'));
+                  console.log(chalk.gray(''));
+                  console.log(chalk.yellow('Commands:'));
+                  console.log(chalk.gray('  --start        Start container service'));
+                  console.log(chalk.gray('  --stop         Stop container'));
+                  console.log(chalk.gray('  --status       Show container status'));
+                  console.log(chalk.gray('  --dashboard    Open container dashboard'));
+                  console.log(chalk.gray(''));
+                  console.log(chalk.green('Benefits over Git approach:'));
+                  console.log(chalk.gray('  • True persistence - container stays running'));
+                  console.log(chalk.gray('  • Faster subsequent starts (just connect)'));
+                  console.log(chalk.gray('  • Shared state across multiple sessions'));
+                  console.log(chalk.gray('  • Better resource efficiency'));
+                  console.log(chalk.gray('  • Complete isolation and security'));
+                }
+                return;
+              }
+              
+              // Use the new Git-based Agent Zero manager
+              const agentZeroGitManager = new AgentZeroGitManager({
+                enableDocker: options.docker || false,
+                enableVenv: options.venv || true,
+                enableLocalInstall: options.local || false,
+                promptUser: !options.noPrompts,
+                port: 50001,
+                enableWebUI: true,
+                enableAPI: true,
+                enableLogging: true
+              });
+              
+              if (options.start) {
+                console.log(chalk.blue('🚀 Starting Agent Zero Git Integration...'));
+                console.log(chalk.cyan('📥 This will automatically detect and install Agent Zero if needed'));
+                console.log(chalk.cyan('🤖 You\'ll be prompted for installation preferences'));
+                
+                await agentZeroGitManager.start();
+                console.log(chalk.green('✅ Agent Zero Git Integration started successfully'));
+                console.log(chalk.blue(`📊 Dashboard: http://localhost:${agentZeroGitManager.getConfig().port}`));
+                console.log(chalk.blue(`🤖 Agent Zero: http://localhost:${agentZeroGitManager.getConfig().port}`));
+                
+                // Keep the process running
+                process.on('SIGINT', async () => {
+                  console.log(chalk.yellow('\n⏹️ Stopping Agent Zero...'));
+                  await agentZeroGitManager.stop();
+                  process.exit(0);
+                });
+                
+              } else if (options.stop) {
+                console.log(chalk.yellow('⏹️ Stopping Agent Zero mode...'));
+                await agentZeroGitManager.stop();
+                console.log(chalk.green('✅ Agent Zero mode stopped successfully'));
+              } else if (options.status) {
+                const installation = agentZeroGitManager.getInstallation();
+                const config = agentZeroGitManager.getConfig();
+                
+                console.log(chalk.blue('📊 Agent Zero Git Integration Status:'));
+                console.log(chalk.gray(`Status: ${installation?.status || 'Not installed'}`));
+                console.log(chalk.gray(`Type: ${installation?.type || 'None'}`));
+                console.log(chalk.gray(`Health: ${installation?.health || 'Unknown'}`));
+                console.log(chalk.gray(`Version: ${installation?.version || 'Unknown'}`));
+                console.log(chalk.gray(`Path: ${installation?.path || 'None'}`));
+                console.log(chalk.gray(`Port: ${config.port}`));
+                console.log(chalk.gray(`Repository: ${config.repository}`));
+                console.log(chalk.gray(`Security Mode: ${config.securityMode}`));
+                console.log(chalk.gray(`User Prompts: ${config.promptUser ? 'Enabled' : 'Disabled'}`));
+                console.log(chalk.gray(`Auto Update: ${config.autoUpdate ? 'Enabled' : 'Disabled'}`));
+                
+                if (installation?.logs) {
+                  console.log(chalk.cyan('📝 Recent Logs:'));
+                  installation.logs.slice(-5).forEach(log => {
+                    console.log(chalk.gray(`  ${log}`));
+                  });
+                }
+              } else if (options.dashboard) {
+                const config = agentZeroGitManager.getConfig();
+                console.log(chalk.blue('🌐 Opening Agent Zero dashboard...'));
+                console.log(chalk.green(`Dashboard URL: http://localhost:${config.port}`));
+                console.log(chalk.gray('The dashboard will open in your default browser'));
+                
+                // Open dashboard in browser
+                const { exec } = require('child_process');
+                exec(`open http://localhost:${config.port}`);
+              } else if (options.logs) {
+                const installation = agentZeroGitManager.getInstallation();
+                console.log(chalk.blue('📝 Agent Zero Logs:'));
+                
+                if (!installation?.logs || installation.logs.length === 0) {
+                  console.log(chalk.yellow('No logs available'));
+                } else {
+                  installation.logs.slice(-20).forEach(log => {
+                    console.log(chalk.gray(`  ${log}`));
+                  });
+                }
+              } else if (options.install) {
+                console.log(chalk.blue('📥 Installing Agent Zero...'));
+                await agentZeroGitManager.start();
+                console.log(chalk.green('✅ Agent Zero installation completed'));
+              } else if (options.update) {
+                console.log(chalk.blue('🔄 Updating Agent Zero...'));
+                // The update functionality is built into the start method
+                await agentZeroGitManager.start();
+                console.log(chalk.green('✅ Agent Zero updated successfully'));
+              } else if (options.reinstall) {
+                console.log(chalk.blue('🔄 Reinstalling Agent Zero...'));
+                // The reinstall functionality is built into the start method
+                await agentZeroGitManager.start();
+                console.log(chalk.green('✅ Agent Zero reinstalled successfully'));
+              } else {
+                console.log(chalk.blue('🤖 Agent Zero Git Integration'));
+                console.log(chalk.gray('Fast, safe, and universal Agent Zero integration'));
+                console.log(chalk.gray(''));
+                console.log(chalk.cyan('Key Features:'));
+                console.log(chalk.gray('  • Automatic Git clone from official repository'));
+                console.log(chalk.gray('  • Flexible installation (venv, Docker, local)'));
+                console.log(chalk.gray('  • User prompts for installation preferences'));
+                console.log(chalk.gray('  • Real-time dashboard and monitoring'));
+                console.log(chalk.gray('  • Automatic updates and health monitoring'));
+                console.log(chalk.gray('  • Security modes and configurable settings'));
+                console.log(chalk.gray(''));
+                console.log(chalk.yellow('Commands:'));
+                console.log(chalk.gray('  --start        Start with user prompts (recommended)'));
+                console.log(chalk.gray('  --install      Install Agent Zero'));
+                console.log(chalk.gray('  --update       Update to latest version'));
+                console.log(chalk.gray('  --reinstall    Fresh installation'));
+                console.log(chalk.gray('  --status       Show current status'));
+                console.log(chalk.gray('  --dashboard    Open web dashboard'));
+                console.log(chalk.gray('  --logs         Show recent logs'));
+                console.log(chalk.gray('  --docker       Use Docker installation'));
+                console.log(chalk.gray('  --venv         Use Python venv (default)'));
+                console.log(chalk.gray('  --local        Use local Python'));
+                console.log(chalk.gray('  --no-prompts   Skip prompts, use defaults'));
+              }
+            } catch (error) {
+              console.error(chalk.red('❌ Error:'), error);
+              process.exit(1);
+            }
+          });
+
+        program
+          .command('orchestrator')
+          .description('Start InterTools Orchestrator (Big Gun Mode) - Specialized multi-agent system')
+          .option('--start', 'Start orchestrator')
+          .option('--stop', 'Stop orchestrator')
+          .option('--status', 'Show orchestrator status')
+          .option('--agents', 'List specialized agents')
+          .option('--logs', 'Show log analysis results')
+          .option('--cursor-chat', 'Show Cursor chat messages')
+          .option('--monitor', 'Start continuous monitoring')
+          .option('--orchestrator-port <port>', 'Orchestrator API port', '50005')
+          .option('--agent-zero-port <port>', 'Agent Zero port', '50001')
+          .option('--log-interval <ms>', 'Log analysis interval', '5000')
+          .option('--summary-length <chars>', 'Max summary length for Cursor chat', '100')
+          .action(async (options) => {
+            try {
+              const orchestrator = new InterToolsOrchestrator({
+                agentZeroPort: parseInt(options.agentZeroPort),
+                orchestratorPort: parseInt(options.orchestratorPort),
+                logAnalysisInterval: parseInt(options.logInterval),
+                summaryMaxLength: parseInt(options.summaryLength),
+                enableBigGunMode: true,
+                enableSpecializedAgents: true,
+                enableContinuousMonitoring: true,
+                enableCompactSummaries: true,
+                enableCursorIntegration: true,
+                autoStart: true
+              });
+              
+              if (options.start) {
+                console.log(chalk.blue('🚀 Starting InterTools Orchestrator (Big Gun Mode)...'));
+                console.log(chalk.cyan('🎯 Specialized agent coordination'));
+                console.log(chalk.cyan('📊 Continuous log monitoring'));
+                console.log(chalk.cyan('💬 Compact Cursor chat integration'));
+                console.log(chalk.cyan('🔍 Intelligent log interpretation'));
+                
+                await orchestrator.start();
+                
+                console.log(chalk.green('✅ InterTools Orchestrator started successfully'));
+                console.log(chalk.blue(`🤖 Agent Zero: http://localhost:${options.agentZeroPort}`));
+                console.log(chalk.blue(`🎯 Orchestrator API: http://localhost:${options.orchestratorPort}`));
+                console.log(chalk.cyan(`👥 Specialized Agents: ${orchestrator.getAgents().length}`));
+                
+                console.log(chalk.yellow('🔗 InterTools URLs:'));
+                console.log(chalk.gray(`  Status API: http://localhost:${options.orchestratorPort}/api/status`));
+                console.log(chalk.gray(`  Agents API: http://localhost:${options.orchestratorPort}/api/agents`));
+                console.log(chalk.gray(`  Logs API: http://localhost:${options.orchestratorPort}/api/logs`));
+                console.log(chalk.gray(`  Cursor Chat API: http://localhost:${options.orchestratorPort}/api/cursor-chat`));
+                
+                // Keep the process running
+                process.on('SIGINT', async () => {
+                  console.log(chalk.yellow('\n⏹️ Stopping InterTools Orchestrator...'));
+                  await orchestrator.stop();
+                  process.exit(0);
+                });
+                
+              } else if (options.stop) {
+                console.log(chalk.yellow('⏹️ Stopping InterTools Orchestrator...'));
+                await orchestrator.stop();
+                console.log(chalk.green('✅ InterTools Orchestrator stopped successfully'));
+                
+              } else if (options.status) {
+                const agents = orchestrator.getAgents();
+                const logResults = orchestrator.getLogAnalysisResults();
+                const chatMessages = orchestrator.getCursorChatMessages();
+                
+                console.log(chalk.blue('📊 InterTools Orchestrator Status:'));
+                console.log(chalk.gray(`Running: ${orchestrator.isRunning() ? 'Yes' : 'No'}`));
+                console.log(chalk.gray(`Agent Zero Port: ${options.agentZeroPort}`));
+                console.log(chalk.gray(`Orchestrator Port: ${options.orchestratorPort}`));
+                console.log(chalk.gray(`Specialized Agents: ${agents.length}`));
+                console.log(chalk.gray(`Log Analysis Results: ${logResults.length}`));
+                console.log(chalk.gray(`Cursor Chat Messages: ${chatMessages.length}`));
+                
+                console.log(chalk.cyan('👥 Specialized Agents:'));
+                agents.forEach(agent => {
+                  const status = agent.status === 'idle' ? chalk.green('idle') : 
+                                agent.status === 'busy' ? chalk.yellow('busy') : 
+                                chalk.red('error');
+                  console.log(chalk.gray(`  • ${agent.name} (${status}) - ${agent.capabilities.join(', ')}`));
+                });
+                
+              } else if (options.agents) {
+                const agents = orchestrator.getAgents();
+                console.log(chalk.blue('👥 Specialized Agents:'));
+                
+                if (agents.length === 0) {
+                  console.log(chalk.yellow('No agents available'));
+                } else {
+                  agents.forEach(agent => {
+                    const status = agent.status === 'idle' ? chalk.green('idle') : 
+                                  agent.status === 'busy' ? chalk.yellow('busy') : 
+                                  chalk.red('error');
+                    console.log(chalk.gray(`\n${agent.name} (${agent.id})`));
+                    console.log(chalk.gray(`  Type: ${agent.type}`));
+                    console.log(chalk.gray(`  Status: ${status}`));
+                    console.log(chalk.gray(`  Capabilities: ${agent.capabilities.join(', ')}`));
+                    console.log(chalk.gray(`  Tasks Completed: ${agent.performance.tasksCompleted}`));
+                    console.log(chalk.gray(`  Success Rate: ${agent.performance.successRate}%`));
+                    console.log(chalk.gray(`  Avg Execution Time: ${agent.performance.averageExecutionTime}ms`));
+                    if (agent.currentTask) {
+                      console.log(chalk.gray(`  Current Task: ${agent.currentTask}`));
+                    }
+                  });
+                }
+                
+              } else if (options.logs) {
+                const logResults = orchestrator.getLogAnalysisResults();
+                console.log(chalk.blue('📊 Log Analysis Results:'));
+                
+                if (logResults.length === 0) {
+                  console.log(chalk.yellow('No log analysis results available'));
+                } else {
+                  logResults.slice(-10).forEach(result => {
+                    const severity = result.severity === 'critical' ? chalk.red('critical') :
+                                   result.severity === 'high' ? chalk.yellow('high') :
+                                   result.severity === 'medium' ? chalk.blue('medium') :
+                                   chalk.gray('low');
+                    console.log(chalk.gray(`\n${result.id} (${severity})`));
+                    console.log(chalk.gray(`  Source: ${result.source}`));
+                    console.log(chalk.gray(`  Type: ${result.logType}`));
+                    console.log(chalk.gray(`  Summary: ${result.summary}`));
+                    console.log(chalk.gray(`  Compact: ${result.compactSummary}`));
+                    if (result.suggestions.length > 0) {
+                      console.log(chalk.gray(`  Suggestions: ${result.suggestions.join(', ')}`));
+                    }
+                  });
+                }
+                
+              } else if (options.cursorChat) {
+                const chatMessages = orchestrator.getCursorChatMessages();
+                console.log(chalk.blue('💬 Cursor Chat Messages:'));
+                
+                if (chatMessages.length === 0) {
+                  console.log(chalk.yellow('No Cursor chat messages available'));
+                } else {
+                  chatMessages.slice(-10).forEach(message => {
+                    const priority = message.priority === 'critical' ? chalk.red('critical') :
+                                   message.priority === 'high' ? chalk.yellow('high') :
+                                   message.priority === 'medium' ? chalk.blue('medium') :
+                                   chalk.gray('low');
+                    console.log(chalk.gray(`\n${message.id} (${priority})`));
+                    console.log(chalk.gray(`  Type: ${message.type}`));
+                    console.log(chalk.gray(`  Source: ${message.source}`));
+                    console.log(chalk.gray(`  Content: ${message.content}`));
+                    console.log(chalk.gray(`  Actionable: ${message.actionable ? 'Yes' : 'No'}`));
+                  });
+                }
+                
+              } else if (options.monitor) {
+                console.log(chalk.blue('🔍 Starting continuous monitoring...'));
+                console.log(chalk.green('✅ Continuous monitoring is automatically enabled when orchestrator starts'));
+                console.log(chalk.cyan('📊 Monitoring:'));
+                console.log(chalk.gray('  • Console logs (every 5 seconds)'));
+                console.log(chalk.gray('  • Terminal logs (every 5 seconds)'));
+                console.log(chalk.gray('  • Log analysis (every 10 seconds)'));
+                console.log(chalk.gray('  • Cursor chat integration (every 15 seconds)'));
+                
+              } else {
+                console.log(chalk.blue('🎯 InterTools Orchestrator (Big Gun Mode)'));
+                console.log(chalk.gray('Specialized multi-agent system for enhanced development workflow'));
+                console.log(chalk.gray(''));
+                console.log(chalk.cyan('Specialized Agents:'));
+                console.log(chalk.gray('  • Console Log Harvester - Captures and analyzes console output'));
+                console.log(chalk.gray('  • Terminal Log Monitor - Tracks terminal commands and output'));
+                console.log(chalk.gray('  • Cursor Chat Communicator - Sends compact summaries to Cursor'));
+                console.log(chalk.gray('  • Log Interpreter - Analyzes logs and extracts insights'));
+                console.log(chalk.gray('  • Code Change Suggester - Provides actionable code suggestions'));
+                console.log(chalk.gray(''));
+                console.log(chalk.cyan('Key Features:'));
+                console.log(chalk.gray('  • Continuous log monitoring loops'));
+                console.log(chalk.gray('  • Compact, summarized feedback to Cursor'));
+                console.log(chalk.gray('  • Intelligent error interpretation'));
+                console.log(chalk.gray('  • Clear code change suggestions'));
+                console.log(chalk.gray('  • Real-time agent coordination'));
+                console.log(chalk.gray(''));
+                console.log(chalk.yellow('Commands:'));
+                console.log(chalk.gray('  --start                    Start orchestrator'));
+                console.log(chalk.gray('  --stop                     Stop orchestrator'));
+                console.log(chalk.gray('  --status                   Show orchestrator status'));
+                console.log(chalk.gray('  --agents                   List specialized agents'));
+                console.log(chalk.gray('  --logs                     Show log analysis results'));
+                console.log(chalk.gray('  --cursor-chat              Show Cursor chat messages'));
+                console.log(chalk.gray('  --monitor                  Show monitoring status'));
+                console.log(chalk.gray('  --orchestrator-port <port> Set orchestrator API port'));
+                console.log(chalk.gray('  --agent-zero-port <port>   Set Agent Zero port'));
+                console.log(chalk.gray('  --log-interval <ms>        Set log analysis interval'));
+                console.log(chalk.gray('  --summary-length <chars>   Set max summary length'));
+                console.log(chalk.gray(''));
+                console.log(chalk.green('InterTools URLs:'));
+                console.log(chalk.gray('  Status: http://localhost:50005/api/status'));
+                console.log(chalk.gray('  Agents: http://localhost:50005/api/agents'));
+                console.log(chalk.gray('  Logs: http://localhost:50005/api/logs'));
+                console.log(chalk.gray('  Cursor Chat: http://localhost:50005/api/cursor-chat'));
+              }
+              
+            } catch (error) {
+              console.error(chalk.red('❌ Error:'), error);
+              process.exit(1);
+            }
+          });
+
+        program
+          .command('seamless')
+          .description('Start Agent Zero seamless integration for your app')
+          .option('--start', 'Start seamless integration')
+          .option('--stop', 'Stop seamless integration')
+          .option('--status', 'Show integration status')
+          .option('--models', 'List available models')
+          .option('--workflows', 'List available workflows')
+          .option('--test-chat <message>', 'Test chat functionality')
+          .option('--test-completion <prompt>', 'Test completion functionality')
+          .option('--api-port <port>', 'API server port', '50003')
+          .option('--agent-zero-port <port>', 'Agent Zero port', '50001')
+          .action(async (options) => {
     try {
-      const agentZeroManager = new AgentZeroManager();
-      const dockerService = new DockerAgentZeroService();
+      const seamlessIntegration = new AgentZeroSeamlessIntegration({
+        apiPort: parseInt(options.apiPort),
+        agentZeroPort: parseInt(options.agentZeroPort),
+        enableSeamlessMode: true,
+        enableModelSelection: true,
+        enableWorkflowIntegration: true,
+        autoStart: true
+      });
       
       if (options.start) {
-        console.log(chalk.blue('🚀 Starting Agent Zero mode...'));
-        await dockerService.start();
-        await agentZeroManager.start();
-        console.log(chalk.green('✅ Agent Zero mode started successfully'));
-        console.log(chalk.blue(`📊 Dashboard: http://localhost:${agentZeroManager.getConfig().dashboardPort}`));
-        console.log(chalk.blue(`🔌 API: http://localhost:${agentZeroManager.getConfig().port}`));
+        console.log(chalk.blue('🚀 Starting Agent Zero Seamless Integration...'));
+        console.log(chalk.cyan('🎯 This will make Agent Zero available as a model in your app'));
+        console.log(chalk.cyan('⚡ Workflows will be automatically integrated'));
+        
+        await seamlessIntegration.start();
+        
+        console.log(chalk.green('✅ Seamless integration started successfully'));
+        console.log(chalk.blue(`📡 Integration API: http://localhost:${options.apiPort}`));
+        console.log(chalk.blue(`🤖 Agent Zero: http://localhost:${options.agentZeroPort}`));
+        console.log(chalk.cyan('📋 Available models:'));
+        
+        const models = seamlessIntegration.getAvailableModels();
+        models.forEach(model => {
+          console.log(chalk.gray(`  • ${model.name} (${model.id}) - ${model.description}`));
+        });
+        
+        console.log(chalk.cyan('⚡ Available workflows:'));
+        const workflows = seamlessIntegration.getWorkflows();
+        workflows.forEach(workflow => {
+          console.log(chalk.gray(`  • ${workflow.name} (${workflow.id}) - ${workflow.description}`));
+        });
+        
+        console.log(chalk.yellow('🔗 Integration URLs for your app:'));
+        console.log(chalk.gray(`  Models API: http://localhost:${options.apiPort}/api/models`));
+        console.log(chalk.gray(`  Chat API: http://localhost:${options.apiPort}/api/chat`));
+        console.log(chalk.gray(`  Completion API: http://localhost:${options.apiPort}/api/completion`));
+        console.log(chalk.gray(`  Workflows API: http://localhost:${options.apiPort}/api/workflows`));
+        
+        // Keep the process running
+        process.on('SIGINT', async () => {
+          console.log(chalk.yellow('\n⏹️ Stopping seamless integration...'));
+          await seamlessIntegration.stop();
+          process.exit(0);
+        });
+        
       } else if (options.stop) {
-        console.log(chalk.yellow('⏹️ Stopping Agent Zero mode...'));
-        await agentZeroManager.stop();
-        await dockerService.stop();
-        console.log(chalk.green('✅ Agent Zero mode stopped successfully'));
+        console.log(chalk.yellow('⏹️ Stopping seamless integration...'));
+        await seamlessIntegration.stop();
+        console.log(chalk.green('✅ Seamless integration stopped successfully'));
+        
       } else if (options.status) {
-        const runtime = dockerService.getRuntime();
-        const config = agentZeroManager.getConfig();
+        const config = seamlessIntegration.getConfig();
+        const models = seamlessIntegration.getAvailableModels();
+        const workflows = seamlessIntegration.getWorkflows();
         
-        console.log(chalk.blue('📊 Agent Zero Status:'));
-        console.log(chalk.gray(`Status: ${runtime?.status || 'Not running'}`));
-        console.log(chalk.gray(`Health: ${runtime?.health || 'Unknown'}`));
-        console.log(chalk.gray(`Container: ${config.containerName}`));
-        console.log(chalk.gray(`Port: ${config.port}`));
-        console.log(chalk.gray(`Dashboard Port: ${config.dashboardPort}`));
-        console.log(chalk.gray(`Projects: ${agentZeroManager.getProjects().length}`));
-        console.log(chalk.gray(`Sessions: ${agentZeroManager.getSessions().length}`));
-        console.log(chalk.gray(`Logs: ${agentZeroManager.getLogs().length}`));
+        console.log(chalk.blue('📊 Agent Zero Seamless Integration Status:'));
+        console.log(chalk.gray(`Running: ${seamlessIntegration.isRunning() ? 'Yes' : 'No'}`));
+        console.log(chalk.gray(`Agent Zero Port: ${config.agentZeroPort}`));
+        console.log(chalk.gray(`API Port: ${config.apiPort}`));
+        console.log(chalk.gray(`Available Models: ${models.length}`));
+        console.log(chalk.gray(`Available Workflows: ${workflows.length}`));
+        console.log(chalk.gray(`Enabled Workflows: ${workflows.filter(w => w.enabled).length}`));
         
-        if (runtime?.metrics) {
-          console.log(chalk.cyan('📈 Performance Metrics:'));
-          console.log(chalk.gray(`CPU Usage: ${runtime.metrics.cpuUsage.toFixed(1)}%`));
-          console.log(chalk.gray(`Memory Usage: ${runtime.metrics.memoryUsage.toFixed(1)}%`));
-          console.log(chalk.gray(`Network IO: ${runtime.metrics.networkIO.toFixed(1)} MB`));
-          console.log(chalk.gray(`Disk IO: ${runtime.metrics.diskIO.toFixed(1)} MB`));
-        }
-      } else if (options.dashboard) {
-        const config = agentZeroManager.getConfig();
-        console.log(chalk.blue('🌐 Opening Agent Zero dashboard...'));
-        console.log(chalk.green(`Dashboard URL: http://localhost:${config.dashboardPort}`));
-        console.log(chalk.gray('The dashboard will open in your default browser'));
-        
-        // Open dashboard in browser
-        const { exec } = require('child_process');
-        exec(`open http://localhost:${config.dashboardPort}`);
-      } else if (options.logs) {
-        const logs = agentZeroManager.getLogs();
-        console.log(chalk.blue('📝 Agent Zero Logs:'));
-        
-        if (logs.length === 0) {
-          console.log(chalk.yellow('No logs available'));
-        } else {
-          logs.slice(-20).forEach(log => {
-            const timestamp = log.timestamp.toLocaleString();
-            const typeColor = log.type === 'error' ? chalk.red : 
-                            log.type === 'performance' ? chalk.cyan :
-                            log.type === 'execution' ? chalk.green : chalk.white;
-            console.log(chalk.gray(`[${timestamp}]`), typeColor(`[${log.type}]`), chalk.white(log.message));
+        if (models.length > 0) {
+          console.log(chalk.cyan('📋 Models:'));
+          models.forEach(model => {
+            console.log(chalk.gray(`  • ${model.name} (${model.status})`));
           });
         }
-      } else if (options.enhancements) {
-        const enhancements = dockerService.getEnhancements();
-        console.log(chalk.blue('⚡ Available Enhancements:'));
         
-        enhancements.forEach((enhancement, index) => {
-          const statusColor = enhancement.status === 'completed' ? chalk.green :
-                            enhancement.status === 'implementing' ? chalk.yellow :
-                            enhancement.status === 'failed' ? chalk.red : chalk.gray;
-          const impactColor = enhancement.impact === 'high' ? chalk.red :
-                             enhancement.impact === 'medium' ? chalk.yellow : chalk.green;
-          
-          console.log(chalk.gray(`${index + 1}.`), chalk.white.bold(enhancement.name));
-          console.log(chalk.gray(`   ${enhancement.description}`));
-          console.log(impactColor(`   Impact: ${enhancement.impact}`));
-          console.log(chalk.gray(`   Effort: ${enhancement.effort}`));
-          console.log(statusColor(`   Status: ${enhancement.status}`));
-          console.log(chalk.gray('─'.repeat(40)));
-        });
-      } else if (options.applyEnhancement) {
-        console.log(chalk.blue(`🚀 Applying enhancement: ${options.applyEnhancement}`));
-        try {
-          await dockerService.applyEnhancement(options.applyEnhancement);
-          console.log(chalk.green(`✅ Enhancement "${options.applyEnhancement}" applied successfully`));
-        } catch (error) {
-          console.log(chalk.red(`❌ Failed to apply enhancement: ${error}`));
+        if (workflows.length > 0) {
+          console.log(chalk.cyan('⚡ Workflows:'));
+          workflows.forEach(workflow => {
+            const status = workflow.enabled ? chalk.green('enabled') : chalk.red('disabled');
+            console.log(chalk.gray(`  • ${workflow.name} (${status})`));
+          });
         }
+        
+      } else if (options.models) {
+        const models = seamlessIntegration.getAvailableModels();
+        console.log(chalk.blue('📋 Available Models:'));
+        
+        if (models.length === 0) {
+          console.log(chalk.yellow('No models available'));
+        } else {
+          models.forEach(model => {
+            console.log(chalk.gray(`\n${model.name} (${model.id})`));
+            console.log(chalk.gray(`  Provider: ${model.provider}`));
+            console.log(chalk.gray(`  Type: ${model.type}`));
+            console.log(chalk.gray(`  Description: ${model.description}`));
+            console.log(chalk.gray(`  Capabilities: ${model.capabilities.join(', ')}`));
+            console.log(chalk.gray(`  Status: ${model.status}`));
+            console.log(chalk.gray(`  Endpoint: ${model.endpoint}`));
+            if (model.maxTokens) {
+              console.log(chalk.gray(`  Max Tokens: ${model.maxTokens}`));
+            }
+            if (model.temperature) {
+              console.log(chalk.gray(`  Temperature: ${model.temperature}`));
+            }
+          });
+        }
+        
+      } else if (options.workflows) {
+        const workflows = seamlessIntegration.getWorkflows();
+        console.log(chalk.blue('⚡ Available Workflows:'));
+        
+        if (workflows.length === 0) {
+          console.log(chalk.yellow('No workflows available'));
+        } else {
+          workflows.forEach(workflow => {
+            const status = workflow.enabled ? chalk.green('enabled') : chalk.red('disabled');
+            console.log(chalk.gray(`\n${workflow.name} (${workflow.id})`));
+            console.log(chalk.gray(`  Description: ${workflow.description}`));
+            console.log(chalk.gray(`  Status: ${status}`));
+            console.log(chalk.gray(`  Triggers: ${workflow.triggers.join(', ')}`));
+            console.log(chalk.gray(`  Actions: ${workflow.actions.join(', ')}`));
+            console.log(chalk.gray(`  Usage Count: ${workflow.usageCount}`));
+            if (workflow.lastUsed) {
+              console.log(chalk.gray(`  Last Used: ${workflow.lastUsed.toLocaleString()}`));
+            }
+          });
+        }
+        
+      } else if (options.testChat) {
+        console.log(chalk.blue('🧪 Testing chat functionality...'));
+        try {
+          const result = await seamlessIntegration.sendChatMessage(options.testChat);
+          console.log(chalk.green('✅ Chat test successful'));
+          console.log(chalk.gray(`Response: ${JSON.stringify(result, null, 2)}`));
+        } catch (error) {
+          console.log(chalk.red('❌ Chat test failed:'), error instanceof Error ? error.message : String(error));
+        }
+        
+      } else if (options.testCompletion) {
+        console.log(chalk.blue('🧪 Testing completion functionality...'));
+        try {
+          const result = await seamlessIntegration.getCompletion(options.testCompletion);
+          console.log(chalk.green('✅ Completion test successful'));
+          console.log(chalk.gray(`Response: ${JSON.stringify(result, null, 2)}`));
+        } catch (error) {
+          console.log(chalk.red('❌ Completion test failed:'), error instanceof Error ? error.message : String(error));
+        }
+        
       } else {
-        console.log(chalk.blue('🤖 Agent Zero Mode'));
-        console.log(chalk.gray('Use --start, --stop, --status, --dashboard, --logs, --enhancements, or --apply-enhancement'));
+        console.log(chalk.blue('🎯 Agent Zero Seamless Integration'));
+        console.log(chalk.gray('Integrate Agent Zero seamlessly into your app workflow'));
+        console.log(chalk.gray(''));
+        console.log(chalk.cyan('Key Features:'));
+        console.log(chalk.gray('  • Agent Zero available as selectable model'));
+        console.log(chalk.gray('  • Automatic workflow integration'));
+        console.log(chalk.gray('  • REST API for your app'));
+        console.log(chalk.gray('  • Real-time health monitoring'));
+        console.log(chalk.gray('  • Multiple model types (chat, completion, code)'));
+        console.log(chalk.gray('  • Pre-built workflows for development'));
+        console.log(chalk.gray(''));
+        console.log(chalk.yellow('Commands:'));
+        console.log(chalk.gray('  --start              Start seamless integration'));
+        console.log(chalk.gray('  --stop               Stop integration'));
+        console.log(chalk.gray('  --status             Show integration status'));
+        console.log(chalk.gray('  --models             List available models'));
+        console.log(chalk.gray('  --workflows          List available workflows'));
+        console.log(chalk.gray('  --test-chat <msg>    Test chat functionality'));
+        console.log(chalk.gray('  --test-completion <prompt>  Test completion'));
+        console.log(chalk.gray('  --api-port <port>    Set API server port'));
+        console.log(chalk.gray('  --agent-zero-port <port>  Set Agent Zero port'));
+        console.log(chalk.gray(''));
+        console.log(chalk.green('Integration URLs for your app:'));
+        console.log(chalk.gray('  Models: http://localhost:50003/api/models'));
+        console.log(chalk.gray('  Chat: http://localhost:50003/api/chat'));
+        console.log(chalk.gray('  Completion: http://localhost:50003/api/completion'));
+        console.log(chalk.gray('  Workflows: http://localhost:50003/api/workflows'));
       }
+      
     } catch (error) {
       console.error(chalk.red('❌ Error:'), error);
       process.exit(1);
@@ -485,35 +1017,69 @@ program
 
 program
   .command('visualize')
-  .description('Open IterAgent visualization dashboard')
-  .option('--port <port>', 'Dashboard port', '3000')
+  .description('Open IterAgent visualization dashboard with Agent Zero integration')
+  .option('--port <port>', 'Dashboard port', '50001')
   .option('--open', 'Open dashboard in browser')
+  .option('--agent-zero', 'Include Agent Zero integration')
   .action(async (options) => {
     try {
-      const agentZeroManager = new AgentZeroManager({
-        dashboardPort: parseInt(options.port),
-        enableVisualization: true,
-        enableLogging: true,
-        enableSettings: true
-      });
-      
-      console.log(chalk.blue('🎨 Starting IterAgent visualization dashboard...'));
-      await agentZeroManager.start();
-      
-      console.log(chalk.green('✅ Visualization dashboard started'));
-      console.log(chalk.blue(`📊 Dashboard: http://localhost:${options.port}`));
-      
-      if (options.open) {
-        const { exec } = require('child_process');
-        exec(`open http://localhost:${options.port}`);
+      if (options.agentZero) {
+        // Use the new Git-based Agent Zero manager for visualization
+        const agentZeroGitManager = new AgentZeroGitManager({
+          port: parseInt(options.port),
+          enableWebUI: true,
+          enableAPI: true,
+          enableLogging: true,
+          promptUser: true,
+          enableVenv: true
+        });
+        
+        console.log(chalk.blue('🎨 Starting IterAgent visualization dashboard with Agent Zero...'));
+        await agentZeroGitManager.start();
+        
+        console.log(chalk.green('✅ Visualization dashboard with Agent Zero started'));
+        console.log(chalk.blue(`📊 Dashboard: http://localhost:${options.port}`));
+        console.log(chalk.cyan('🤖 Agent Zero integration enabled'));
+        
+        if (options.open) {
+          const { exec } = require('child_process');
+          exec(`open http://localhost:${options.port}`);
+        }
+        
+        // Keep the process running
+        process.on('SIGINT', async () => {
+          console.log(chalk.yellow('\n⏹️ Stopping dashboard...'));
+          await agentZeroGitManager.stop();
+          process.exit(0);
+        });
+        
+      } else {
+        // Use the original visualization without Agent Zero
+        const agentZeroManager = new AgentZeroManager({
+          dashboardPort: parseInt(options.port),
+          enableVisualization: true,
+          enableLogging: true,
+          enableSettings: true
+        });
+        
+        console.log(chalk.blue('🎨 Starting IterAgent visualization dashboard...'));
+        await agentZeroManager.start();
+        
+        console.log(chalk.green('✅ Visualization dashboard started'));
+        console.log(chalk.blue(`📊 Dashboard: http://localhost:${options.port}`));
+        
+        if (options.open) {
+          const { exec } = require('child_process');
+          exec(`open http://localhost:${options.port}`);
+        }
+        
+        // Keep the process running
+        process.on('SIGINT', async () => {
+          console.log(chalk.yellow('\n⏹️ Stopping dashboard...'));
+          await agentZeroManager.stop();
+          process.exit(0);
+        });
       }
-      
-      // Keep the process running
-      process.on('SIGINT', async () => {
-        console.log(chalk.yellow('\n⏹️ Stopping dashboard...'));
-        await agentZeroManager.stop();
-        process.exit(0);
-      });
       
     } catch (error) {
       console.error(chalk.red('❌ Error:'), error);

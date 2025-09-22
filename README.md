@@ -1,48 +1,95 @@
-# IterAgent 🚀
+# InterTools 🚀
 
-**Iterative testing agent for Cursor IDE** - Automatically runs your app, captures logs, runs tests, and feeds insights back to Cursor for seamless development.
+**Intelligent development tools with multi-agent orchestration for Cursor IDE** - Specialized agents continuously monitor logs, interpret errors, and provide compact feedback to Cursor AI for enhanced development workflow.
 
 [![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://choosealicense.com/licenses/mit/)
 [![Node.js Version](https://img.shields.io/badge/node-%3E%3D16.0.0-brightgreen)](https://nodejs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.2+-blue)](https://www.typescriptlang.org/)
 
-## ✨ What is IterAgent?
+## ✨ What is InterTools?
 
-IterAgent creates a seamless development loop inside Cursor IDE:
+InterTools creates a "big gun" multi-agent orchestration system inside Cursor IDE:
 
-1. **🚀 Starts your dev server** (npm run dev, etc.)
-2. **📝 Captures and analyzes logs** in real-time
-3. **🧪 Runs Playwright smoke tests** against your app
-4. **📊 Generates intelligent summaries** of issues and recommendations
-5. **🎮 Provides interactive TUI** to send fix requests to Cursor
-6. **🔄 Continues the loop** for iterative development
+1. **👥 Specialized Agent Team** - Console harvester, terminal monitor, chat communicator, log interpreter, code suggester
+2. **🔄 Continuous Monitoring Loops** - Real-time log analysis every 5-15 seconds
+3. **💬 Compact Cursor Integration** - Summarized feedback that doesn't overwhelm your screen
+4. **🔍 Intelligent Error Interpretation** - Clear definitions of what errors mean and imply
+5. **⚡ Actionable Code Suggestions** - Specific, implementable fixes for Anthropic/Cursor AI
+6. **🎯 Enhanced Workflow Efficiency** - Multi-agent coordination for maximum productivity
 
 ## 🎯 Key Features
 
-- **Zero Configuration**: Works out of the box with most projects
-- **Smart Log Analysis**: De-noises logs, classifies errors, extracts metadata
-- **Terminal Feedback System**: Real-time console log analysis and intelligent suggestions
-- **Smart Suggestion Management**: Allowlist/blocklist for suggestion filtering
-- **Automatic Code Execution**: Execute suggested commands and inject code
-- **Comprehensive Testing**: Playwright-based smoke tests with accessibility checks
-- **Cursor Integration**: Seamlessly feeds fix requests to Cursor's AI
+- **👥 Specialized Agent Team**: Five specialized agents working in coordination
+- **🔄 Continuous Monitoring**: Real-time log analysis in continuous loops
+- **💬 Compact Summaries**: Max 100-character summaries for Cursor chat
+- **🔍 Intelligent Interpretation**: Clear error definitions and code implications
+- **⚡ Actionable Suggestions**: Specific, implementable code changes
+- **🎯 Multi-Agent Orchestration**: Coordinated workflow enhancement
+- **📊 Real-Time Analysis**: Console and terminal log monitoring every 5-15 seconds
+- **🤖 Agent Zero Integration**: Enhanced capabilities with Agent Zero runtime
 - **Interactive TUI**: Beautiful terminal interface for monitoring and control
 - **Flexible Configuration**: Customize ports, routes, timeouts, and more
 - **Multiple Project Types**: Supports Node.js, Python, Rust, Go, and more
+
+## 👥 Specialized Agent Team
+
+InterTools features five specialized agents that work together in continuous monitoring loops:
+
+### 🔍 Console Log Harvester
+- **Purpose**: Captures and analyzes console output in real-time
+- **Capabilities**: Console monitoring, log capture, error detection, pattern recognition
+- **Frequency**: Every 5 seconds
+- **Output**: Structured log data for analysis
+
+### 📊 Terminal Log Monitor  
+- **Purpose**: Tracks terminal commands and output
+- **Capabilities**: Terminal monitoring, command tracking, output analysis, process monitoring
+- **Frequency**: Every 5 seconds
+- **Output**: Command execution data and terminal output
+
+### 💬 Cursor Chat Communicator
+- **Purpose**: Sends compact summaries to Cursor AI chat
+- **Capabilities**: Chat integration, message formatting, priority routing, actionable suggestions
+- **Frequency**: Every 15 seconds
+- **Output**: Max 100-character summaries to Cursor chat
+
+### 🧠 Log Interpreter
+- **Purpose**: Analyzes logs and extracts meaningful insights
+- **Capabilities**: Log analysis, error interpretation, context understanding, pattern matching
+- **Frequency**: Every 10 seconds
+- **Output**: Structured analysis with severity levels and suggestions
+
+### ⚡ Code Change Suggester
+- **Purpose**: Provides actionable code suggestions for fixes
+- **Capabilities**: Code analysis, fix suggestions, implementation guidance, Anthropic integration
+- **Frequency**: On-demand based on error analysis
+- **Output**: Specific, implementable code changes
 
 ## 🚀 Quick Start
 
 ### Installation
 
 ```bash
-npm install -g iteragent-cli
+npm install -g intertools
 ```
 
-### Initialize in Your Project
+### Start InterTools Orchestrator (Big Gun Mode)
 
 ```bash
-cd your-project
-iteragent init
+# Start the specialized agent team
+intertools orchestrator --start
+
+# Check status of all agents
+intertools orchestrator --status
+
+# View specialized agents
+intertools orchestrator --agents
+
+# Monitor log analysis results
+intertools orchestrator --logs
+
+# Check Cursor chat messages
+intertools orchestrator --cursor-chat
 ```
 
 This creates a `.iteragentrc.json` configuration file and `.cursor/inbox/` directory.
@@ -339,6 +386,66 @@ iteragent allowlist add "security"
 ```
 
 For detailed terminal feedback documentation, see [TERMINAL_FEEDBACK.md](./TERMINAL_FEEDBACK.md).
+
+## 🤖 Agent Zero Integration
+
+IterAgent includes **two powerful Agent Zero integrations**:
+
+### 🚀 **Agent Zero Git Integration** (Recommended)
+**Fast, safe, and universal** - automatically pulls from the official Agent Zero repository and sets up a local environment with user prompts and flexible installation options.
+
+#### Key Features:
+- **Automatic Git Clone**: Pulls from official [Agent Zero repository](https://github.com/agent0ai/agent-zero)
+- **Flexible Installation**: Python venv, Docker, or local installation options
+- **User Prompts**: Interactive prompts guide installation preferences
+- **No Docker Required**: Works without Docker installation
+- **Real-time Dashboard**: Web-based monitoring and control interface
+- **Health Monitoring**: Automatic health checks and performance metrics
+- **Security Modes**: Configurable security settings (strict, moderate, permissive)
+
+#### Quick Start:
+```bash
+# Start with user prompts (recommended)
+iteragent agent-zero --start
+
+# Install Agent Zero
+iteragent agent-zero --install
+
+# Open dashboard
+iteragent agent-zero --dashboard
+
+# Check status
+iteragent agent-zero --status
+```
+
+### 🐳 **Agent Zero Docker Mode** (Advanced)
+**Docker-based integration** - requires Docker but provides full containerized Agent Zero runtime.
+
+#### Key Features:
+- **Docker Integration**: Seamless integration with Agent Zero Docker containers
+- **Visualization Dashboard**: Real-time monitoring and control interface
+- **Comprehensive Logging**: Detailed logs of all activities and interactions
+- **Settings Management**: Easy configuration and customization
+- **Performance Enhancement**: Automatic performance optimization suggestions
+- **Project Tracking**: Monitor multiple projects and sessions
+- **Real-time Updates**: Live updates via WebSocket connections
+
+#### Quick Start:
+```bash
+# Start Docker-based Agent Zero mode
+iteragent agent-zero --start --docker
+
+# Open visualization dashboard
+iteragent agent-zero --dashboard
+
+# Check status
+iteragent agent-zero --status
+
+# View logs
+iteragent agent-zero --logs
+```
+
+For detailed Agent Zero integration documentation, see [AGENT_ZERO_GIT_INTEGRATION.md](./AGENT_ZERO_GIT_INTEGRATION.md).
 
 ## 🔗 Cursor Integration
 

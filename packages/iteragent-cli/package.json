@@ -1,10 +1,10 @@
 {
-  "name": "iteragent-cli",
-  "version": "1.0.6",
-  "description": "Iterative testing agent for Cursor IDE - runs apps, captures logs, tests, and feeds back to Cursor",
+  "name": "intertools",
+  "version": "1.0.8",
+  "description": "InterTools - Intelligent development tools with multi-agent orchestration for Cursor",
   "main": "dist/index.js",
   "bin": {
-    "iteragent": "dist/index.js"
+    "intertools": "dist/index.js"
   },
   "scripts": {
     "build": "tsc",
@@ -51,10 +51,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/alexhorton/iteragent.git"
+    "url": "https://github.com/luvs2spluj/intertools.git"
   },
   "bugs": {
-    "url": "https://github.com/alexhorton/iteragent/issues"
+    "url": "https://github.com/luvs2spluj/intertools/issues"
   },
-  "homepage": "https://github.com/alexhorton/iteragent#readme"
+  "homepage": "https://github.com/luvs2spluj/intertools#readme"
 }
