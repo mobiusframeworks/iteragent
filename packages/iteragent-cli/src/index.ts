@@ -16,6 +16,8 @@ import { MobileTester } from './mobile-tester';
 import { MobileAnalyzer } from './mobile-analyzer';
 import { TerminalFeedback } from './terminal-feedback';
 import { CursorAgentIntegration } from './cursor-agent-integration';
+import { CursorAIFunctionExecutor, SpeedOptimizationSuggestion } from './cursor-ai-executor';
+import { CursorAIFunctionPanel } from './cursor-ai-panel';
 
 const program = new Command();
 
@@ -192,6 +194,185 @@ program
     }
   });
 
+program
+  .command('cursor-ai')
+  .description('Manage Cursor AI function execution')
+  .option('--enable', 'Enable Cursor AI function execution')
+  .option('--disable', 'Disable Cursor AI function execution')
+  .option('--status', 'Show Cursor AI execution status')
+  .option('--panel', 'Show function management panel')
+  .option('--performance', 'Show performance monitoring')
+  .action(async (options) => {
+    try {
+      const executor = new CursorAIFunctionExecutor();
+      
+      if (options.enable) {
+        executor.updateConfig({ enableAutoExecution: true });
+        console.log(chalk.green('✅ Cursor AI function execution enabled'));
+      } else if (options.disable) {
+        executor.updateConfig({ enableAutoExecution: false });
+        console.log(chalk.yellow('⏹️ Cursor AI function execution disabled'));
+      } else if (options.status) {
+        const config = executor.getConfig();
+        console.log(chalk.blue('📊 Cursor AI Execution Status:'));
+        console.log(chalk.gray(`Auto Execution: ${config.enableAutoExecution ? 'Enabled' : 'Disabled'}`));
+        console.log(chalk.gray(`Functions: ${executor.getFunctions().length}`));
+        console.log(chalk.gray(`Allowlist: ${config.allowlist.length} items`));
+        console.log(chalk.gray(`Blocklist: ${config.blocklist.length} items`));
+        console.log(chalk.gray(`Performance Monitoring: ${config.performanceMonitoring.enabled ? 'Enabled' : 'Disabled'}`));
+      } else if (options.panel) {
+        const panel = new CursorAIFunctionPanel();
+        panel.updateFunctions(executor.getFunctions());
+        panel.show();
+      } else if (options.performance) {
+        executor.startPerformanceMonitoring();
+        console.log(chalk.blue('📊 Performance monitoring started'));
+        console.log(chalk.gray('Press Ctrl+C to stop monitoring'));
+      } else {
+        console.log(chalk.blue('🤖 Cursor AI Function Management'));
+        console.log(chalk.gray('Use --enable, --disable, --status, --panel, or --performance'));
+      }
+    } catch (error) {
+      console.error(chalk.red('❌ Error:'), error);
+      process.exit(1);
+    }
+  });
+
+program
+  .command('functions')
+  .description('Manage Cursor AI functions')
+  .option('--list', 'List all available functions')
+  .option('--allowlist <functionId>', 'Add function to allowlist')
+  .option('--blocklist <functionId>', 'Add function to blocklist')
+  .option('--remove-allowlist <functionId>', 'Remove function from allowlist')
+  .option('--remove-blocklist <functionId>', 'Remove function from blocklist')
+  .option('--execute <functionId>', 'Execute a specific function')
+  .action(async (options) => {
+    try {
+      const executor = new CursorAIFunctionExecutor();
+      
+      if (options.list) {
+        const functions = executor.getFunctions();
+        console.log(chalk.blue('📋 Available Functions:'));
+        functions.forEach((func, index) => {
+          const riskColor = func.riskLevel === 'low' ? chalk.green : 
+                          func.riskLevel === 'medium' ? chalk.yellow : 
+                          func.riskLevel === 'high' ? chalk.red : chalk.red.bold;
+          console.log(chalk.gray(`${index + 1}.`), chalk.white.bold(func.name));
+          console.log(chalk.gray(`   ID: ${func.id}`));
+          console.log(chalk.gray(`   Category: ${func.category}`));
+          console.log(riskColor(`   Risk: ${func.riskLevel}`));
+          console.log(chalk.gray(`   Command: ${func.command}`));
+          console.log(chalk.gray('─'.repeat(40)));
+        });
+      } else if (options.allowlist) {
+        executor.addToAllowlist(options.allowlist);
+      } else if (options.blocklist) {
+        executor.addToBlocklist(options.blocklist);
+      } else if (options.removeAllowlist) {
+        executor.removeFromAllowlist(options.removeAllowlist);
+      } else if (options.removeBlocklist) {
+        executor.removeFromBlocklist(options.removeBlocklist);
+      } else if (options.execute) {
+        const result = await executor.executeFunction(options.execute);
+        if (result.success) {
+          console.log(chalk.green(`✅ Function executed successfully`));
+          console.log(chalk.gray(`Output: ${result.output}`));
+        } else {
+          console.log(chalk.red(`❌ Function execution failed`));
+          console.log(chalk.gray(`Error: ${result.error}`));
+        }
+      } else {
+        console.log(chalk.blue('🔧 Function Management'));
+        console.log(chalk.gray('Use --list, --allowlist, --blocklist, --remove-allowlist, --remove-blocklist, or --execute'));
+      }
+    } catch (error) {
+      console.error(chalk.red('❌ Error:'), error);
+      process.exit(1);
+    }
+  });
+
+program
+  .command('speed-optimization')
+  .description('Manage speed optimization suggestions')
+  .option('--enable', 'Enable speed optimization monitoring')
+  .option('--disable', 'Disable speed optimization monitoring')
+  .option('--suggestions', 'Show current speed optimization suggestions')
+  .option('--apply <suggestionId>', 'Apply a specific speed optimization suggestion')
+  .action(async (options) => {
+    try {
+      const executor = new CursorAIFunctionExecutor();
+      
+      if (options.enable) {
+        executor.updateConfig({ 
+          speedOptimization: { 
+            enabled: true, 
+            suggestionInterval: 300000, 
+            autoApply: false, 
+            minImprovementThreshold: 10 
+          } 
+        });
+        executor.startPerformanceMonitoring();
+        console.log(chalk.green('✅ Speed optimization monitoring enabled'));
+      } else if (options.disable) {
+        executor.updateConfig({ 
+          speedOptimization: { 
+            enabled: false, 
+            suggestionInterval: 300000, 
+            autoApply: false, 
+            minImprovementThreshold: 10 
+          } 
+        });
+        console.log(chalk.yellow('⏹️ Speed optimization monitoring disabled'));
+      } else if (options.suggestions) {
+        const suggestions = executor.getSpeedSuggestions();
+        if (suggestions.length === 0) {
+          console.log(chalk.yellow('No speed optimization suggestions available'));
+          console.log(chalk.gray('Run performance monitoring to generate suggestions'));
+        } else {
+          console.log(chalk.cyan('⚡ Speed Optimization Suggestions:'));
+          suggestions.forEach((suggestion, index) => {
+            const impactColor = suggestion.impact === 'low' ? chalk.green : 
+                              suggestion.impact === 'medium' ? chalk.yellow : chalk.red;
+            console.log(chalk.gray(`${index + 1}.`), chalk.white.bold(suggestion.title));
+            console.log(chalk.gray(`   ${suggestion.description}`));
+            console.log(impactColor(`   Impact: ${suggestion.impact}`));
+            console.log(chalk.green(`   Estimated Improvement: ${suggestion.estimatedImprovement}%`));
+            console.log(chalk.gray(`   ${suggestion.reasoning}`));
+            if (suggestion.command) {
+              console.log(chalk.blue(`   Command: ${suggestion.command}`));
+            }
+            console.log(chalk.gray('─'.repeat(40)));
+          });
+        }
+      } else if (options.apply) {
+        const suggestions = executor.getSpeedSuggestions();
+        const suggestion = suggestions.find(s => s.id === options.apply);
+        if (suggestion) {
+          if (suggestion.command) {
+            console.log(chalk.blue(`🚀 Applying suggestion: ${suggestion.title}`));
+            const result = await executor.executeFunction('execute-command', { command: suggestion.command });
+            if (result.success) {
+              console.log(chalk.green('✅ Suggestion applied successfully'));
+            } else {
+              console.log(chalk.red('❌ Failed to apply suggestion'));
+            }
+          } else {
+            console.log(chalk.yellow('⚠️ This suggestion cannot be automatically applied'));
+          }
+        } else {
+          console.log(chalk.red('❌ Suggestion not found'));
+        }
+      } else {
+        console.log(chalk.blue('⚡ Speed Optimization Management'));
+        console.log(chalk.gray('Use --enable, --disable, --suggestions, or --apply'));
+      }
+    } catch (error) {
+      console.error(chalk.red('❌ Error:'), error);
+      process.exit(1);
+    }
+  });
+
 async function startIterativeLoop(
   runner: Runner,
   harvester: Harvester,
@@ -219,6 +400,103 @@ async function startIterativeLoop(
   });
   
   await cursorAgent.initialize();
+  
+  // Initialize Cursor AI function executor
+  const cursorAIExecutor = new CursorAIFunctionExecutor({
+    enableAutoExecution: true,
+    allowlist: [],
+    blocklist: [],
+    defaultBlocklist: [
+      'git push',
+      'git push origin',
+      'git push --force',
+      'rm -rf',
+      'sudo rm',
+      'format c:',
+      'del /f /s /q',
+      'shutdown',
+      'reboot',
+      'halt'
+    ],
+    performanceMonitoring: {
+      enabled: true,
+      interval: 30000,
+      thresholds: {
+        cpuUsage: 80,
+        memoryUsage: 85,
+        responseTime: 5000
+      }
+    },
+    speedOptimization: {
+      enabled: true,
+      suggestionInterval: 300000,
+      autoApply: false,
+      minImprovementThreshold: 10
+    },
+    ui: {
+      showFunctionPanel: true,
+      panelPosition: 'top-right',
+      autoHide: true,
+      hideDelay: 5000
+    }
+  });
+  
+  // Initialize function panel
+  const functionPanel = new CursorAIFunctionPanel({
+    position: 'top-right',
+    width: 400,
+    height: 600,
+    autoHide: true,
+    hideDelay: 5000,
+    theme: 'dark',
+    showCategories: true,
+    showStatistics: true
+  });
+  
+  // Set up event listeners
+  cursorAIExecutor.on('functionExecuted', (func, result) => {
+    console.log(chalk.green(`✅ Cursor AI function executed: ${func.name}`));
+    if (result.output) {
+      console.log(chalk.gray(`Output: ${result.output}`));
+    }
+  });
+  
+  cursorAIExecutor.on('functionFailed', (func, result) => {
+    console.log(chalk.red(`❌ Cursor AI function failed: ${func.name}`));
+    if (result.error) {
+      console.log(chalk.gray(`Error: ${result.error}`));
+    }
+  });
+  
+  cursorAIExecutor.on('functionBlocked', (func, result) => {
+    console.log(chalk.yellow(`🚫 Cursor AI function blocked: ${func.name}`));
+    console.log(chalk.gray('Use iteragent functions --allowlist to enable'));
+  });
+  
+  cursorAIExecutor.on('functionRequiresConfirmation', (func, result) => {
+    console.log(chalk.yellow(`⚠️ Cursor AI function requires confirmation: ${func.name}`));
+    console.log(chalk.gray('Use iteragent functions --allowlist to auto-approve'));
+  });
+  
+  cursorAIExecutor.on('speedSuggestions', (suggestions: SpeedOptimizationSuggestion[]) => {
+    console.log(chalk.cyan(`💡 Generated ${suggestions.length} speed optimization suggestions`));
+    suggestions.forEach((suggestion: SpeedOptimizationSuggestion) => {
+      console.log(chalk.gray(`• ${suggestion.title}: ${suggestion.estimatedImprovement}% improvement`));
+    });
+  });
+  
+  cursorAIExecutor.on('performanceMetrics', (metrics) => {
+    if (metrics.cpuUsage > 80 || metrics.memoryUsage > 85 || metrics.responseTime > 5000) {
+      console.log(chalk.yellow(`⚠️ Performance Alert:`));
+      console.log(chalk.gray(`CPU: ${metrics.cpuUsage.toFixed(1)}% | Memory: ${metrics.memoryUsage.toFixed(1)}% | Response: ${metrics.responseTime}ms`));
+    }
+  });
+  
+  // Update function panel with functions
+  functionPanel.updateFunctions(cursorAIExecutor.getFunctions());
+  
+  // Start performance monitoring
+  cursorAIExecutor.startPerformanceMonitoring();
   
   // Detect project type
   const isTradingBot = detectTradingBotProject(process.cwd());
@@ -319,6 +597,8 @@ async function startIterativeLoop(
       // Cleanup
       terminalFeedback.stopMonitoring();
       cursorAgent.stop();
+      cursorAIExecutor.stopPerformanceMonitoring();
+      functionPanel.deactivate();
       console.log(chalk.blue('👋 IterAgent stopped.'));
     }
 

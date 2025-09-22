@@ -1,6 +1,6 @@
 {
   "name": "iteragent-cli",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Iterative testing agent for Cursor IDE - runs apps, captures logs, tests, and feeds back to Cursor",
   "main": "dist/index.js",
   "bin": {
