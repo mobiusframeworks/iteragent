@@ -202,6 +202,7 @@ IterAgent automatically detects and supports:
 - **Rust**: Cargo-based projects
 - **Go**: Go modules and applications
 - **📈 Trading Bots**: Specialized features for financial applications
+- **📱 Mobile Development**: React Native, Flutter, Expo, Ionic support
 - **Custom**: Any project with a start command
 
 ## 📈 Trading Bot Features
@@ -241,6 +242,47 @@ iteragent run
 ```
 
 For detailed trading features documentation, see [TRADING_FEATURES.md](./TRADING_FEATURES.md).
+
+## 📱 Mobile Development Features
+
+IterAgent includes comprehensive mobile development support for React Native, Flutter, Expo, Ionic, iOS, and Android:
+
+### 🎯 Platform Support
+- **React Native**: Metro bundler, hot reload, iOS/Android testing
+- **Flutter**: Hot reload, widget testing, platform channels
+- **Expo**: Expo CLI, EAS CLI, over-the-air updates
+- **Ionic**: Cross-platform, PWA features, native plugins
+- **iOS**: Xcode, iOS Simulator, CocoaPods integration
+- **Android**: Android SDK, Gradle, Android Emulator
+
+### 📊 Mobile Testing
+- **Unit Tests**: Jest, Flutter Test, XCTest, JUnit
+- **Integration Tests**: Detox, Flutter Integration Test, Appium
+- **E2E Tests**: Mobile viewport, touch events, gestures
+- **Performance Tests**: Bundle size, startup time, memory usage
+
+### 🚀 Mobile Performance Monitoring
+- **Startup Performance**: App launch time, first screen render
+- **Memory Management**: Memory leaks, garbage collection
+- **CPU Performance**: Thread performance, main thread blocking
+- **Battery Impact**: Background activity, network optimization
+
+### 🚀 Quick Start for Mobile Development
+```bash
+# Initialize with mobile features (auto-detect platform)
+iteragent init-mobile
+
+# Initialize for specific platform
+iteragent init-mobile --platform react-native
+iteragent init-mobile --platform flutter
+iteragent init-mobile --platform expo
+iteragent init-mobile --platform ionic
+
+# Run with mobile-specific testing
+iteragent run
+```
+
+For detailed mobile features documentation, see [MOBILE_FEATURES.md](./MOBILE_FEATURES.md).
 
 ## 🔗 Cursor Integration
 

@@ -11,6 +11,9 @@ import { loadConfig } from './utils';
 import { createTradingBotConfig, detectTradingBotProject, TradingBotConfig } from './trading-config';
 import { TradingTester } from './trading-tester';
 import { TradingAnalyzer } from './trading-analyzer';
+import { createMobileConfig, detectMobileProject, MobileConfig } from './mobile-config';
+import { MobileTester } from './mobile-tester';
+import { MobileAnalyzer } from './mobile-analyzer';
 
 const program = new Command();
 
@@ -83,6 +86,27 @@ program
     }
   });
 
+program
+  .command('init-mobile')
+  .description('Initialize IterAgent specifically for mobile development projects')
+  .option('-p, --platform <platform>', 'Mobile platform (react-native, flutter, expo, ionic)', 'auto')
+  .action(async (options) => {
+    try {
+      console.log(chalk.blue('📱 Initializing IterAgent for Mobile Development...'));
+      await initializeMobileProject(options.platform);
+      console.log(chalk.green('✅ Mobile Development IterAgent initialized!'));
+      console.log(chalk.blue('📱 Specialized features enabled:'));
+      console.log(chalk.blue('  • Mobile platform detection and configuration'));
+      console.log(chalk.blue('  • Cross-platform testing (iOS, Android, Web)'));
+      console.log(chalk.blue('  • Performance monitoring and optimization'));
+      console.log(chalk.blue('  • Device compatibility testing'));
+      console.log(chalk.blue('  • Mobile-specific log analysis'));
+    } catch (error) {
+      console.error(chalk.red('❌ Error:'), error);
+      process.exit(1);
+    }
+  });
+
 async function startIterativeLoop(
   runner: Runner,
   harvester: Harvester,
@@ -93,15 +117,25 @@ async function startIterativeLoop(
 ) {
   console.log(chalk.yellow('🔄 Starting iterative loop...'));
   
-  // Detect if this is a trading bot project
+  // Detect project type
   const isTradingBot = detectTradingBotProject(process.cwd());
+  const mobileProject = detectMobileProject(process.cwd());
+  
   let tradingTester: TradingTester | null = null;
   let tradingAnalyzer: TradingAnalyzer | null = null;
+  let mobileTester: MobileTester | null = null;
+  let mobileAnalyzer: MobileAnalyzer | null = null;
   
   if (isTradingBot) {
     console.log(chalk.cyan('📈 Trading bot detected! Enabling specialized features...'));
     tradingTester = new TradingTester(config);
     tradingAnalyzer = new TradingAnalyzer();
+  }
+  
+  if (mobileProject) {
+    console.log(chalk.blue(`📱 Mobile project detected (${mobileProject.platform})! Enabling mobile features...`));
+    mobileTester = new MobileTester(config);
+    mobileAnalyzer = new MobileAnalyzer();
   }
   
   while (true) {
@@ -120,6 +154,7 @@ async function startIterativeLoop(
       // 4. Run tests if enabled
       let testResults = null;
       let tradingTestResults = null;
+      let mobileTestResults = null;
       
       if (tester) {
         console.log(chalk.blue('🧪 Running standard tests...'));
@@ -131,6 +166,11 @@ async function startIterativeLoop(
         tradingTestResults = await tradingTester.runTests();
       }
       
+      if (mobileTester) {
+        console.log(chalk.blue('📱 Running mobile-specific tests...'));
+        mobileTestResults = await mobileTester.runTests();
+      }
+      
       // 5. Generate summary
       console.log(chalk.blue('📊 Generating summary...'));
       let summary = await summarizer.generateSummary(logs, testResults, config);
@@ -140,6 +180,13 @@ async function startIterativeLoop(
         const tradingAnalysis = tradingAnalyzer.analyzeLogs(logs, testResults);
         (summary as any).tradingAnalysis = tradingAnalysis;
         (summary as any).tradingTestResults = tradingTestResults;
+      }
+      
+      // Add mobile-specific analysis if available
+      if (mobileAnalyzer && mobileTestResults) {
+        const mobileAnalysis = mobileAnalyzer.analyzeLogs(logs, mobileTestResults);
+        (summary as any).mobileAnalysis = mobileAnalysis;
+        (summary as any).mobileTestResults = mobileTestResults;
       }
       
       // 6. Show TUI if enabled
@@ -206,6 +253,49 @@ async function initializeProject(isTradingBot: boolean = false) {
     console.log(chalk.cyan('  • API endpoint monitoring'));
     console.log(chalk.cyan('  • Performance metrics analysis'));
   }
+}
+
+async function initializeMobileProject(platform: string = 'auto') {
+  const fs = await import('fs/promises');
+  const path = await import('path');
+  
+  const configPath = '.iteragentrc.json';
+  let config: any;
+  
+  // Detect mobile platform if auto
+  if (platform === 'auto') {
+    const mobileProject = detectMobileProject(process.cwd());
+    if (mobileProject) {
+      platform = mobileProject.platform;
+      console.log(chalk.blue(`📱 Auto-detected mobile platform: ${platform}`));
+    } else {
+      platform = 'react-native'; // Default fallback
+      console.log(chalk.yellow('📱 No mobile platform detected, defaulting to React Native'));
+    }
+  }
+  
+  config = createMobileConfig(process.cwd(), platform);
+  
+  await fs.writeFile(configPath, JSON.stringify(config, null, 2));
+  
+  // Create .cursor/inbox directory
+  const inboxDir = '.cursor/inbox';
+  try {
+    await fs.mkdir(inboxDir, { recursive: true });
+  } catch (error) {
+    // Directory might already exist
+  }
+  
+  console.log(chalk.green(`✅ Created ${configPath}`));
+  console.log(chalk.green(`✅ Created ${inboxDir}/ directory`));
+  
+  console.log(chalk.blue('📱 Mobile development features enabled:'));
+  console.log(chalk.blue(`  • Platform: ${platform}`));
+  console.log(chalk.blue(`  • Bundler: ${config.mobile.bundler}`));
+  console.log(chalk.blue(`  • Build tools: ${config.mobile.buildTools.join(', ')}`));
+  console.log(chalk.blue(`  • Device testing: ${config.mobile.deviceTesting ? 'enabled' : 'disabled'}`));
+  console.log(chalk.blue(`  • Simulator testing: ${config.mobile.simulatorTesting ? 'enabled' : 'disabled'}`));
+  console.log(chalk.blue(`  • Hot reload: ${config.mobile.hotReload ? 'enabled' : 'disabled'}`));
 }
 
 program.parse();
