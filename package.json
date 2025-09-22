@@ -1,0 +1,44 @@
+{
+  "name": "iteragent",
+  "version": "1.0.0",
+  "description": "Iterative testing agent for Cursor IDE - runs apps, captures logs, tests, and feeds back to Cursor",
+  "main": "packages/iteragent-cli/dist/index.js",
+  "bin": {
+    "iteragent": "packages/iteragent-cli/dist/index.js"
+  },
+  "scripts": {
+    "build": "cd packages/iteragent-cli && npm run build",
+    "install-cli": "cd packages/iteragent-cli && npm install -g .",
+    "test": "cd packages/iteragent-cli && npm test",
+    "dev": "cd packages/iteragent-cli && npm run dev",
+    "example": "cd examples/react-vite && npm install && npm run dev",
+    "example-test": "cd examples/react-vite && iteragent run"
+  },
+  "keywords": [
+    "cursor",
+    "testing",
+    "development",
+    "automation",
+    "playwright",
+    "cli",
+    "iterative",
+    "agent"
+  ],
+  "author": "Alex Horton",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/alexhorton/iteragent.git"
+  },
+  "bugs": {
+    "url": "https://github.com/alexhorton/iteragent/issues"
+  },
+  "homepage": "https://github.com/alexhorton/iteragent#readme",
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "workspaces": [
+    "packages/*",
+    "examples/*"
+  ]
+}

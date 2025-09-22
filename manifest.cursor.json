@@ -1,0 +1,58 @@
+{
+  "name": "IterAgent",
+  "version": "1.0.0",
+  "description": "Iterative testing agent for Cursor IDE - runs apps, captures logs, tests, and feeds back to Cursor",
+  "author": "Alex Horton",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/alexhorton/iteragent.git"
+  },
+  "keywords": [
+    "cursor",
+    "testing",
+    "development",
+    "automation",
+    "playwright",
+    "cli",
+    "iterative",
+    "agent"
+  ],
+  "categories": [
+    "Development Tools",
+    "Testing",
+    "Automation"
+  ],
+  "installation": {
+    "type": "npm",
+    "command": "npm install -g iteragent-cli"
+  },
+  "usage": {
+    "init": "iteragent init",
+    "run": "iteragent run",
+    "help": "iteragent --help"
+  },
+  "features": [
+    "Automatic dev server startup and monitoring",
+    "Real-time log capture and analysis",
+    "Playwright-based smoke testing",
+    "Intelligent error classification and de-noising",
+    "Interactive TUI for fix request generation",
+    "Seamless integration with Cursor IDE",
+    "Configurable test routes and timeouts",
+    "Comprehensive reporting and summaries"
+  ],
+  "requirements": {
+    "node": ">=16.0.0",
+    "npm": ">=8.0.0"
+  },
+  "screenshots": [
+    "https://github.com/alexhorton/iteragent/blob/main/docs/screenshot-tui.png",
+    "https://github.com/alexhorton/iteragent/blob/main/docs/screenshot-summary.png"
+  ],
+  "documentation": "https://github.com/alexhorton/iteragent#readme",
+  "support": {
+    "issues": "https://github.com/alexhorton/iteragent/issues",
+    "discussions": "https://github.com/alexhorton/iteragent/discussions"
+  }
+}

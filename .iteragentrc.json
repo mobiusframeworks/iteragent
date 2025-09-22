@@ -1,0 +1,19 @@
+{
+  "port": 3000,
+  "startCommand": "npm run dev",
+  "routes": [
+    "/",
+    "/about",
+    "/contact"
+  ],
+  "logCaptureDuration": 5000,
+  "testTimeout": 30000,
+  "cursorInboxPath": ".cursor/inbox",
+  "outputDir": ".iteragent",
+  "headless": true,
+  "takeScreenshots": true,
+  "workingDirectory": "examples/react-vite",
+  "env": {
+    "NODE_ENV": "development"
+  }
+}
