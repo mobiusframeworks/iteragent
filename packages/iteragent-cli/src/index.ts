@@ -8,6 +8,9 @@ import { Tester } from './tester';
 import { Summarizer } from './summarizer';
 import { TUI } from './tui';
 import { loadConfig } from './utils';
+import { createTradingBotConfig, detectTradingBotProject, TradingBotConfig } from './trading-config';
+import { TradingTester } from './trading-tester';
+import { TradingAnalyzer } from './trading-analyzer';
 
 const program = new Command();
 
@@ -48,11 +51,32 @@ program
 program
   .command('init')
   .description('Initialize IterAgent configuration for current project')
-  .action(async () => {
+  .option('--trading', 'Initialize with trading bot configuration')
+  .action(async (options) => {
     try {
       console.log(chalk.blue('🔧 Initializing IterAgent...'));
-      await initializeProject();
+      await initializeProject(options.trading);
       console.log(chalk.green('✅ IterAgent initialized!'));
+    } catch (error) {
+      console.error(chalk.red('❌ Error:'), error);
+      process.exit(1);
+    }
+  });
+
+program
+  .command('init-trading')
+  .description('Initialize IterAgent specifically for trading bot projects')
+  .action(async () => {
+    try {
+      console.log(chalk.cyan('📈 Initializing IterAgent for Trading Bot...'));
+      await initializeProject(true);
+      console.log(chalk.green('✅ Trading Bot IterAgent initialized!'));
+      console.log(chalk.cyan('📊 Specialized features enabled:'));
+      console.log(chalk.cyan('  • Financial data validation and monitoring'));
+      console.log(chalk.cyan('  • Trading strategy backtesting validation'));
+      console.log(chalk.cyan('  • API endpoint performance monitoring'));
+      console.log(chalk.cyan('  • Real-time trading signal analysis'));
+      console.log(chalk.cyan('  • Risk metrics and alert monitoring'));
     } catch (error) {
       console.error(chalk.red('❌ Error:'), error);
       process.exit(1);
@@ -69,6 +93,17 @@ async function startIterativeLoop(
 ) {
   console.log(chalk.yellow('🔄 Starting iterative loop...'));
   
+  // Detect if this is a trading bot project
+  const isTradingBot = detectTradingBotProject(process.cwd());
+  let tradingTester: TradingTester | null = null;
+  let tradingAnalyzer: TradingAnalyzer | null = null;
+  
+  if (isTradingBot) {
+    console.log(chalk.cyan('📈 Trading bot detected! Enabling specialized features...'));
+    tradingTester = new TradingTester(config);
+    tradingAnalyzer = new TradingAnalyzer();
+  }
+  
   while (true) {
     try {
       // 1. Start/Restart the dev server
@@ -84,14 +119,28 @@ async function startIterativeLoop(
       
       // 4. Run tests if enabled
       let testResults = null;
+      let tradingTestResults = null;
+      
       if (tester) {
-        console.log(chalk.blue('🧪 Running tests...'));
+        console.log(chalk.blue('🧪 Running standard tests...'));
         testResults = await tester.runTests();
+      }
+      
+      if (tradingTester) {
+        console.log(chalk.cyan('📊 Running trading-specific tests...'));
+        tradingTestResults = await tradingTester.runTests();
       }
       
       // 5. Generate summary
       console.log(chalk.blue('📊 Generating summary...'));
-      const summary = await summarizer.generateSummary(logs, testResults, config);
+      let summary = await summarizer.generateSummary(logs, testResults, config);
+      
+      // Add trading-specific analysis if available
+      if (tradingAnalyzer && tradingTestResults) {
+        const tradingAnalysis = tradingAnalyzer.analyzeLogs(logs, testResults);
+        (summary as any).tradingAnalysis = tradingAnalysis;
+        (summary as any).tradingTestResults = tradingTestResults;
+      }
       
       // 6. Show TUI if enabled
       if (tui) {
@@ -116,19 +165,26 @@ async function startIterativeLoop(
   console.log(chalk.blue('👋 IterAgent stopped.'));
 }
 
-async function initializeProject() {
+async function initializeProject(isTradingBot: boolean = false) {
   const fs = await import('fs/promises');
   const path = await import('path');
   
   const configPath = '.iteragentrc.json';
-  const config = {
-    port: 3000,
-    startCommand: 'npm run dev',
-    routes: ['/'],
-    logCaptureDuration: 5000,
-    testTimeout: 30000,
-    cursorInboxPath: '.cursor/inbox'
-  };
+  let config: any;
+  
+  if (isTradingBot || detectTradingBotProject(process.cwd())) {
+    console.log(chalk.cyan('📈 Detected trading bot project! Creating specialized configuration...'));
+    config = createTradingBotConfig(process.cwd());
+  } else {
+    config = {
+      port: 3000,
+      startCommand: 'npm run dev',
+      routes: ['/'],
+      logCaptureDuration: 5000,
+      testTimeout: 30000,
+      cursorInboxPath: '.cursor/inbox'
+    };
+  }
   
   await fs.writeFile(configPath, JSON.stringify(config, null, 2));
   
@@ -142,6 +198,14 @@ async function initializeProject() {
   
   console.log(chalk.green(`✅ Created ${configPath}`));
   console.log(chalk.green(`✅ Created ${inboxDir}/ directory`));
+  
+  if (isTradingBot || detectTradingBotProject(process.cwd())) {
+    console.log(chalk.cyan('📊 Trading bot features enabled:'));
+    console.log(chalk.cyan('  • Financial data validation'));
+    console.log(chalk.cyan('  • Trading strategy testing'));
+    console.log(chalk.cyan('  • API endpoint monitoring'));
+    console.log(chalk.cyan('  • Performance metrics analysis'));
+  }
 }
 
 program.parse();

@@ -201,7 +201,46 @@ IterAgent automatically detects and supports:
 - **Python**: Flask, Django, FastAPI applications
 - **Rust**: Cargo-based projects
 - **Go**: Go modules and applications
+- **📈 Trading Bots**: Specialized features for financial applications
 - **Custom**: Any project with a start command
+
+## 📈 Trading Bot Features
+
+IterAgent includes specialized features for trading bot and financial application development:
+
+### 🎯 Automatic Detection
+- Detects trading bot projects automatically
+- Configures specialized settings for financial applications
+- Monitors trading-specific endpoints and data flows
+
+### 📊 Financial Data Validation
+- Real-time price and volume data validation
+- Data freshness monitoring and alerts
+- API endpoint performance tracking
+- Trading strategy backtesting validation
+
+### 🧪 Trading-Specific Testing
+- Backtest endpoint testing (`/api/backtest`)
+- Strategy execution validation (`/api/strategies`)
+- Financial data endpoint monitoring (`/api/tickers`, `/api/btc`, `/api/tesla`)
+- Performance metrics validation (Sharpe ratio, drawdown, win rate)
+
+### 🚨 Intelligent Alerts
+- Price change alerts (configurable thresholds)
+- Volume spike detection
+- Error rate monitoring
+- Performance degradation alerts
+
+### 🚀 Quick Start for Trading Bots
+```bash
+# Initialize with trading features
+iteragent init-trading
+
+# Run with specialized trading analysis
+iteragent run
+```
+
+For detailed trading features documentation, see [TRADING_FEATURES.md](./TRADING_FEATURES.md).
 
 ## 🔗 Cursor Integration
 
