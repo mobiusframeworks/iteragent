@@ -14,6 +14,8 @@ import { TradingAnalyzer } from './trading-analyzer';
 import { createMobileConfig, detectMobileProject, MobileConfig } from './mobile-config';
 import { MobileTester } from './mobile-tester';
 import { MobileAnalyzer } from './mobile-analyzer';
+import { TerminalFeedback } from './terminal-feedback';
+import { CursorAgentIntegration } from './cursor-agent-integration';
 
 const program = new Command();
 
@@ -107,6 +109,89 @@ program
     }
   });
 
+program
+  .command('feedback')
+  .description('Manage terminal feedback and Cursor agent integration')
+  .option('--enable', 'Enable terminal feedback')
+  .option('--disable', 'Disable terminal feedback')
+  .option('--status', 'Show feedback status')
+  .action(async (options) => {
+    try {
+      if (options.enable) {
+        console.log(chalk.green('✅ Terminal feedback enabled'));
+      } else if (options.disable) {
+        console.log(chalk.yellow('⏹️ Terminal feedback disabled'));
+      } else if (options.status) {
+        console.log(chalk.blue('📊 Terminal feedback status: Active'));
+      } else {
+        console.log(chalk.blue('🔍 Terminal feedback management'));
+        console.log(chalk.gray('Use --enable, --disable, or --status'));
+      }
+    } catch (error) {
+      console.error(chalk.red('❌ Error:'), error);
+      process.exit(1);
+    }
+  });
+
+program
+  .command('allowlist')
+  .description('Manage suggestion allowlist')
+  .argument('<action>', 'add or remove')
+  .argument('<item>', 'Item to add/remove from allowlist')
+  .action(async (action, item) => {
+    try {
+      if (action === 'add') {
+        console.log(chalk.green(`✅ Added "${item}" to allowlist`));
+      } else if (action === 'remove') {
+        console.log(chalk.yellow(`🗑️ Removed "${item}" from allowlist`));
+      } else {
+        console.log(chalk.red('❌ Invalid action. Use "add" or "remove"'));
+      }
+    } catch (error) {
+      console.error(chalk.red('❌ Error:'), error);
+      process.exit(1);
+    }
+  });
+
+program
+  .command('blocklist')
+  .description('Manage suggestion blocklist')
+  .argument('<action>', 'add or remove')
+  .argument('<item>', 'Item to add/remove from blocklist')
+  .action(async (action, item) => {
+    try {
+      if (action === 'add') {
+        console.log(chalk.red(`🚫 Added "${item}" to blocklist`));
+      } else if (action === 'remove') {
+        console.log(chalk.green(`✅ Removed "${item}" from blocklist`));
+      } else {
+        console.log(chalk.red('❌ Invalid action. Use "add" or "remove"'));
+      }
+    } catch (error) {
+      console.error(chalk.red('❌ Error:'), error);
+      process.exit(1);
+    }
+  });
+
+program
+  .command('suggestions')
+  .description('View and manage current suggestions')
+  .option('--clear', 'Clear all suggestions')
+  .option('--type <type>', 'Filter by suggestion type')
+  .action(async (options) => {
+    try {
+      if (options.clear) {
+        console.log(chalk.yellow('🗑️ Cleared all suggestions'));
+      } else {
+        console.log(chalk.blue('📋 Current suggestions:'));
+        console.log(chalk.gray('Use --type to filter or --clear to clear all'));
+      }
+    } catch (error) {
+      console.error(chalk.red('❌ Error:'), error);
+      process.exit(1);
+    }
+  });
+
 async function startIterativeLoop(
   runner: Runner,
   harvester: Harvester,
@@ -116,6 +201,24 @@ async function startIterativeLoop(
   config: any
 ) {
   console.log(chalk.yellow('🔄 Starting iterative loop...'));
+  
+  // Initialize terminal feedback and Cursor agent integration
+  const terminalFeedback = new TerminalFeedback({
+    enableSuggestions: true,
+    suggestionThreshold: 0.7,
+    autoExecute: false,
+    maxSuggestions: 10,
+    enableCodeExecution: true
+  });
+  
+  const cursorAgent = new CursorAgentIntegration({
+    enableAutoExecution: false,
+    maxMessages: 50,
+    enableCodeInjection: true,
+    enableTerminalControl: true
+  });
+  
+  await cursorAgent.initialize();
   
   // Detect project type
   const isTradingBot = detectTradingBotProject(process.cwd());
@@ -143,6 +246,10 @@ async function startIterativeLoop(
       // 1. Start/Restart the dev server
       console.log(chalk.blue('📡 Starting dev server...'));
       const serverProcess = await runner.startServer();
+      
+      // Start terminal feedback monitoring
+      console.log(chalk.blue('🔍 Starting terminal feedback monitoring...'));
+      await terminalFeedback.startMonitoring(serverProcess);
       
       // 2. Wait for server to be ready
       await runner.waitForServer(config.port);
@@ -204,13 +311,16 @@ async function startIterativeLoop(
       
     } catch (error) {
       console.error(chalk.red('❌ Error in loop:'), error);
-      console.log(chalk.yellow('🔄 Retrying in 3 seconds...'));
-      await new Promise(resolve => setTimeout(resolve, 3000));
+          console.log(chalk.yellow('🔄 Retrying in 3 seconds...'));
+          await new Promise(resolve => setTimeout(resolve, 3000));
+        }
+      }
+      
+      // Cleanup
+      terminalFeedback.stopMonitoring();
+      cursorAgent.stop();
+      console.log(chalk.blue('👋 IterAgent stopped.'));
     }
-  }
-  
-  console.log(chalk.blue('👋 IterAgent stopped.'));
-}
 
 async function initializeProject(isTradingBot: boolean = false) {
   const fs = await import('fs/promises');

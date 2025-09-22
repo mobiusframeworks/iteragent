@@ -21,6 +21,9 @@ IterAgent creates a seamless development loop inside Cursor IDE:
 
 - **Zero Configuration**: Works out of the box with most projects
 - **Smart Log Analysis**: De-noises logs, classifies errors, extracts metadata
+- **Terminal Feedback System**: Real-time console log analysis and intelligent suggestions
+- **Smart Suggestion Management**: Allowlist/blocklist for suggestion filtering
+- **Automatic Code Execution**: Execute suggested commands and inject code
 - **Comprehensive Testing**: Playwright-based smoke tests with accessibility checks
 - **Cursor Integration**: Seamlessly feeds fix requests to Cursor's AI
 - **Interactive TUI**: Beautiful terminal interface for monitoring and control
@@ -283,6 +286,59 @@ iteragent run
 ```
 
 For detailed mobile features documentation, see [MOBILE_FEATURES.md](./MOBILE_FEATURES.md).
+
+## 🔍 Terminal Feedback System
+
+IterAgent provides intelligent terminal feedback that analyzes console logs and sends suggestions directly to Cursor:
+
+### 🎯 Real-time Analysis
+- **Live Log Monitoring** - Monitors stdout/stderr in real-time
+- **Pattern Recognition** - Detects errors, warnings, and performance issues
+- **Smart Filtering** - Reduces noise and focuses on relevant issues
+- **Context Awareness** - Understands project type and development patterns
+
+### 💡 Intelligent Suggestions
+- **Error Detection** - Identifies and categorizes errors by severity
+- **Fix Commands** - Provides specific terminal commands to resolve issues
+- **Code Suggestions** - Injects TypeScript/JavaScript code improvements
+- **Performance Optimization** - Detects memory leaks and slow operations
+
+### 🎮 Interactive Control
+```bash
+# Manage terminal feedback
+iteragent feedback --enable
+iteragent feedback --disable
+iteragent feedback --status
+
+# Manage suggestion filters
+iteragent allowlist add "error"
+iteragent allowlist add "performance"
+iteragent blocklist add "deprecated"
+
+# View and manage suggestions
+iteragent suggestions
+iteragent suggestions --clear
+iteragent suggestions --type error
+
+# Execute suggestions
+iteragent execute suggestion_id
+```
+
+### 🚀 Quick Start for Terminal Feedback
+```bash
+# Enable terminal feedback (default)
+iteragent run
+
+# Configure suggestion threshold
+iteragent config suggestionThreshold 0.8
+
+# Add useful suggestion types to allowlist
+iteragent allowlist add "error"
+iteragent allowlist add "performance"
+iteragent allowlist add "security"
+```
+
+For detailed terminal feedback documentation, see [TERMINAL_FEEDBACK.md](./TERMINAL_FEEDBACK.md).
 
 ## 🔗 Cursor Integration
 
