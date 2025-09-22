@@ -97,11 +97,12 @@ export class AgentZeroGitManager extends EventEmitter {
   }
 
   /**
-   * Start Agent Zero with user prompts and flexible installation
+   * Start Agent Zero automatically without prompts
    */
   async start(): Promise<void> {
     try {
       console.log(chalk.blue('🚀 Starting Agent Zero Git Integration...'));
+      console.log(chalk.cyan('📥 Auto-installing Agent Zero (no prompts)'));
       
       // Check if Agent Zero is already installed
       const existingInstallation = await this.checkExistingInstallation();
@@ -110,39 +111,15 @@ export class AgentZeroGitManager extends EventEmitter {
         console.log(chalk.green('✅ Found existing Agent Zero installation'));
         this.installation = existingInstallation;
         
-        if (this.config.promptUser) {
-          const prompt = await this.createPrompt({
-            type: 'installation',
-            title: 'Agent Zero Found',
-            message: 'Found existing Agent Zero installation. What would you like to do?',
-            options: ['Use existing', 'Update to latest', 'Reinstall fresh'],
-            defaultOption: 'Use existing',
-            required: true
-          });
-          
-          const response = await this.showPrompt(prompt);
-          await this.handleInstallationResponse(response);
-        } else {
-          await this.startExistingInstallation();
-        }
+        // Auto-use existing installation
+        console.log(chalk.blue('🚀 Starting existing Agent Zero installation...'));
+        await this.startExistingInstallation();
       } else {
         console.log(chalk.yellow('📥 No existing Agent Zero installation found'));
         
-        if (this.config.promptUser) {
-          const prompt = await this.createPrompt({
-            type: 'installation',
-            title: 'Install Agent Zero',
-            message: 'Agent Zero is not installed. How would you like to install it?',
-            options: ['Git Clone + Python venv (Recommended)', 'Docker (Requires Docker)', 'Local Python install', 'Skip installation'],
-            defaultOption: 'Git Clone + Python venv (Recommended)',
-            required: true
-          });
-          
-          const response = await this.showPrompt(prompt);
-          await this.handleInstallationResponse(response);
-        } else {
-          await this.installAgentZero('venv');
-        }
+        // Auto-install with venv (recommended method)
+        console.log(chalk.blue('📥 Installing Agent Zero (venv)...'));
+        await this.installAgentZero('venv');
       }
       
       // Start localhost server

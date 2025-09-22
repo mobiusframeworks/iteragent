@@ -646,7 +646,8 @@ program
                 enableContinuousMonitoring: true,
                 enableCompactSummaries: true,
                 enableCursorIntegration: true,
-                autoStart: true
+                autoStart: true,
+                skipPrompts: true // Auto-proceed without user confirmation
               });
               
               if (options.start) {
@@ -669,9 +670,22 @@ program
                 console.log(chalk.gray(`  Logs API: http://localhost:${options.orchestratorPort}/api/logs`));
                 console.log(chalk.gray(`  Cursor Chat API: http://localhost:${options.orchestratorPort}/api/cursor-chat`));
                 
-                // Keep the process running
+                console.log(chalk.green('\n✅ InterTools is running! Press Ctrl+C to stop anytime.'));
+                console.log(chalk.cyan('🔄 Continuous monitoring loops are active'));
+                console.log(chalk.cyan('💬 Compact summaries will be sent to Cursor chat'));
+                
+                // Easy stop with Ctrl+C
                 process.on('SIGINT', async () => {
                   console.log(chalk.yellow('\n⏹️ Stopping InterTools Orchestrator...'));
+                  console.log(chalk.gray('🔄 Stopping specialized agents...'));
+                  await orchestrator.stop();
+                  console.log(chalk.green('✅ InterTools stopped successfully'));
+                  process.exit(0);
+                });
+                
+                // Keep running indefinitely
+                process.on('SIGTERM', async () => {
+                  console.log(chalk.yellow('\n⏹️ Received SIGTERM, stopping gracefully...'));
                   await orchestrator.stop();
                   process.exit(0);
                 });

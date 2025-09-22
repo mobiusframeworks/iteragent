@@ -18,6 +18,7 @@ export interface InterToolsOrchestratorConfig {
   enableCompactSummaries: boolean;
   enableCursorIntegration: boolean;
   autoStart: boolean;
+  skipPrompts: boolean;
   healthCheckInterval: number;
   logAnalysisInterval: number;
   summaryMaxLength: number;
@@ -96,6 +97,7 @@ export class InterToolsOrchestrator extends EventEmitter {
       healthCheckInterval: 30000,
       logAnalysisInterval: 5000,
       summaryMaxLength: 100,
+      skipPrompts: true, // Auto-proceed without user confirmation
       ...config
     };
 
