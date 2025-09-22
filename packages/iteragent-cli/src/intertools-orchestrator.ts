@@ -7,6 +7,7 @@ import express from 'express';
 import { Server as SocketIOServer } from 'socket.io';
 import { createServer } from 'http';
 import axios from 'axios';
+import { CursorAIInteractive } from './cursor-ai-interactive';
 
 export interface InterToolsOrchestratorConfig {
   containerName: string;
@@ -81,6 +82,9 @@ export class InterToolsOrchestrator extends EventEmitter {
   private terminalLogBuffer: string[] = [];
   private lastConsoleAnalysis: Date = new Date();
   private lastTerminalAnalysis: Date = new Date();
+  
+  // Interactive Cursor AI system
+  private cursorAIInteractive: CursorAIInteractive;
 
   constructor(config: Partial<InterToolsOrchestratorConfig> = {}) {
     super();
@@ -109,6 +113,9 @@ export class InterToolsOrchestrator extends EventEmitter {
         methods: ["GET", "POST"]
       }
     });
+
+    // Initialize interactive Cursor AI system
+    this.cursorAIInteractive = new CursorAIInteractive('.cursor/inbox');
 
     this.setupExpressRoutes();
     this.setupWebSocketHandlers();
@@ -374,6 +381,15 @@ export class InterToolsOrchestrator extends EventEmitter {
       console.log(chalk.blue(`📊 Log Interpreter: Processed ${this.logAnalysisResults.length} total analyses`));
       this.emit('logAnalysisCompleted', { results: this.logAnalysisResults });
 
+      // Create interactive commands if errors are detected
+      const hasErrors = this.logAnalysisResults.some(analysis => 
+        analysis.logType === 'error' || analysis.severity === 'high' || analysis.severity === 'critical'
+      );
+      
+      if (hasErrors && this.config.enableCursorIntegration) {
+        await this.createInteractiveCommandsForErrors();
+      }
+
     } catch (error) {
       console.error(chalk.red('❌ Log analysis error:'), error);
     } finally {
@@ -508,6 +524,64 @@ ${message.actionable ? 'Yes - See suggestions below' : 'No - Informational only'
     } catch (error) {
       console.error(chalk.red('❌ Failed to send message to Cursor:'), error);
       throw error;
+    }
+  }
+
+  /**
+   * Create interactive commands for Cursor AI when errors are detected
+   */
+  private async createInteractiveCommandsForErrors(): Promise<void> {
+    try {
+      // Get recent high-priority errors
+      const recentErrors = this.logAnalysisResults
+        .filter(analysis => 
+          analysis.severity === 'high' || analysis.severity === 'critical' ||
+          analysis.logType === 'error'
+        )
+        .slice(-5); // Last 5 errors
+
+      if (recentErrors.length === 0) return;
+
+      // Create a mock summary for the interactive system
+      const mockSummary = {
+        serverHealth: 'unhealthy' as const,
+        logAnalysis: {
+          errors: recentErrors.map(analysis => ({
+            message: analysis.summary,
+            timestamp: analysis.timestamp,
+            category: analysis.logType,
+            context: analysis.details
+          })),
+          warnings: this.logAnalysisResults
+            .filter(analysis => analysis.logType === 'warning')
+            .slice(-3)
+            .map(analysis => ({
+              message: analysis.summary,
+              timestamp: analysis.timestamp,
+              category: analysis.logType
+            })),
+          summary: {
+            totalEntries: this.logAnalysisResults.length,
+            errorCount: recentErrors.length,
+            warningCount: this.logAnalysisResults.filter(a => a.logType === 'warning').length,
+            categories: {}
+          }
+        },
+        criticalIssues: recentErrors
+          .filter(analysis => analysis.severity === 'critical')
+          .map(analysis => analysis.summary),
+        recommendations: recentErrors
+          .flatMap(analysis => analysis.suggestions || [])
+          .slice(0, 5)
+      };
+
+      // Create interactive commands
+      await this.cursorAIInteractive.sendInteractiveCommands(mockSummary as any);
+      
+      console.log(chalk.blue('🤖 Interactive error resolution commands created for Cursor AI'));
+      
+    } catch (error) {
+      console.error(chalk.red('❌ Failed to create interactive commands:'), error);
     }
   }
 

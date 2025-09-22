@@ -1,6 +1,6 @@
 {
   "name": "intertools",
-  "version": "1.0.11",
+  "version": "1.0.12",
   "description": "InterTools - Intelligent development tools with multi-agent orchestration for Cursor",
   "main": "dist/index.js",
   "bin": {

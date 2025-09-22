@@ -65,6 +65,33 @@ npx intertools@latest seamless --workflows
 npx intertools@latest seamless --test-chat "Help me debug this error"
 ```
 
+### 🎮 Interactive Cursor AI Commands
+```bash
+# Create interactive commands for error resolution
+npx intertools@latest interactive --create
+
+# List available interactive commands
+npx intertools@latest interactive --list
+
+# Execute specific command (use in Cursor AI chat)
+npx intertools@latest interactive --execute <commandId>
+```
+
+### 💬 Cursor AI Chat Integration
+When InterTools detects errors, it automatically creates interactive commands in `.cursor/inbox/`:
+
+1. **Open Cursor AI chat** and look for `intertools-interactive.md`
+2. **Select a command ID** from the available list
+3. **Type in chat**: "Execute command: [COMMAND_ID]"
+4. **Cursor AI will run the command** and provide detailed results
+5. **Review results** and continue with next steps
+
+**Available Command Types:**
+- 🔧 **Fix errors** automatically with intelligent suggestions
+- 🔍 **Analyze warnings** and provide context
+- 💡 **Apply optimizations** for performance improvements
+- ▶️ **Continue development loop** to next iteration
+
 ## 🎯 Expected Results
 - 25% faster error detection and resolution
 - 40% more efficient log analysis and insights

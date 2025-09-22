@@ -3,12 +3,15 @@ import chalk from 'chalk';
 import { Summary } from './summarizer';
 import { promises as fs } from 'fs';
 import path from 'path';
+import { CursorAIInteractive } from './cursor-ai-interactive';
 
 export class TUI {
   private cursorInboxPath: string;
+  private cursorAIInteractive: CursorAIInteractive;
 
   constructor(cursorInboxPath: string = '.cursor/inbox') {
     this.cursorInboxPath = cursorInboxPath;
+    this.cursorAIInteractive = new CursorAIInteractive(cursorInboxPath);
   }
 
   async showSummary(summary: Summary): Promise<boolean> {
@@ -75,7 +78,12 @@ export class TUI {
         message: 'What would you like to do?',
         choices: [
           {
-            name: '📝 Send fix request to Cursor (Press Enter)',
+            name: '🤖 Interactive Cursor AI Commands (Recommended)',
+            value: 'interactive_commands',
+            short: 'Interactive AI'
+          },
+          {
+            name: '📝 Send fix request to Cursor (Legacy)',
             value: 'fix_request',
             short: 'Send to Cursor'
           },
@@ -99,6 +107,10 @@ export class TUI {
     ]);
 
     switch (action) {
+      case 'interactive_commands':
+        await this.sendInteractiveCommandsToCursor(summary);
+        return true; // Continue the loop
+        
       case 'fix_request':
         await this.sendFixRequestToCursor(summary);
         return true; // Continue the loop
@@ -115,6 +127,43 @@ export class TUI {
         
       default:
         return true;
+    }
+  }
+
+  private async sendInteractiveCommandsToCursor(summary: Summary): Promise<void> {
+    console.log(chalk.blue('🤖 Creating interactive commands for Cursor AI...'));
+    
+    try {
+      await this.cursorAIInteractive.sendInteractiveCommands(summary);
+      
+      console.log(chalk.green('✅ Interactive commands created successfully!'));
+      console.log();
+      console.log(chalk.yellow('💡 How to use in Cursor AI chat:'));
+      console.log(chalk.gray('   1. Open Cursor AI chat'));
+      console.log(chalk.gray('   2. Look for the "intertools-interactive.md" file'));
+      console.log(chalk.gray('   3. Select a command ID from the list'));
+      console.log(chalk.gray('   4. Type: "Execute command: [COMMAND_ID]"'));
+      console.log(chalk.gray('   5. Cursor AI will run the command and provide results'));
+      console.log();
+      console.log(chalk.cyan('🎯 Available command types:'));
+      console.log(chalk.gray('   • Fix errors automatically'));
+      console.log(chalk.gray('   • Analyze warnings'));
+      console.log(chalk.gray('   • Apply optimizations'));
+      console.log(chalk.gray('   • Continue development loop'));
+      console.log();
+      
+      // Wait for user to press Enter
+      await inquirer.prompt([
+        {
+          type: 'input',
+          name: 'continue',
+          message: 'Press Enter to continue...',
+          default: ''
+        }
+      ]);
+      
+    } catch (error) {
+      console.error(chalk.red('❌ Error creating interactive commands:'), error);
     }
   }
 

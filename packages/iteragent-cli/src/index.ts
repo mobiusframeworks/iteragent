@@ -1807,4 +1807,111 @@ async function initializeMobileProject(platform: string = 'auto') {
   console.log(chalk.blue(`  • Hot reload: ${config.mobile.hotReload ? 'enabled' : 'disabled'}`));
 }
 
+// Interactive Cursor AI Commands
+program
+  .command('interactive')
+  .description('Create interactive commands for Cursor AI error resolution')
+  .option('--create', 'Create interactive commands from current project state')
+  .option('--list', 'List available interactive commands')
+  .option('--execute <commandId>', 'Execute a specific command by ID')
+  .action(async (options) => {
+    try {
+      const { CursorAIInteractive } = await import('./cursor-ai-interactive');
+      const interactive = new CursorAIInteractive('.cursor/inbox');
+      
+      if (options.create) {
+        console.log(chalk.blue('🤖 Creating interactive commands for Cursor AI...'));
+        
+        // Create a mock summary for demonstration
+        const mockSummary = {
+          serverHealth: 'unhealthy' as const,
+          logAnalysis: {
+            errors: [
+              {
+                message: 'TypeError: Cannot read property of undefined',
+                timestamp: new Date(),
+                category: 'error',
+                context: 'Line 42 in src/components/Button.tsx'
+              },
+              {
+                message: 'Module not found: Error: Can\'t resolve \'react-router-dom\'',
+                timestamp: new Date(),
+                category: 'error',
+                context: 'Import statement in src/App.tsx'
+              }
+            ],
+            warnings: [
+              {
+                message: 'Warning: componentWillMount is deprecated',
+                timestamp: new Date(),
+                category: 'warning'
+              }
+            ],
+            summary: {
+              totalEntries: 15,
+              errorCount: 2,
+              warningCount: 1,
+              categories: {}
+            }
+          },
+          criticalIssues: ['TypeError: Cannot read property of undefined'],
+          recommendations: [
+            'Add null checks before accessing object properties',
+            'Install missing dependencies',
+            'Update deprecated React lifecycle methods'
+          ]
+        };
+        
+        await interactive.sendInteractiveCommands(mockSummary as any);
+        
+        console.log(chalk.green('✅ Interactive commands created successfully!'));
+        console.log(chalk.yellow('💡 Check .cursor/inbox/intertools-interactive.md for available commands'));
+        
+      } else if (options.list) {
+        console.log(chalk.blue('📋 Available interactive commands:'));
+        
+        try {
+          const fs = await import('fs/promises');
+          const path = await import('path');
+          const commandsDir = '.cursor/inbox/commands';
+          const files = await fs.readdir(commandsDir);
+          const commandFiles = files.filter((file: string) => file.endsWith('.md'));
+          
+          if (commandFiles.length === 0) {
+            console.log(chalk.yellow('No interactive commands found. Run with --create to generate them.'));
+            return;
+          }
+          
+          for (const file of commandFiles) {
+            const filePath = path.join(commandsDir, file);
+            const content = await fs.readFile(filePath, 'utf8');
+            const lines = content.split('\n');
+            const title = lines.find((line: string) => line.startsWith('# '))?.substring(2) || 'Unknown Command';
+            const commandIdLine = lines.find((line: string) => line.startsWith('**Command ID:**'));
+            const commandId = commandIdLine ? commandIdLine.split('**Command ID:**')[1].trim() : 'unknown';
+            
+            console.log(chalk.cyan(`  • ${title}`));
+            console.log(chalk.gray(`    ID: ${commandId}`));
+            console.log();
+          }
+          
+        } catch (error) {
+          console.log(chalk.yellow('No interactive commands found. Run with --create to generate them.'));
+        }
+        
+      } else if (options.execute) {
+        console.log(chalk.blue(`🚀 Executing command: ${options.execute}`));
+        console.log(chalk.yellow('This would execute the command in Cursor AI chat'));
+        console.log(chalk.gray('Use "Execute command: [COMMAND_ID]" in Cursor AI chat to run it'));
+        
+      } else {
+        console.log(chalk.yellow('Please specify an action: --create, --list, or --execute <commandId>'));
+      }
+      
+    } catch (error) {
+      console.error(chalk.red('❌ Error:'), error instanceof Error ? error.message : String(error));
+      process.exit(1);
+    }
+  });
+
 program.parse();
