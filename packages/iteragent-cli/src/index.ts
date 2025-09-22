@@ -18,6 +18,8 @@ import { TerminalFeedback } from './terminal-feedback';
 import { CursorAgentIntegration } from './cursor-agent-integration';
 import { CursorAIFunctionExecutor, SpeedOptimizationSuggestion } from './cursor-ai-executor';
 import { CursorAIFunctionPanel } from './cursor-ai-panel';
+import { AgentZeroManager } from './agent-zero-manager';
+import { DockerAgentZeroService } from './docker-agent-zero';
 
 const program = new Command();
 
@@ -367,6 +369,152 @@ program
         console.log(chalk.blue('⚡ Speed Optimization Management'));
         console.log(chalk.gray('Use --enable, --disable, --suggestions, or --apply'));
       }
+    } catch (error) {
+      console.error(chalk.red('❌ Error:'), error);
+      process.exit(1);
+    }
+  });
+
+program
+  .command('agent-zero')
+  .description('Agent Zero mode - Connect to Docker Agent Zero runtime')
+  .option('--start', 'Start Agent Zero mode')
+  .option('--stop', 'Stop Agent Zero mode')
+  .option('--status', 'Show Agent Zero status')
+  .option('--dashboard', 'Open Agent Zero dashboard')
+  .option('--logs', 'Show Agent Zero logs')
+  .option('--enhancements', 'Show available enhancements')
+  .option('--apply-enhancement <name>', 'Apply specific enhancement')
+  .action(async (options) => {
+    try {
+      const agentZeroManager = new AgentZeroManager();
+      const dockerService = new DockerAgentZeroService();
+      
+      if (options.start) {
+        console.log(chalk.blue('🚀 Starting Agent Zero mode...'));
+        await dockerService.start();
+        await agentZeroManager.start();
+        console.log(chalk.green('✅ Agent Zero mode started successfully'));
+        console.log(chalk.blue(`📊 Dashboard: http://localhost:${agentZeroManager.getConfig().dashboardPort}`));
+        console.log(chalk.blue(`🔌 API: http://localhost:${agentZeroManager.getConfig().port}`));
+      } else if (options.stop) {
+        console.log(chalk.yellow('⏹️ Stopping Agent Zero mode...'));
+        await agentZeroManager.stop();
+        await dockerService.stop();
+        console.log(chalk.green('✅ Agent Zero mode stopped successfully'));
+      } else if (options.status) {
+        const runtime = dockerService.getRuntime();
+        const config = agentZeroManager.getConfig();
+        
+        console.log(chalk.blue('📊 Agent Zero Status:'));
+        console.log(chalk.gray(`Status: ${runtime?.status || 'Not running'}`));
+        console.log(chalk.gray(`Health: ${runtime?.health || 'Unknown'}`));
+        console.log(chalk.gray(`Container: ${config.containerName}`));
+        console.log(chalk.gray(`Port: ${config.port}`));
+        console.log(chalk.gray(`Dashboard Port: ${config.dashboardPort}`));
+        console.log(chalk.gray(`Projects: ${agentZeroManager.getProjects().length}`));
+        console.log(chalk.gray(`Sessions: ${agentZeroManager.getSessions().length}`));
+        console.log(chalk.gray(`Logs: ${agentZeroManager.getLogs().length}`));
+        
+        if (runtime?.metrics) {
+          console.log(chalk.cyan('📈 Performance Metrics:'));
+          console.log(chalk.gray(`CPU Usage: ${runtime.metrics.cpuUsage.toFixed(1)}%`));
+          console.log(chalk.gray(`Memory Usage: ${runtime.metrics.memoryUsage.toFixed(1)}%`));
+          console.log(chalk.gray(`Network IO: ${runtime.metrics.networkIO.toFixed(1)} MB`));
+          console.log(chalk.gray(`Disk IO: ${runtime.metrics.diskIO.toFixed(1)} MB`));
+        }
+      } else if (options.dashboard) {
+        const config = agentZeroManager.getConfig();
+        console.log(chalk.blue('🌐 Opening Agent Zero dashboard...'));
+        console.log(chalk.green(`Dashboard URL: http://localhost:${config.dashboardPort}`));
+        console.log(chalk.gray('The dashboard will open in your default browser'));
+        
+        // Open dashboard in browser
+        const { exec } = require('child_process');
+        exec(`open http://localhost:${config.dashboardPort}`);
+      } else if (options.logs) {
+        const logs = agentZeroManager.getLogs();
+        console.log(chalk.blue('📝 Agent Zero Logs:'));
+        
+        if (logs.length === 0) {
+          console.log(chalk.yellow('No logs available'));
+        } else {
+          logs.slice(-20).forEach(log => {
+            const timestamp = log.timestamp.toLocaleString();
+            const typeColor = log.type === 'error' ? chalk.red : 
+                            log.type === 'performance' ? chalk.cyan :
+                            log.type === 'execution' ? chalk.green : chalk.white;
+            console.log(chalk.gray(`[${timestamp}]`), typeColor(`[${log.type}]`), chalk.white(log.message));
+          });
+        }
+      } else if (options.enhancements) {
+        const enhancements = dockerService.getEnhancements();
+        console.log(chalk.blue('⚡ Available Enhancements:'));
+        
+        enhancements.forEach((enhancement, index) => {
+          const statusColor = enhancement.status === 'completed' ? chalk.green :
+                            enhancement.status === 'implementing' ? chalk.yellow :
+                            enhancement.status === 'failed' ? chalk.red : chalk.gray;
+          const impactColor = enhancement.impact === 'high' ? chalk.red :
+                             enhancement.impact === 'medium' ? chalk.yellow : chalk.green;
+          
+          console.log(chalk.gray(`${index + 1}.`), chalk.white.bold(enhancement.name));
+          console.log(chalk.gray(`   ${enhancement.description}`));
+          console.log(impactColor(`   Impact: ${enhancement.impact}`));
+          console.log(chalk.gray(`   Effort: ${enhancement.effort}`));
+          console.log(statusColor(`   Status: ${enhancement.status}`));
+          console.log(chalk.gray('─'.repeat(40)));
+        });
+      } else if (options.applyEnhancement) {
+        console.log(chalk.blue(`🚀 Applying enhancement: ${options.applyEnhancement}`));
+        try {
+          await dockerService.applyEnhancement(options.applyEnhancement);
+          console.log(chalk.green(`✅ Enhancement "${options.applyEnhancement}" applied successfully`));
+        } catch (error) {
+          console.log(chalk.red(`❌ Failed to apply enhancement: ${error}`));
+        }
+      } else {
+        console.log(chalk.blue('🤖 Agent Zero Mode'));
+        console.log(chalk.gray('Use --start, --stop, --status, --dashboard, --logs, --enhancements, or --apply-enhancement'));
+      }
+    } catch (error) {
+      console.error(chalk.red('❌ Error:'), error);
+      process.exit(1);
+    }
+  });
+
+program
+  .command('visualize')
+  .description('Open IterAgent visualization dashboard')
+  .option('--port <port>', 'Dashboard port', '3000')
+  .option('--open', 'Open dashboard in browser')
+  .action(async (options) => {
+    try {
+      const agentZeroManager = new AgentZeroManager({
+        dashboardPort: parseInt(options.port),
+        enableVisualization: true,
+        enableLogging: true,
+        enableSettings: true
+      });
+      
+      console.log(chalk.blue('🎨 Starting IterAgent visualization dashboard...'));
+      await agentZeroManager.start();
+      
+      console.log(chalk.green('✅ Visualization dashboard started'));
+      console.log(chalk.blue(`📊 Dashboard: http://localhost:${options.port}`));
+      
+      if (options.open) {
+        const { exec } = require('child_process');
+        exec(`open http://localhost:${options.port}`);
+      }
+      
+      // Keep the process running
+      process.on('SIGINT', async () => {
+        console.log(chalk.yellow('\n⏹️ Stopping dashboard...'));
+        await agentZeroManager.stop();
+        process.exit(0);
+      });
+      
     } catch (error) {
       console.error(chalk.red('❌ Error:'), error);
       process.exit(1);
