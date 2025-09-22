@@ -6,7 +6,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/alexhorton/iteragent.git"
+    "url": "https://github.com/luvs2spluj/iteragent.git"
   },
   "keywords": [
     "cursor",
@@ -50,9 +50,9 @@
     "https://github.com/alexhorton/iteragent/blob/main/docs/screenshot-tui.png",
     "https://github.com/alexhorton/iteragent/blob/main/docs/screenshot-summary.png"
   ],
-  "documentation": "https://github.com/alexhorton/iteragent#readme",
+  "documentation": "https://github.com/luvs2spluj/iteragent#readme",
   "support": {
-    "issues": "https://github.com/alexhorton/iteragent/issues",
-    "discussions": "https://github.com/alexhorton/iteragent/discussions"
+    "issues": "https://github.com/luvs2spluj/iteragent/issues",
+    "discussions": "https://github.com/luvs2spluj/iteragent/discussions"
   }
 }

@@ -28,12 +28,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/alexhorton/iteragent.git"
+    "url": "https://github.com/luvs2spluj/iteragent.git"
   },
   "bugs": {
-    "url": "https://github.com/alexhorton/iteragent/issues"
+    "url": "https://github.com/luvs2spluj/iteragent/issues"
   },
-  "homepage": "https://github.com/alexhorton/iteragent#readme",
+  "homepage": "https://github.com/luvs2spluj/iteragent#readme",
   "engines": {
     "node": ">=16.0.0"
   },
