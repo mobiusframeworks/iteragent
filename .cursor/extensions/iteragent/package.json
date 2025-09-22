@@ -1,0 +1,58 @@
+{
+  "name": "iteragent",
+  "displayName": "IterAgent",
+  "description": "Iterative testing agent for Cursor IDE",
+  "version": "1.0.3",
+  "publisher": "iteragent",
+  "engines": {
+    "vscode": "^1.74.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onCommand:iteragent.start",
+    "onCommand:iteragent.stop",
+    "onCommand:iteragent.status"
+  ],
+  "main": "./extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "iteragent.start",
+        "title": "Start IterAgent",
+        "category": "IterAgent"
+      },
+      {
+        "command": "iteragent.stop",
+        "title": "Stop IterAgent",
+        "category": "IterAgent"
+      },
+      {
+        "command": "iteragent.status",
+        "title": "IterAgent Status",
+        "category": "IterAgent"
+      }
+    ],
+    "configuration": {
+      "title": "IterAgent",
+      "properties": {
+        "iteragent.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable IterAgent"
+        },
+        "iteragent.autoStart": {
+          "type": "boolean",
+          "default": true,
+          "description": "Auto-start IterAgent"
+        },
+        "iteragent.globalInstall": {
+          "type": "boolean",
+          "default": true,
+          "description": "Use global IterAgent installation"
+        }
+      }
+    }
+  }
+}

@@ -70,25 +70,27 @@ export class MobileTester {
       const results: MobileTestResult[] = [];
       
       // Run different types of tests based on platform
-      if (this.config.mobileTesting.testTypes.includes('unit')) {
+      const testTypes = this.config.mobileTesting?.testTypes || ['unit', 'integration', 'e2e'];
+      
+      if (testTypes.includes('unit')) {
         console.log(chalk.yellow('🧪 Running unit tests...'));
         const unitResults = await this.runUnitTests();
         results.push(...unitResults);
       }
       
-      if (this.config.mobileTesting.testTypes.includes('integration')) {
+      if (testTypes.includes('integration')) {
         console.log(chalk.yellow('🔗 Running integration tests...'));
         const integrationResults = await this.runIntegrationTests();
         results.push(...integrationResults);
       }
       
-      if (this.config.mobileTesting.testTypes.includes('e2e')) {
+      if (testTypes.includes('e2e')) {
         console.log(chalk.yellow('🎯 Running E2E tests...'));
         const e2eResults = await this.runE2ETests();
         results.push(...e2eResults);
       }
       
-      if (this.config.mobileTesting.testTypes.includes('performance')) {
+      if (testTypes.includes('performance')) {
         console.log(chalk.yellow('⚡ Running performance tests...'));
         const performanceResults = await this.runPerformanceTests();
         results.push(...performanceResults);

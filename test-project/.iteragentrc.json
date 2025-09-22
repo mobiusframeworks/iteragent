@@ -1,0 +1,10 @@
+{
+  "port": 3000,
+  "startCommand": "npm run dev",
+  "routes": [
+    "/"
+  ],
+  "logCaptureDuration": 5000,
+  "testTimeout": 30000,
+  "cursorInboxPath": ".cursor/inbox"
+}
