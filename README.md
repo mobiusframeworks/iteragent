@@ -30,6 +30,55 @@ InterTools creates a "big gun" multi-agent orchestration system inside Cursor ID
 - **Interactive TUI**: Beautiful terminal interface for monitoring and control
 - **Flexible Configuration**: Customize ports, routes, timeouts, and more
 - **Multiple Project Types**: Supports Node.js, Python, Rust, Go, and more
+- **🌐 Web Chat Integration**: Click-to-chat functionality for any website
+
+## 🌐 Web Chat - Click-to-Chat Functionality
+
+InterTools now includes a powerful web chat system that allows users to provide feedback about any web page by clicking on elements and sharing their thoughts.
+
+### ✨ Features
+- **🖱️ Click-to-Chat**: Click anywhere on any web page to open chat interface
+- **🎯 Element Selection**: Click on specific elements to highlight them for context
+- **📊 Page Analysis**: Automatic capture of page context, viewport, and performance data
+- **🔄 Real-time Communication**: Instant feedback to InterTools system
+- **🌍 Cross-Platform**: Works on any website with the extension script
+
+### 🚀 Quick Start
+```bash
+# Start web chat server
+npx intertools@1.0.14 web-chat --start
+
+# Enable on any website:
+# 1. Open browser developer tools (F12)
+# 2. Go to Console tab
+# 3. Paste the extension script from WEB_CHAT_GUIDE.md
+# 4. Click the chat button (💬) that appears
+# 5. Select elements and provide feedback
+```
+
+### 📋 Web Chat Commands
+```bash
+# Start web chat server
+npx intertools@1.0.14 web-chat --start
+
+# Start with custom port
+npx intertools@1.0.14 web-chat --start --port 3002
+
+# View message logs
+npx intertools@1.0.14 web-chat --logs
+
+# Clear all messages
+npx intertools@1.0.14 web-chat --clear
+```
+
+### 🎯 Use Cases
+- **User Experience Testing**: Provide feedback about page usability
+- **Bug Reports**: Report issues with specific elements
+- **Design Reviews**: Share thoughts about page design and layout
+- **Accessibility Issues**: Report missing alt text or poor contrast
+- **Performance Issues**: Report slow loading or broken functionality
+
+**📚 Full Documentation**: See [WEB_CHAT_GUIDE.md](WEB_CHAT_GUIDE.md) for complete setup and usage instructions.
 
 ## 👥 Specialized Agent Team
 

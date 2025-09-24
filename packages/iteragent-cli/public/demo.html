@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InterTools Web Chat Demo</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .demo-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .demo-section h2 {
+            color: #667eea;
+            margin-top: 0;
+        }
+        
+        .button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: transform 0.3s ease;
+        }
+        
+        .button:hover {
+            transform: scale(1.05);
+        }
+        
+        .input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+        
+        .input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .code-block {
+            background: #f4f4f4;
+            border-radius: 10px;
+            padding: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            overflow-x: auto;
+            margin: 10px 0;
+        }
+        
+        .status {
+            padding: 10px;
+            border-radius: 10px;
+            margin: 10px 0;
+            font-weight: bold;
+        }
+        
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .status.info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        
+        .chat-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            z-index: 1000;
+            transition: all 0.3s ease;
+            user-select: none;
+        }
+        
+        .chat-button:hover {
+            transform: scale(1.1);
+        }
+        
+        .highlight {
+            outline: 2px solid #667eea !important;
+            outline-offset: 2px !important;
+            background-color: rgba(102, 126, 234, 0.1) !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 InterTools Web Chat Demo</h1>
+        
+        <div class="demo-section">
+            <h2>📝 What is InterTools Web Chat?</h2>
+            <p>InterTools Web Chat allows you to provide feedback about any web page by clicking on elements and sharing your thoughts. This feedback is then fed back to the InterTools system for analysis and improvement.</p>
+        </div>
+        
+        <div class="demo-section">
+            <h2>🎯 How to Use</h2>
+            <ol>
+                <li><strong>Start the Web Chat Server:</strong> Run <code>npx intertools@1.0.13 web-chat --start</code></li>
+                <li><strong>Inject the Extension:</strong> Open browser developer tools (F12) and paste the extension script</li>
+                <li><strong>Click to Chat:</strong> Click the chat button that appears on the page</li>
+                <li><strong>Select Elements:</strong> Click on any element to highlight it for context</li>
+                <li><strong>Share Feedback:</strong> Type your thoughts about the page and send</li>
+            </ol>
+        </div>
+        
+        <div class="demo-section">
+            <h2>🔧 Extension Script</h2>
+            <p>Copy and paste this script into your browser's developer console:</p>
+            <div class="code-block" id="extension-script">
+                // InterTools Web Chat Extension Script
+                // This will be loaded dynamically
+            </div>
+            <button class="button" onclick="loadExtensionScript()">📋 Load Extension Script</button>
+        </div>
+        
+        <div class="demo-section">
+            <h2>📊 Test Elements</h2>
+            <p>Click on any of these elements to test the highlighting functionality:</p>
+            
+            <button class="button" onclick="testElement(this)">Test Button 1</button>
+            <button class="button" onclick="testElement(this)">Test Button 2</button>
+            
+            <input type="text" class="input" placeholder="Test input field" onclick="testElement(this)">
+            
+            <div class="code-block" onclick="testElement(this)">
+                <strong>Clickable Code Block</strong><br>
+                This is a test element that you can click to highlight.
+            </div>
+        </div>
+        
+        <div class="demo-section">
+            <h2>📈 Status</h2>
+            <div id="status" class="status info">
+                🔍 Checking InterTools Web Chat server connection...
+            </div>
+            <button class="button" onclick="checkServerStatus()">🔄 Check Status</button>
+        </div>
+        
+        <div class="demo-section">
+            <h2>💡 Features</h2>
+            <ul>
+                <li><strong>Click-to-Chat:</strong> Click anywhere on the page to open the chat interface</li>
+                <li><strong>Element Context:</strong> Select specific elements to provide targeted feedback</li>
+                <li><strong>Page Analysis:</strong> Automatic capture of page context, viewport, and performance data</li>
+                <li><strong>Real-time Communication:</strong> Instant feedback to InterTools system</li>
+                <li><strong>Cross-Platform:</strong> Works on any website with the extension script</li>
+            </ul>
+        </div>
+    </div>
+    
+    <!-- Chat Button (will be added by extension) -->
+    <div class="chat-button" id="intertools-chat-button" style="display: none;">
+        💬
+    </div>
+    
+    <script>
+        // Test element highlighting
+        function testElement(element) {
+            // Remove previous highlight
+            document.querySelectorAll('.highlight').forEach(el => {
+                el.classList.remove('highlight');
+            });
+            
+            // Add highlight to clicked element
+            element.classList.add('highlight');
+            
+            // Show feedback
+            showStatus('✅ Element highlighted: ' + element.tagName + (element.id ? '#' + element.id : ''), 'success');
+            
+            // Remove highlight after 2 seconds
+            setTimeout(() => {
+                element.classList.remove('highlight');
+            }, 2000);
+        }
+        
+        // Load extension script
+        function loadExtensionScript() {
+            const script = `
+                // InterTools Web Chat Extension
+                class InterToolsWebChatExtension {
+                    constructor(serverUrl = 'http://localhost:3001') {
+                        this.chatServerUrl = serverUrl;
+                        this.init();
+                    }
+                    
+                    init() {
+                        this.createChatButton();
+                        this.createChatOverlay();
+                        this.setupEventListeners();
+                        this.checkServerConnection();
+                    }
+                    
+                    createChatButton() {
+                        const button = document.getElementById('intertools-chat-button');
+                        if (button) {
+                            button.style.display = 'flex';
+                            button.onclick = () => this.toggleChat();
+                        }
+                    }
+                    
+                    createChatOverlay() {
+                        // Simplified chat overlay for demo
+                        console.log('Chat overlay would be created here');
+                    }
+                    
+                    setupEventListeners() {
+                        // Event listeners would be set up here
+                        console.log('Event listeners set up');
+                    }
+                    
+                    async checkServerConnection() {
+                        try {
+                            const response = await fetch('http://localhost:3001/api/health');
+                            const result = await response.json();
+                            if (result.success) {
+                                showStatus('✅ InterTools Web Chat server connected!', 'success');
+                                this.enable();
+                            } else {
+                                showStatus('⚠️ InterTools Web Chat server not responding', 'error');
+                            }
+                        } catch (error) {
+                            showStatus('❌ InterTools Web Chat server not available. Start it with: npx intertools@1.0.13 web-chat --start', 'error');
+                        }
+                    }
+                    
+                    enable() {
+                        const button = document.getElementById('intertools-chat-button');
+                        if (button) {
+                            button.style.display = 'flex';
+                        }
+                    }
+                    
+                    toggleChat() {
+                        showStatus('💬 Chat interface would open here', 'info');
+                    }
+                }
+                
+                // Initialize extension
+                const extension = new InterToolsWebChatExtension();
+                window.InterToolsExtension = extension;
+            `;
+            
+            // Execute the script
+            eval(script);
+            showStatus('✅ Extension script loaded successfully!', 'success');
+        }
+        
+        // Check server status
+        async function checkServerStatus() {
+            const statusDiv = document.getElementById('status');
+            statusDiv.className = 'status info';
+            statusDiv.textContent = '🔍 Checking InterTools Web Chat server connection...';
+            
+            try {
+                const response = await fetch('http://localhost:3001/api/health');
+                const result = await response.json();
+                
+                if (result.success) {
+                    statusDiv.className = 'status success';
+                    statusDiv.textContent = '✅ InterTools Web Chat server is running!';
+                } else {
+                    statusDiv.className = 'status error';
+                    statusDiv.textContent = '⚠️ InterTools Web Chat server not responding';
+                }
+            } catch (error) {
+                statusDiv.className = 'status error';
+                statusDiv.textContent = '❌ InterTools Web Chat server not available. Start it with: npx intertools@1.0.13 web-chat --start';
+            }
+        }
+        
+        // Show status message
+        function showStatus(message, type) {
+            const statusDiv = document.getElementById('status');
+            statusDiv.className = 'status ' + type;
+            statusDiv.textContent = message;
+        }
+        
+        // Auto-check status on page load
+        window.addEventListener('load', () => {
+            setTimeout(checkServerStatus, 1000);
+        });
+    </script>
+</body>
+</html>

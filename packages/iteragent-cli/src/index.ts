@@ -24,6 +24,7 @@ import { AgentZeroGitManager } from './agent-zero-git-manager';
 import { AgentZeroContainerService } from './agent-zero-container-service';
 import { AgentZeroSeamlessIntegration } from './agent-zero-seamless-integration';
 import { InterToolsOrchestrator } from './intertools-orchestrator';
+import { InterToolsWebChat } from './web-chat-server';
 
 const program = new Command();
 
@@ -1911,6 +1912,119 @@ program
     } catch (error) {
       console.error(chalk.red('❌ Error:'), error instanceof Error ? error.message : String(error));
       process.exit(1);
+    }
+  });
+
+// Web Chat Server
+program
+  .command('web-chat')
+  .description('Start InterTools Web Chat server for click-to-chat functionality')
+  .option('-p, --port <port>', 'Port for web chat server', '3001')
+  .option('-h, --host <host>', 'Host for web chat server', 'localhost')
+  .option('-s, --start', 'Start the web chat server')
+  .option('-t, --stop', 'Stop the web chat server')
+  .option('-c, --clear', 'Clear all web chat messages')
+  .option('-l, --logs', 'Show web chat logs')
+  .action(async (options) => {
+    try {
+      const webChat = new InterToolsWebChat({
+        port: parseInt(options.port),
+        host: options.host,
+        enableCORS: true,
+        maxMessageLength: 1000,
+        enablePageContext: true,
+        enableElementCapture: true,
+        logPath: '.intertools/web-chat-logs.json'
+      });
+
+      if (options.start) {
+        console.log(chalk.blue('🌐 Starting InterTools Web Chat server...'));
+        
+        webChat.on('started', (info) => {
+          console.log(chalk.green(`✅ Web chat server started at http://${info.host}:${info.port}`));
+          console.log(chalk.cyan('💬 Click-to-chat functionality is now available'));
+          console.log(chalk.yellow('📝 Inject the extension script into any web page to enable chat'));
+          console.log('');
+          console.log(chalk.white('To enable click-to-chat on any website:'));
+          console.log(chalk.cyan('1. Open browser developer tools (F12)'));
+          console.log(chalk.cyan('2. Go to Console tab'));
+          console.log(chalk.cyan('3. Paste the extension script from:'));
+          console.log(chalk.white('   packages/iteragent-cli/src/web-chat-extension.ts'));
+          console.log('');
+          console.log(chalk.green('🎯 Web chat interface: http://' + info.host + ':' + info.port));
+        });
+
+        webChat.on('webChatMessage', (message) => {
+          console.log(chalk.blue('💬 New web chat message:'));
+          console.log(chalk.white(`   Page: ${message.pageTitle}`));
+          console.log(chalk.white(`   Message: ${message.message}`));
+          console.log(chalk.white(`   Time: ${message.timestamp.toLocaleTimeString()}`));
+          if (message.elementInfo) {
+            console.log(chalk.white(`   Element: ${message.elementInfo.tagName}${message.elementInfo.id ? '#' + message.elementInfo.id : ''}`));
+          }
+        });
+
+        await webChat.start();
+
+        // Keep the process running
+        process.on('SIGINT', async () => {
+          console.log(chalk.yellow('\n🛑 Stopping web chat server...'));
+          await webChat.stop();
+          process.exit(0);
+        });
+
+        // Keep alive
+        setInterval(() => {}, 1000);
+
+      } else if (options.stop) {
+        console.log(chalk.yellow('🛑 Stopping web chat server...'));
+        await webChat.stop();
+        console.log(chalk.green('✅ Web chat server stopped'));
+
+      } else if (options.clear) {
+        console.log(chalk.yellow('🗑️  Clearing web chat messages...'));
+        webChat.clearMessages();
+        console.log(chalk.green('✅ Web chat messages cleared'));
+
+      } else if (options.logs) {
+        console.log(chalk.blue('📋 Web Chat Messages:'));
+        const messages = webChat.getMessages();
+        
+        if (messages.length === 0) {
+          console.log(chalk.yellow('⚠️  No messages found'));
+          return;
+        }
+
+        messages.slice(-10).forEach((message, index) => {
+          console.log(chalk.cyan(`\n${index + 1}. ${message.pageTitle}`));
+          console.log(chalk.white(`   Message: ${message.message}`));
+          console.log(chalk.white(`   Time: ${message.timestamp.toLocaleTimeString()}`));
+          console.log(chalk.white(`   URL: ${message.pageUrl}`));
+          if (message.elementInfo) {
+            console.log(chalk.white(`   Element: ${message.elementInfo.tagName}${message.elementInfo.id ? '#' + message.elementInfo.id : ''}`));
+          }
+        });
+
+      } else {
+        console.log(chalk.blue('🌐 InterTools Web Chat'));
+        console.log('');
+        console.log(chalk.white('Available options:'));
+        console.log(chalk.cyan('  --start     Start the web chat server'));
+        console.log(chalk.cyan('  --stop      Stop the web chat server'));
+        console.log(chalk.cyan('  --clear     Clear all web chat messages'));
+        console.log(chalk.cyan('  --logs      Show web chat logs'));
+        console.log(chalk.cyan('  --port      Set port (default: 3001)'));
+        console.log(chalk.cyan('  --host      Set host (default: localhost)'));
+        console.log('');
+        console.log(chalk.yellow('Examples:'));
+        console.log(chalk.white('  intertools web-chat --start'));
+        console.log(chalk.white('  intertools web-chat --start --port 3002'));
+        console.log(chalk.white('  intertools web-chat --logs'));
+        console.log(chalk.white('  intertools web-chat --clear'));
+      }
+      
+    } catch (error) {
+      console.error(chalk.red('❌ Web chat command failed:'), error instanceof Error ? error.message : String(error));
     }
   });
 
