@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InterTools Test Website - E-commerce Demo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f8f9fa;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+        
+        .nav {
+            display: flex;
+            gap: 2rem;
+        }
+        
+        .nav a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+        
+        .nav a:hover {
+            background: rgba(255,255,255,0.2);
+        }
+        
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 4rem 0;
+            text-align: center;
+        }
+        
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+        
+        .cta-button {
+            background: white;
+            color: #667eea;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        
+        .cta-button:hover {
+            transform: scale(1.05);
+        }
+        
+        /* Products Section */
+        .products {
+            padding: 4rem 0;
+        }
+        
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: #333;
+        }
+        
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .product-card {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .product-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(45deg, #f0f0f0, #e0e0e0);
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+        }
+        
+        .product-title {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+        
+        .product-price {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 1rem;
+        }
+        
+        .product-description {
+            color: #666;
+            margin-bottom: 1.5rem;
+        }
+        
+        .add-to-cart {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 20px;
+            cursor: pointer;
+            width: 100%;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+        
+        .add-to-cart:hover {
+            background: #5a6fd8;
+        }
+        
+        /* Features Section */
+        .features {
+            background: white;
+            padding: 4rem 0;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+        
+        .feature {
+            text-align: center;
+            padding: 2rem;
+        }
+        
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .feature h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: #333;
+        }
+        
+        .feature p {
+            color: #666;
+        }
+        
+        /* Contact Form */
+        .contact {
+            background: #f8f9fa;
+            padding: 4rem 0;
+        }
+        
+        .contact-form {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .submit-button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            transition: background 0.3s;
+        }
+        
+        .submit-button:hover {
+            background: #5a6fd8;
+        }
+        
+        /* Footer */
+        .footer {
+            background: #333;
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+        }
+        
+        /* Test Elements for InterTools */
+        .test-element {
+            border: 2px dashed #667eea;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 10px;
+            background: rgba(102, 126, 234, 0.1);
+        }
+        
+        .test-element h4 {
+            color: #667eea;
+            margin-bottom: 0.5rem;
+        }
+        
+        .test-element p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        /* InterTools Chat Button */
+        .intertools-chat-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            z-index: 1000;
+            transition: all 0.3s ease;
+            user-select: none;
+        }
+        
+        .intertools-chat-button:hover {
+            transform: scale(1.1);
+        }
+        
+        /* Highlight styles for element selection */
+        .intertools-highlight {
+            outline: 2px solid #667eea !important;
+            outline-offset: 2px !important;
+            background-color: rgba(102, 126, 234, 0.1) !important;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .nav {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">🛍️ TechStore</div>
+                <nav class="nav">
+                    <a href="#home">Home</a>
+                    <a href="#products">Products</a>
+                    <a href="#features">Features</a>
+                    <a href="#contact">Contact</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="container">
+            <h1>Welcome to TechStore</h1>
+            <p>Discover amazing products with cutting-edge technology</p>
+            <button class="cta-button" onclick="testElement(this)">Shop Now</button>
+            
+            <div class="test-element">
+                <h4>🧪 InterTools Test Element</h4>
+                <p>Click this element to test the highlighting functionality. This is a test area for InterTools web chat feedback.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section class="products" id="products">
+        <div class="container">
+            <h2 class="section-title">Featured Products</h2>
+            <div class="products-grid">
+                <div class="product-card" onclick="testElement(this)">
+                    <div class="product-image">📱</div>
+                    <h3 class="product-title">Smartphone Pro</h3>
+                    <div class="product-price">$999</div>
+                    <p class="product-description">Latest smartphone with advanced features and premium design.</p>
+                    <button class="add-to-cart" onclick="testElement(this)">Add to Cart</button>
+                </div>
+                
+                <div class="product-card" onclick="testElement(this)">
+                    <div class="product-image">💻</div>
+                    <h3 class="product-title">Laptop Elite</h3>
+                    <div class="product-price">$1,299</div>
+                    <p class="product-description">High-performance laptop for professionals and creators.</p>
+                    <button class="add-to-cart" onclick="testElement(this)">Add to Cart</button>
+                </div>
+                
+                <div class="product-card" onclick="testElement(this)">
+                    <div class="product-image">🎧</div>
+                    <h3 class="product-title">Wireless Headphones</h3>
+                    <div class="product-price">$199</div>
+                    <p class="product-description">Premium wireless headphones with noise cancellation.</p>
+                    <button class="add-to-cart" onclick="testElement(this)">Add to Cart</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="container">
+            <h2 class="section-title">Why Choose TechStore?</h2>
+            <div class="features-grid">
+                <div class="feature" onclick="testElement(this)">
+                    <div class="feature-icon">🚚</div>
+                    <h3>Fast Shipping</h3>
+                    <p>Free shipping on orders over $50. Delivery within 2-3 business days.</p>
+                </div>
+                
+                <div class="feature" onclick="testElement(this)">
+                    <div class="feature-icon">🔒</div>
+                    <h3>Secure Payment</h3>
+                    <p>Your payment information is encrypted and secure with our SSL protection.</p>
+                </div>
+                
+                <div class="feature" onclick="testElement(this)">
+                    <div class="feature-icon">🔄</div>
+                    <h3>Easy Returns</h3>
+                    <p>30-day return policy. No questions asked, full refund guaranteed.</p>
+                </div>
+                
+                <div class="feature" onclick="testElement(this)">
+                    <div class="feature-icon">📞</div>
+                    <h3>24/7 Support</h3>
+                    <p>Round-the-clock customer support to help you with any questions.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Form -->
+    <section class="contact" id="contact">
+        <div class="container">
+            <h2 class="section-title">Get in Touch</h2>
+            <form class="contact-form" onsubmit="testElement(this)">
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" name="name" required onclick="testElement(this)">
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required onclick="testElement(this)">
+                </div>
+                
+                <div class="form-group">
+                    <label for="message">Message</label>
+                    <textarea id="message" name="message" rows="5" required onclick="testElement(this)"></textarea>
+                </div>
+                
+                <button type="submit" class="submit-button" onclick="testElement(this)">Send Message</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 TechStore. All rights reserved. | <a href="#" style="color: #667eea;">Privacy Policy</a> | <a href="#" style="color: #667eea;">Terms of Service</a></p>
+        </div>
+    </footer>
+
+    <!-- InterTools Chat Button -->
+    <div class="intertools-chat-button" id="intertools-chat-button" style="display: none;">
+        💬
+    </div>
+
+    <!-- InterTools Test Panel -->
+    <div id="intertools-test-panel" style="position: fixed; top: 20px; left: 20px; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); z-index: 1001; max-width: 300px; display: none;">
+        <h3 style="color: #667eea; margin-bottom: 15px;">🧪 InterTools Test Panel</h3>
+        <div id="test-status" style="margin-bottom: 15px; padding: 10px; border-radius: 5px; background: #f0f0f0;">
+            <strong>Status:</strong> <span id="status-text">Checking connection...</span>
+        </div>
+        <button onclick="loadInterToolsExtension()" style="background: #667eea; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; width: 100%; margin-bottom: 10px;">
+            🚀 Load InterTools Extension
+        </button>
+        <button onclick="testElementHighlighting()" style="background: #28a745; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; width: 100%; margin-bottom: 10px;">
+            🎯 Test Element Highlighting
+        </button>
+        <button onclick="simulateUserFeedback()" style="background: #ffc107; color: black; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; width: 100%; margin-bottom: 10px;">
+            💬 Simulate User Feedback
+        </button>
+        <button onclick="toggleTestPanel()" style="background: #dc3545; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; width: 100%;">
+            ❌ Close Panel
+        </button>
+    </div>
+
+    <!-- Test Panel Toggle Button -->
+    <button onclick="toggleTestPanel()" style="position: fixed; top: 20px; left: 20px; background: #667eea; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; z-index: 1002; font-size: 12px;">
+        🧪 InterTools Test
+    </button>
+
+    <script>
+        // InterTools Test Functions
+        function testElement(element) {
+            // Remove previous highlight
+            document.querySelectorAll('.intertools-highlight').forEach(el => {
+                el.classList.remove('intertools-highlight');
+            });
+            
+            // Add highlight to clicked element
+            element.classList.add('intertools-highlight');
+            
+            // Show feedback
+            updateTestStatus('✅ Element highlighted: ' + element.tagName + (element.id ? '#' + element.id : ''), 'success');
+            
+            // Remove highlight after 2 seconds
+            setTimeout(() => {
+                element.classList.remove('intertools-highlight');
+            }, 2000);
+        }
+        
+        function updateTestStatus(message, type) {
+            const statusDiv = document.getElementById('test-status');
+            const statusText = document.getElementById('status-text');
+            
+            statusDiv.style.background = type === 'success' ? '#d4edda' : type === 'error' ? '#f8d7da' : '#f0f0f0';
+            statusDiv.style.color = type === 'success' ? '#155724' : type === 'error' ? '#721c24' : '#333';
+            statusText.textContent = message;
+        }
+        
+        function toggleTestPanel() {
+            const panel = document.getElementById('intertools-test-panel');
+            panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+        }
+        
+        function loadInterToolsExtension() {
+            updateTestStatus('🔄 Loading InterTools extension...', 'info');
+            
+            // Simulate loading the extension
+            setTimeout(() => {
+                const chatButton = document.getElementById('intertools-chat-button');
+                chatButton.style.display = 'flex';
+                updateTestStatus('✅ InterTools extension loaded! Chat button visible.', 'success');
+            }, 1000);
+        }
+        
+        function testElementHighlighting() {
+            updateTestStatus('🎯 Testing element highlighting...', 'info');
+            
+            // Highlight random elements
+            const elements = document.querySelectorAll('.product-card, .feature, .cta-button');
+            let index = 0;
+            
+            const highlightInterval = setInterval(() => {
+                if (index < elements.length) {
+                    testElement(elements[index]);
+                    index++;
+                } else {
+                    clearInterval(highlightInterval);
+                    updateTestStatus('✅ Element highlighting test completed!', 'success');
+                }
+            }, 500);
+        }
+        
+        function simulateUserFeedback() {
+            updateTestStatus('💬 Simulating user feedback...', 'info');
+            
+            // Simulate different types of feedback
+            const feedbacks = [
+                'The product cards look great but the prices could be more prominent',
+                'The contact form is easy to use, good UX design',
+                'The hero section is too busy, consider simplifying',
+                'Navigation is clear and intuitive',
+                'The add to cart buttons need better hover effects',
+                'Overall design is modern and professional'
+            ];
+            
+            let index = 0;
+            const feedbackInterval = setInterval(() => {
+                if (index < feedbacks.length) {
+                    updateTestStatus('💬 Feedback: ' + feedbacks[index], 'info');
+                    index++;
+                } else {
+                    clearInterval(feedbackInterval);
+                    updateTestStatus('✅ User feedback simulation completed!', 'success');
+                }
+            }, 2000);
+        }
+        
+        // Check InterTools server connection
+        async function checkInterToolsConnection() {
+            try {
+                const response = await fetch('http://localhost:3001/api/health');
+                const result = await response.json();
+                
+                if (result.success) {
+                    updateTestStatus('✅ InterTools server connected!', 'success');
+                } else {
+                    updateTestStatus('⚠️ InterTools server not responding', 'error');
+                }
+            } catch (error) {
+                updateTestStatus('❌ InterTools server not available. Start with: npx intertools@1.0.14 web-chat --start', 'error');
+            }
+        }
+        
+        // Initialize test environment
+        window.addEventListener('load', () => {
+            setTimeout(checkInterToolsConnection, 1000);
+        });
+        
+        // Add some interactive elements for testing
+        document.addEventListener('click', (e) => {
+            if (e.target.classList.contains('intertools-highlight')) {
+                console.log('InterTools: Element clicked for feedback:', e.target);
+            }
+        });
+        
+        // Simulate some page interactions
+        let interactionCount = 0;
+        document.addEventListener('click', () => {
+            interactionCount++;
+            if (interactionCount % 5 === 0) {
+                console.log('InterTools: Page interaction detected, count:', interactionCount);
+            }
+        });
+    </script>
+</body>
+</html>
