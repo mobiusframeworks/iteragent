@@ -918,18 +918,18 @@
                 </div>
                 
                 <div style="background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%); padding: 1.5rem; border-radius: 12px; margin: 1.5rem 0; border-left: 4px solid #10b981;">
-                    <h3 style="margin: 0 0 0.5rem 0; color: #065f46; font-size: 1.1rem;">🆓 FREE Version - Always Free!</h3>
+                    <h3 style="margin: 0 0 0.5rem 0; color: #065f46; font-size: 1.1rem;">🆓 FREE Version - Direct Cursor Integration</h3>
                     <p style="margin: 0; color: #064e3b; font-size: 1rem;">
-                        InterTools FREE is completely free and open source forever. No limits, no subscriptions.
-                        Copy the script below and start capturing console logs immediately!
+                        <strong>Simple & Focused:</strong> Captures console logs and pushes them directly to Cursor IDE with one click. 
+                        No chat features - just clean log forwarding for faster development.
                     </p>
                 </div>
                 
                 <div style="background: linear-gradient(135deg, #fef3c7 0%, #fed7aa 100%); padding: 1.5rem; border-radius: 12px; margin: 1.5rem 0; border-left: 4px solid #f59e0b;">
-                    <h3 style="margin: 0 0 0.5rem 0; color: #92400e; font-size: 1.1rem;">🤖 PRO Version - 7-Day Free Trial</h3>
+                    <h3 style="margin: 0 0 0.5rem 0; color: #92400e; font-size: 1.1rem;">🤖 PRO Version - AI Chat & Advanced Features</h3>
                     <p style="margin: 0; color: #92400e; font-size: 1rem;">
-                        <strong>Try PRO free for 7 days!</strong> Advanced AI analysis, performance monitoring, and real-time IDE sync. 
-                        After trial: <strong>$30/month</strong> for professional developers who want the best tools.
+                        <strong>7-day free trial!</strong> Interactive AI chat, advanced performance monitoring, element extraction, 
+                        and real-time collaboration features. After trial: <strong>$30/month</strong> for teams and advanced users.
                     </p>
                 </div>
                 
@@ -1112,25 +1112,25 @@
                     <!-- Feature Comparison -->
                     <div id="version-features" style="background: #f8fafc; padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem;">
                         <div id="free-features" style="display: block;">
-                            <h4 style="margin: 0 0 0.5rem 0; color: #10b981;">🆓 FREE Version Features:</h4>
+                            <h4 style="margin: 0 0 0.5rem 0; color: #10b981;">🆓 FREE Version - Direct Cursor Integration:</h4>
                             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.5rem; font-size: 0.875rem; color: #374151;">
-                                <span>✅ Complete console log capture</span>
-                                <span>✅ Error monitoring & analysis</span>
-                                <span>✅ IDE-ready reports</span>
-                                <span>✅ Professional floating UI</span>
-                                <span>✅ No limits or subscriptions</span>
-                                <span>✅ Open source & forever free</span>
+                                <span>✅ Console log capture</span>
+                                <span>✅ One-click push to Cursor</span>
+                                <span>✅ Formatted for IDE analysis</span>
+                                <span>✅ Simple & lightweight</span>
+                                <span>✅ No chat - just logs</span>
+                                <span>✅ Forever free & open source</span>
                             </div>
                         </div>
                         <div id="pro-features" style="display: none;">
-                            <h4 style="margin: 0 0 0.5rem 0; color: #8b5cf6;">🤖 PRO Version Features:</h4>
+                            <h4 style="margin: 0 0 0.5rem 0; color: #8b5cf6;">🤖 PRO Version - AI Chat & Advanced Features:</h4>
                             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0.5rem; font-size: 0.875rem; color: #374151;">
                                 <span>✅ Everything in FREE +</span>
-                                <span>🤖 AI-powered error analysis</span>
-                                <span>⚡ Advanced performance monitoring</span>
-                                <span>📋 Element extraction & analysis</span>
-                                <span>🔄 Real-time IDE synchronization</span>
-                                <span>💡 AI-generated code suggestions</span>
+                                <span>💬 Interactive AI chat interface</span>
+                                <span>🤖 Real-time code analysis & suggestions</span>
+                                <span>📋 Advanced element extraction</span>
+                                <span>⚡ Performance monitoring & optimization</span>
+                                <span>👥 Team collaboration features</span>
                             </div>
                         </div>
                     </div>
@@ -2034,77 +2034,6 @@ alert('🎭 Demo Pro Script copied! In production, this would be a protected scr
             }
         }
 
-        function copyFreeScript() {
-            const freeScript = `// InterTools Free Script - Always Free and Open Source
-// Copy and paste this into any website's console
-
-(function() {
-  'use strict';
-  
-  if (window.interToolsLoaded) {
-    console.log('InterTools already loaded!');
-    return;
-  }
-  
-  console.log('🚀 Loading InterTools Free...');
-  
-  // Try Railway backend first, fallback to localhost
-  const API_ENDPOINTS = [
-    'https://your-app.railway.app',
-    'http://localhost:3001',
-    'https://intertools.pro/api'
-  ];
-  
-  let currentEndpoint = 0;
-  
-  function tryLoadScript() {
-    const endpoint = API_ENDPOINTS[currentEndpoint];
-    
-    fetch(endpoint + '/free-script.js')
-      .then(response => {
-        if (!response.ok) throw new Error('Network response was not ok');
-        return response.text();
-      })
-      .then(script => {
-        const scriptElement = document.createElement('script');
-        scriptElement.textContent = script.replace('https://your-app.railway.app', endpoint);
-        document.head.appendChild(scriptElement);
-        window.interToolsLoaded = true;
-        console.log('✅ InterTools Free loaded successfully from:', endpoint);
-      })
-      .catch(error => {
-        console.warn('Failed to load from:', endpoint, error);
-        currentEndpoint++;
-        if (currentEndpoint < API_ENDPOINTS.length) {
-          console.log('Trying next endpoint...');
-          tryLoadScript();
-        } else {
-          console.error('❌ Failed to load InterTools from all endpoints');
-          console.log('💡 Visit https://intertools.pro for help');
-        }
-      });
-  }
-  
-  tryLoadScript();
-})();`;
-            
-            navigator.clipboard.writeText(freeScript).then(() => {
-                const scriptPreview = document.getElementById('script-preview');
-                if (scriptPreview) {
-                    scriptPreview.textContent = freeScript;
-                }
-                
-                alert('✅ InterTools Free script copied to clipboard!\\n\\n📝 Instructions:\\n1. Open any website\\n2. Press F12 (Developer Tools)\\n3. Go to Console tab\\n4. Paste and press Enter\\n\\n🎯 InterTools will appear as a floating chat button!');
-            }).catch(() => {
-                const textArea = document.createElement('textarea');
-                textArea.value = freeScript;
-                document.body.appendChild(textArea);
-                textArea.select();
-                document.execCommand('copy');
-                document.body.removeChild(textArea);
-                alert('✅ InterTools Free script copied to clipboard!');
-            });
-        }
 
         function downloadFile(fileType) {
             const files = {
@@ -2482,26 +2411,41 @@ alert('🎭 Demo Pro Script copied! In production, this would be a protected scr
         
         // Load and display scripts
         function loadFreeScript() {
+            console.log('🔧 Loading FREE script...');
             const display = document.getElementById('free-script-display');
-            if (display && !display.dataset.loaded) {
-                fetch('/downloads/intertools-free-complete.js')
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error('Failed to load script');
-                        }
-                        return response.text();
-                    })
-                    .then(script => {
-                        // Ensure script is properly formatted for console injection
-                        const cleanScript = script.trim();
-                        display.textContent = cleanScript;
-                        display.dataset.loaded = 'true';
-                        display.dataset.script = cleanScript; // Store for copying
-                    })
-                    .catch(() => {
-                        display.textContent = '// Error loading script. Please try downloading the file directly.';
-                    });
+            
+            if (!display) {
+                console.error('❌ FREE script display element not found');
+                return;
             }
+            
+            if (display.dataset.loaded) {
+                console.log('✅ FREE script already loaded');
+                return;
+            }
+            
+            console.log('📡 Fetching FREE script from server...');
+                fetch('/downloads/intertools-free-cursor.js')
+                .then(response => {
+                    console.log('📡 Response status:', response.status, response.statusText);
+                    if (!response.ok) {
+                        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                    }
+                    return response.text();
+                })
+                .then(script => {
+                    console.log('✅ FREE script loaded, length:', script.length);
+                    // Ensure script is properly formatted for console injection
+                    const cleanScript = script.trim();
+                    display.textContent = cleanScript;
+                    display.dataset.loaded = 'true';
+                    display.dataset.script = cleanScript; // Store for copying
+                    console.log('✅ FREE script displayed and ready');
+                })
+                .catch(error => {
+                    console.error('❌ Error loading FREE script:', error);
+                    display.textContent = `// ❌ Error loading script: ${error.message}\n// Please try refreshing the page or downloading the file directly.`;
+                });
         }
         
         function loadProScript() {
@@ -2556,7 +2500,7 @@ alert('🎭 Demo Pro Script copied! In production, this would be a protected scr
                 }, 2000);
                 
                 // Show success message
-                alert('🎉 InterTools FREE script copied to clipboard!\\n\\n📝 Instructions:\\n1. Go to any website (try GitHub, YouTube, etc.)\\n2. Press F12 to open Developer Tools\\n3. Click Console tab\\n4. Paste the script and press Enter\\n5. Look for the 🛠️ floating button!\\n\\n💡 The script should work immediately - if you don\\'t see the button, check the console for errors.');
+                alert('🎉 InterTools FREE script copied to clipboard!\\n\\n📝 Instructions:\\n1. Go to any website (try GitHub, YouTube, etc.)\\n2. Press F12 to open Developer Tools\\n3. Click Console tab\\n4. Paste the script and press Enter\\n5. Look for the 🛠️ floating button!\\n\\n💡 The script should work immediately - if you don\'t see the button, check the console for errors.');
             }).catch(() => {
                 // Fallback
                 const textArea = document.createElement('textarea');
@@ -2608,9 +2552,21 @@ alert('🎭 Demo Pro Script copied! In production, this would be a protected scr
         
         // Initialize on page load
         document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 InterTools page loaded, initializing...');
             // Default to FREE version
             showFreeVersion();
+            console.log('✅ FREE version should now be loading...');
         });
+        
+        // Also try immediate initialization in case DOMContentLoaded already fired
+        if (document.readyState === 'loading') {
+            console.log('📄 Document still loading, waiting for DOMContentLoaded...');
+        } else {
+            console.log('📄 Document already loaded, initializing immediately...');
+            setTimeout(() => {
+                showFreeVersion();
+            }, 100);
+        }
 
         // Main script copy function (legacy - keeping for compatibility)
         function copyMainScript() {
@@ -2912,6 +2868,29 @@ Paste this report into your IDE for instant development insights!\`;
         function showQuickDemo() {
             alert('🎮 Quick Demo\\n\\n1. Copy the script above\\n2. Open a new tab (try YouTube, GitHub, any site)\\n3. Press F12 to open Developer Tools\\n4. Go to Console tab\\n5. Paste the script and press Enter\\n6. Look for the 🛠️ button in the top-right\\n7. Click it to see captured console logs!\\n\\n💡 InterTools will capture all console.log, console.error, and console.warn messages, then format them perfectly for your IDE!');
         }
+        
+        // Debug function - call this from console if needed
+        window.debugInterTools = function() {
+            console.log('🔧 InterTools Debug Information:');
+            console.log('FREE display element:', document.getElementById('free-script-display'));
+            console.log('PRO display element:', document.getElementById('pro-script-display'));
+            console.log('FREE button:', document.getElementById('free-version-btn'));
+            console.log('PRO button:', document.getElementById('pro-version-btn'));
+            
+            console.log('\\n🔄 Attempting to reload FREE script...');
+            loadFreeScript();
+        };
+        
+        // Force load function for testing
+        window.forceLoadFreeScript = function() {
+            const display = document.getElementById('free-script-display');
+            if (display) {
+                display.dataset.loaded = ''; // Reset loaded state
+                loadFreeScript();
+            } else {
+                console.error('❌ Cannot find free-script-display element');
+            }
+        };
     </script>
 </body>
 </html>
