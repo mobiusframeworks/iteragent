@@ -34,7 +34,7 @@ echo ""
 
 # Build CLI package
 echo "🛠️ Building CLI package..."
-cd ../iteragent-cli
+cd ../intertools-cli
 npm run build
 echo "✅ CLI package built"
 echo ""
@@ -89,7 +89,7 @@ echo ""
 
 # Publish CLI package
 echo "🛠️ Publishing @intertools/cli..."
-cd ../iteragent-cli
+cd ../intertools-cli
 npm publish
 echo "✅ @intertools/cli@1.0.15 published successfully!"
 echo ""

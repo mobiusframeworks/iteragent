@@ -131,7 +131,7 @@ export interface SEOInfo {
   description: string;
   keywords: string[];
   headings: HeadingInfo[];
-  images: SEOImageInfo[];
+  images: SEOImageInfo;
   links: SEOLinkInfo;
   structuredData: boolean;
   mobileOptimized: boolean;

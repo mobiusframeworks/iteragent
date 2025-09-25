@@ -307,5 +307,4 @@ export function proOnly<T extends (...args: any[]) => any>(
 }
 
 // Export types and utilities
-export { TokenClaims };
 export { getActivationInstructions, hasEntitlement, isTokenExpired };

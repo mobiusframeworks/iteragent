@@ -97,13 +97,13 @@ export class TerminalMonitor {
       if (error) return;
 
       const processes = stdout.split('\n').filter(line => line.trim());
-      processes.forEach(process => {
-        if (process.includes('node') || process.includes('npm') || process.includes('yarn') || process.includes('pnpm')) {
+      processes.forEach(processLine => {
+        if (processLine.includes('node') || processLine.includes('npm') || processLine.includes('yarn') || processLine.includes('pnpm')) {
           this.addLog({
-            command: this.extractCommand(process),
+            command: this.extractCommand(processLine),
             output: 'Process running',
             timestamp: new Date(),
-            workingDirectory: process.cwd || process.cwd(),
+            workingDirectory: process.cwd(),
             type: 'command'
           });
         }

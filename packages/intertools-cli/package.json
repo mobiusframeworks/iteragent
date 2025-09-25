@@ -1,52 +1,66 @@
 {
-  "name": "@intertools/cli",
-  "version": "1.0.0",
-  "description": "InterTools Pro License Manager. Activate 7-day free trial (no payment). Manage PRO subscriptions ($30/month). AI analysis, performance monitoring, real-time IDE sync.",
+  "name": "intertools-cli",
+  "version": "1.0.15",
+  "description": "🛠️ InterTools CLI - License Manager & Activation Tool. Activate 7-day free trial (no payment). Manage PRO subscriptions ($30/month). AI analysis, performance monitoring, real-time IDE sync.",
   "main": "dist/index.js",
   "bin": {
     "intertools": "dist/index.js"
   },
   "scripts": {
     "build": "tsc",
-    "dev": "tsx watch src/index.ts",
+    "dev": "tsc --watch",
     "start": "node dist/index.js",
-    "test": "jest"
+    "test": "jest",
+    "setup-cursor": "node -e \"const fs=require('fs');const path=require('path');const projectRoot=process.cwd();const cursorDir=path.join(projectRoot,'.cursor');if(!fs.existsSync(cursorDir))fs.mkdirSync(cursorDir,{recursive:true});const aiConfig=require('./.cursor/ai.json');fs.writeFileSync(path.join(cursorDir,'ai.json'),JSON.stringify(aiConfig,null,2));console.log('✅ Cursor AI configuration installed');\"",
+    "postinstall": "npm run setup-cursor"
   },
+  "keywords": [
+    "cursor",
+    "testing",
+    "development",
+    "automation",
+    "playwright",
+    "cli"
+  ],
+  "author": "Alex Horton",
+  "license": "MIT",
   "dependencies": {
-    "commander": "^11.1.0",
-    "inquirer": "^8.2.6",
+    "@clerk/backend": "^2.15.0",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/socket.io": "^3.0.2",
+    "axios": "^1.12.2",
     "chalk": "^4.1.2",
-    "ora": "^5.4.1",
-    "open": "^8.4.2",
-    "axios": "^1.6.2",
+    "commander": "^11.1.0",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "inquirer": "^8.2.6",
     "jsonwebtoken": "^9.0.2",
-    "node-fetch": "^2.7.0"
+    "node-pty": "^1.0.0",
+    "ora": "^5.4.1",
+    "playwright": "^1.40.0",
+    "socket.io": "^4.8.1",
+    "stripe": "^18.5.0",
+    "ws": "^8.14.2"
   },
   "devDependencies": {
+    "@types/cors": "^2.8.15",
+    "@types/express": "^5.0.3",
     "@types/inquirer": "^8.2.6",
-    "@types/node": "^20.10.4",
-    "@types/jsonwebtoken": "^9.0.5",
-    "@types/node-fetch": "^2.6.9",
-    "typescript": "^5.3.3",
-    "tsx": "^4.6.2",
+    "@types/jest": "^29.5.5",
+    "@types/node": "^20.8.0",
+    "@types/ws": "^8.5.8",
     "jest": "^29.7.0",
-    "@types/jest": "^29.5.8",
-    "ts-jest": "^29.1.1"
+    "typescript": "^5.2.2"
   },
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=16.0.0"
   },
-  "files": [
-    "dist/**/*",
-    "README.md"
-  ],
-  "keywords": [
-    "intertools",
-    "cli",
-    "license",
-    "activation",
-    "pro"
-  ],
-  "author": "InterTools Team",
-  "license": "MIT"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/luvs2spluj/intertools.git"
+  },
+  "bugs": {
+    "url": "https://github.com/luvs2spluj/intertools/issues"
+  },
+  "homepage": "https://github.com/luvs2spluj/intertools#readme"
 }

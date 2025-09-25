@@ -45,7 +45,7 @@ export interface ChatAnalysis {
 
 export class ChatOrchestrator {
   private agents: Map<string, ChatAgent> = new Map();
-  private chatHistory: ChatMessage[] = new Map();
+  private chatHistory: ChatMessage[] = [];
   private context: ChatContext = {};
   private isActive: boolean = false;
 
