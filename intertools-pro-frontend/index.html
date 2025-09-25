@@ -1154,16 +1154,16 @@
                     </div>
                     
                     <div style="text-align: center;">
-                        <button onclick="showQuickDemo()" style="
+                        <button onclick="downloadFile('chrome-extension')" style="
                             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;
                             border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer;
                             font-weight: 600; margin-right: 1rem; transition: all 0.2s ease;
-                        ">🎮 See Quick Demo</button>
-                        <button onclick="scrollToIntegration()" style="
+                        ">🔌 Chrome Extension</button>
+                        <button onclick="downloadFile('api-docs')" style="
                             background: transparent; color: #667eea; border: 2px solid #667eea;
                             padding: 12px 24px; border-radius: 8px; cursor: pointer; font-weight: 600;
                             transition: all 0.2s ease;
-                        ">📁 Download Files</button>
+                        ">📚 Documentation</button>
                     </div>
                 </div>
 
@@ -2385,22 +2385,46 @@ alert('🎭 Demo Pro Script copied! In production, this would be a protected scr
         }
         
         function startFreeTrial() {
-            // In production, this would create a user account and start trial
-            userSubscriptionState = {
-                status: 'trial',
-                trialStartDate: new Date().toISOString(),
-                trialDaysRemaining: 7,
-                subscriptionId: null,
-                nextBillingDate: null
-            };
-            
-            saveSubscriptionState();
-            showProInterface();
-            
-            // Show success message
-            setTimeout(() => {
-                alert('🎉 Free trial started!\\n\\n✅ 7-day trial activated\\n✅ Full PRO script access granted\\n✅ All advanced features unlocked\\n\\nYour PRO script is now available below!');
-            }, 500);
+            // Create user account via API
+            fetch('http://localhost:3002/api/start-trial', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    email: `trial_${Date.now()}@intertools.pro` // Demo email
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Store user ID and subscription state
+                    localStorage.setItem('intertools-user-id', data.userId);
+                    
+                    userSubscriptionState = {
+                        status: 'trial',
+                        trialStartDate: new Date().toISOString(),
+                        trialDaysRemaining: data.trialDaysRemaining,
+                        subscriptionId: null,
+                        nextBillingDate: null,
+                        userId: data.userId
+                    };
+                    
+                    saveSubscriptionState();
+                    showProInterface();
+                    
+                    // Show success message
+                    setTimeout(() => {
+                        alert('🎉 Free trial started!\\n\\n✅ 7-day trial activated\\n✅ Full PRO script access granted\\n✅ All advanced features unlocked\\n\\nYour PRO script is now available below!');
+                    }, 500);
+                } else {
+                    alert('❌ Failed to start trial: ' + data.error);
+                }
+            })
+            .catch(error => {
+                console.error('Trial start error:', error);
+                alert('❌ Error starting trial. Please try again.');
+            });
         }
         
         function subscribeToPro() {
@@ -2461,10 +2485,18 @@ alert('🎭 Demo Pro Script copied! In production, this would be a protected scr
             const display = document.getElementById('free-script-display');
             if (display && !display.dataset.loaded) {
                 fetch('/downloads/intertools-free-complete.js')
-                    .then(response => response.text())
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Failed to load script');
+                        }
+                        return response.text();
+                    })
                     .then(script => {
-                        display.textContent = script;
+                        // Ensure script is properly formatted for console injection
+                        const cleanScript = script.trim();
+                        display.textContent = cleanScript;
                         display.dataset.loaded = 'true';
+                        display.dataset.script = cleanScript; // Store for copying
                     })
                     .catch(() => {
                         display.textContent = '// Error loading script. Please try downloading the file directly.';
@@ -2473,24 +2505,43 @@ alert('🎭 Demo Pro Script copied! In production, this would be a protected scr
         }
         
         function loadProScript() {
+            // PRO script is now delivered server-side only - no client-side access
             const display = document.getElementById('pro-script-display');
-            if (display && !display.dataset.loaded) {
-                fetch('/downloads/intertools-pro-complete.js')
-                    .then(response => response.text())
-                    .then(script => {
-                        display.textContent = script;
-                        display.dataset.loaded = 'true';
-                    })
-                    .catch(() => {
-                        display.textContent = '// Error loading script. Please try downloading the file directly.';
-                    });
+            if (display && userSubscriptionState.status === 'trial' || userSubscriptionState.status === 'active') {
+                // For trial/paid users, fetch from protected API
+                const userId = localStorage.getItem('intertools-user-id');
+                if (userId) {
+                    fetch(`http://localhost:3002/api/pro-script/${userId}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                display.textContent = '// ✅ PRO Script Access Granted\n// Click "Copy PRO Script" to get your protected script\n// Script is dynamically generated and protected';
+                                display.dataset.script = data.script; // Store actual script securely
+                                display.dataset.loaded = 'true';
+                            } else {
+                                display.textContent = '// ❌ Access Denied: ' + data.error;
+                            }
+                        })
+                        .catch(() => {
+                            display.textContent = '// ❌ Error connecting to PRO service';
+                        });
+                } else {
+                    display.textContent = '// ❌ User authentication required';
+                }
+            } else {
+                display.textContent = '// 🔒 PRO Script Protected\n// Start your free trial to access the complete PRO script';
             }
         }
         
         // Copy functions
         function copyFreeScript() {
             const display = document.getElementById('free-script-display');
-            const script = display.textContent;
+            const script = display.dataset.script || display.textContent;
+            
+            if (!script || script.includes('Error loading')) {
+                alert('❌ Script not loaded yet. Please wait a moment and try again.');
+                return;
+            }
             
             navigator.clipboard.writeText(script).then(() => {
                 // Update button
@@ -2505,7 +2556,7 @@ alert('🎭 Demo Pro Script copied! In production, this would be a protected scr
                 }, 2000);
                 
                 // Show success message
-                alert('🎉 InterTools FREE script copied to clipboard!\\n\\n📝 Instructions:\\n1. Go to any website\\n2. Press F12 (Developer Tools)\\n3. Go to Console tab\\n4. Paste and press Enter\\n\\n🛠️ InterTools will appear with a floating button!\\n\\n💡 Completely free - no limits, no subscriptions!');
+                alert('🎉 InterTools FREE script copied to clipboard!\\n\\n📝 Instructions:\\n1. Go to any website (try GitHub, YouTube, etc.)\\n2. Press F12 to open Developer Tools\\n3. Click Console tab\\n4. Paste the script and press Enter\\n5. Look for the 🛠️ floating button!\\n\\n💡 The script should work immediately - if you don\\'t see the button, check the console for errors.');
             }).catch(() => {
                 // Fallback
                 const textArea = document.createElement('textarea');
@@ -2514,28 +2565,35 @@ alert('🎭 Demo Pro Script copied! In production, this would be a protected scr
                 textArea.select();
                 document.execCommand('copy');
                 document.body.removeChild(textArea);
-                alert('✅ InterTools FREE script copied to clipboard!');
+                alert('✅ InterTools FREE script copied to clipboard (fallback method)!');
             });
         }
         
         function copyProScript() {
             const display = document.getElementById('pro-script-display');
-            const script = display.textContent;
+            const script = display.dataset.script; // Use protected script from server
+            
+            if (!script) {
+                alert('❌ PRO script not available. Please ensure you have an active trial or subscription.');
+                return;
+            }
             
             navigator.clipboard.writeText(script).then(() => {
                 // Update button
-                const btn = document.getElementById('pro-copy-btn');
-                const originalText = btn.textContent;
-                btn.textContent = '✅ Copied!';
-                btn.style.background = '#7c3aed';
-                
-                setTimeout(() => {
-                    btn.textContent = originalText;
+                const btn = document.getElementById('pro-copy-btn') || document.getElementById('pro-copy-btn-paid');
+                if (btn) {
+                    const originalText = btn.textContent;
+                    btn.textContent = '✅ Copied!';
                     btn.style.background = '#7c3aed';
-                }, 2000);
+                    
+                    setTimeout(() => {
+                        btn.textContent = originalText;
+                        btn.style.background = btn.id === 'pro-copy-btn' ? '#059669' : '#7c3aed';
+                    }, 2000);
+                }
                 
                 // Show success message
-                alert('🚀 InterTools PRO script copied to clipboard!\\n\\n📝 Instructions:\\n1. Go to any website\\n2. Press F12 (Developer Tools)\\n3. Go to Console tab\\n4. Paste and press Enter\\n\\n🤖 InterTools PRO will appear with advanced AI features!\\n\\n✨ Features: AI analysis, performance monitoring, element extraction, and more!');
+                alert('🚀 InterTools PRO script copied to clipboard!\\n\\n📝 Instructions:\\n1. Go to any website\\n2. Press F12 (Developer Tools)\\n3. Go to Console tab\\n4. Paste and press Enter\\n\\n🤖 InterTools PRO will appear with advanced features!\\n\\n✨ AI analysis, performance monitoring, real-time IDE sync, and more!');
             }).catch(() => {
                 // Fallback
                 const textArea = document.createElement('textarea');
