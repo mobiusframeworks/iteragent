@@ -1,44 +1,61 @@
 {
-  "name": "iteragent",
-  "version": "1.0.0",
-  "description": "Iterative testing agent for Cursor IDE - runs apps, captures logs, tests, and feeds back to Cursor",
-  "main": "packages/iteragent-cli/dist/index.js",
+  "name": "intertools",
+  "version": "1.0.15",
+  "description": "Professional console log analysis and IDE integration with AI-powered insights and advanced features",
+  "main": "packages/intertools/dist/index.js",
   "bin": {
-    "iteragent": "packages/iteragent-cli/dist/index.js"
+    "intertools": "packages/intertools/dist/index.js"
   },
   "scripts": {
-    "build": "cd packages/iteragent-cli && npm run build",
-    "install-cli": "cd packages/iteragent-cli && npm install -g .",
-    "test": "cd packages/iteragent-cli && npm test",
-    "dev": "cd packages/iteragent-cli && npm run dev",
+    "build": "pnpm -r build",
+    "test": "pnpm -r test",
+    "dev": "pnpm -r dev",
+    "install-cli": "cd packages/@intertools/cli && npm install -g .",
+    "install-lib": "cd packages/intertools && npm install -g .",
+    "start-server": "cd apps/server && npm run dev",
+    "start-frontend": "cd intertools-pro-frontend && npm run dev",
+    "start-pro": "concurrently \"npm run start-server\" \"npm run start-frontend\"",
+    "generate-keys": "cd apps/server && npm run generate-keys",
+    "build-extension": "cd browser-extensions/chrome && zip -r ../../intertools-pro-frontend/downloads/intertools-chrome-extension.zip .",
     "example": "cd examples/react-vite && npm install && npm run dev",
-    "example-test": "cd examples/react-vite && iteragent run"
+    "activate": "npx @intertools/cli activate",
+    "status": "npx @intertools/cli status"
   },
   "keywords": [
+    "intertools",
+    "console",
+    "logs",
+    "ide",
     "cursor",
-    "testing",
+    "vscode",
+    "analysis",
+    "ai",
+    "pro",
+    "subscription",
+    "browser-extension",
     "development",
-    "automation",
-    "playwright",
-    "cli",
-    "iterative",
-    "agent"
+    "debugging",
+    "monitoring"
   ],
   "author": "Alex Horton",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/luvs2spluj/iteragent.git"
+    "url": "https://github.com/luvs2spluj/intertools.git"
   },
   "bugs": {
-    "url": "https://github.com/luvs2spluj/iteragent/issues"
+    "url": "https://github.com/luvs2spluj/intertools/issues"
   },
-  "homepage": "https://github.com/luvs2spluj/iteragent#readme",
+  "homepage": "https://intertools.pro",
   "engines": {
-    "node": ">=16.0.0"
+    "node": ">=18.0.0"
   },
   "workspaces": [
+    "apps/*",
     "packages/*",
     "examples/*"
-  ]
+  ],
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
 }

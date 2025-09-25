@@ -1,84 +1,127 @@
 # InterTools 🚀
 
-**Intelligent development tools with multi-agent orchestration for Cursor IDE** - Specialized agents continuously monitor logs, interpret errors, and provide compact feedback to Cursor AI for enhanced development workflow.
+**Professional console log analysis and IDE integration** - Advanced console log capture with AI-powered analysis, real-time IDE sync, and intelligent development insights. Features both FREE and PRO versions with subscription-based advanced capabilities.
 
 [![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://choosealicense.com/licenses/mit/)
-[![Node.js Version](https://img.shields.io/badge/node-%3E%3D16.0.0-brightgreen)](https://nodejs.org/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.2+-blue)](https://www.typescriptlang.org/)
+[![Node.js Version](https://img.shields.io/badge/node-%3E%3D18.0.0-brightgreen)](https://nodejs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.3+-blue)](https://www.typescriptlang.org/)
+[![InterTools Pro](https://img.shields.io/badge/InterTools%20Pro-Available-gold)](https://intertools.pro)
+[![Version](https://img.shields.io/badge/Version-1.0.15-blue)](https://www.npmjs.com/package/intertools)
+[![CLI Version](https://img.shields.io/badge/CLI-1.0.0-green)](https://www.npmjs.com/package/@intertools/cli)
 
 ## ✨ What is InterTools?
 
-InterTools creates a "big gun" multi-agent orchestration system inside Cursor IDE:
+InterTools creates a comprehensive development ecosystem with two powerful versions:
 
-1. **👥 Specialized Agent Team** - Console harvester, terminal monitor, chat communicator, log interpreter, code suggester
-2. **🔄 Continuous Monitoring Loops** - Real-time log analysis every 5-15 seconds
-3. **💬 Compact Cursor Integration** - Summarized feedback that doesn't overwhelm your screen
-4. **🔍 Intelligent Error Interpretation** - Clear definitions of what errors mean and imply
-5. **⚡ Actionable Code Suggestions** - Specific, implementable fixes for Anthropic/Cursor AI
-6. **🎯 Enhanced Workflow Efficiency** - Multi-agent coordination for maximum productivity
+### 🆓 **InterTools FREE** - Console Log Bridge to Cursor
+1. **📝 Smart Log Capture** - Captures console.log, console.error, console.warn automatically
+2. **🎯 Direct Cursor Integration** - One-click push to Cursor with formatted markdown reports
+3. **🔄 Real-time Analysis** - Instant log processing and IDE-ready formatting
+4. **💡 Zero Configuration** - Copy, paste, and start capturing logs immediately
+5. **🌍 Universal Web Support** - Works on any website via browser console injection
+
+### 💼 **InterTools PRO** - Advanced AI Chat Orchestration
+1. **🤖 AI-Powered Chat Orchestrator** - Advanced multi-agent system with GPT integration
+2. **👥 Specialized Agent Team** - Console harvester, terminal monitor, chat communicator, log interpreter
+3. **💬 Interactive AI Analysis** - Real-time conversation with AI agents about your code
+4. **🔍 Advanced Error Analysis** - Deep stack trace analysis and intelligent fix suggestions
+5. **⚡ Element Extraction** - Analyze page structure and extract HTML components
+6. **📊 Performance Monitoring** - Advanced metrics, memory usage, and optimization insights
+7. **🎯 Multi-Agent Coordination** - Specialized agents working together for maximum productivity
+8. **🔄 Real-time IDE Sync** - Auto-push insights to Cursor, VS Code, and other IDEs
+
+### 🚀 **New: Browser Extensions & Web Platform**
+- **Chrome Extension** - Auto-inject InterTools on any website
+- **Web Landing Page** - http://localhost:5174 for easy script access
+- **Developer Mode** - Full PRO access for testing and development
+- **Payment Integration** - Stripe-powered subscriptions ($30/month after 7-day free trial)
 
 ## 🎯 Key Features
 
+### 🆓 **FREE Version Features**
+- **📝 Console Log Capture**: Automatic console.log, console.error, console.warn capture
+- **🎯 Direct Cursor Integration**: One-click "Push to Cursor" functionality
+- **📊 Markdown Reports**: Clean, formatted reports for IDE integration
+- **🌍 Universal Web Support**: Works on any website via browser console
+- **⚡ Zero Setup**: Copy-paste script injection, no installation required
+- **🔄 Real-time Processing**: Instant log capture and formatting
+
+### 💼 **PRO Version Features**
+- **🤖 AI Chat Orchestrator**: Advanced multi-agent system with GPT-4 integration
 - **👥 Specialized Agent Team**: Five specialized agents working in coordination
-- **🔄 Continuous Monitoring**: Real-time log analysis in continuous loops
-- **💬 Compact Summaries**: Max 100-character summaries for Cursor chat
-- **🔍 Intelligent Interpretation**: Clear error definitions and code implications
-- **⚡ Actionable Suggestions**: Specific, implementable code changes
+- **💬 Interactive AI Analysis**: Real-time conversation with AI about your code
+- **🔍 Advanced Error Analysis**: Deep stack trace analysis and intelligent suggestions
+- **⚡ Element Extraction**: Analyze and extract HTML page components
+- **📊 Performance Monitoring**: Memory usage, CPU metrics, and optimization insights
 - **🎯 Multi-Agent Orchestration**: Coordinated workflow enhancement
-- **📊 Real-Time Analysis**: Console and terminal log monitoring every 5-15 seconds
+- **🔄 Real-time IDE Sync**: Auto-push to Cursor, VS Code, WebStorm, Sublime
+- **🛡️ Protected Scripts**: Server-side delivery with licensing and anti-tampering
+- **💳 7-Day Free Trial**: Full PRO access, then $30/month
+
+### 🚀 **Platform & Integration Features**
+- **🌐 Web Landing Page**: Professional interface at http://localhost:5174
+- **🔌 Chrome Extension**: Auto-inject on all websites with one-click toggle
+- **🔧 Developer Mode**: Bypass restrictions for testing and development
+- **💳 Stripe Integration**: Secure payment processing and subscription management
 - **🤖 Agent Zero Integration**: Enhanced capabilities with Agent Zero runtime
-- **Interactive TUI**: Beautiful terminal interface for monitoring and control
-- **Flexible Configuration**: Customize ports, routes, timeouts, and more
-- **Multiple Project Types**: Supports Node.js, Python, Rust, Go, and more
-- **🌐 Web Chat Integration**: Click-to-chat functionality for any website
+- **📱 Cross-Platform**: Works on desktop, mobile, and tablet browsers
+- **🎮 Interactive TUI**: Beautiful terminal interface for monitoring and control
+- **⚙️ Flexible Configuration**: Customize ports, routes, timeouts, and more
+- **🔗 Multiple Project Types**: Supports Node.js, Python, Rust, Go, and more
 
-## 🌐 Web Chat - Click-to-Chat Functionality
+## 🌐 InterTools Pro Web Platform
 
-InterTools now includes a powerful web chat system that allows users to provide feedback about any web page by clicking on elements and sharing their thoughts.
+InterTools Pro features a comprehensive web platform with professional subscription services, browser extensions, and advanced AI chat orchestration.
 
-### ✨ Features
-- **🖱️ Click-to-Chat**: Click anywhere on any web page to open chat interface
-- **🎯 Element Selection**: Click on specific elements to highlight them for context
-- **📊 Page Analysis**: Automatic capture of page context, viewport, and performance data
-- **🔄 Real-time Communication**: Instant feedback to InterTools system
-- **🌍 Cross-Platform**: Works on any website with the extension script
+### ✨ **Web Landing Page Features**
+- **🆓 FREE Script Access**: Copy-paste script for instant console log capture
+- **💼 PRO Version Trial**: 7-day free trial with full AI chat orchestrator access
+- **🔧 Developer Mode**: Full PRO access for testing and development (`devMode()`)
+- **💳 Stripe Integration**: Secure payment processing ($30/month after trial)
+- **📱 Responsive Design**: Works perfectly on desktop, mobile, and tablet
+- **🛠️ Download Center**: Chrome extensions, documentation, and scripts
 
-### 🚀 Quick Start
+### 🚀 **Quick Start - Web Platform**
 ```bash
-# Start web chat server
-npx intertools@1.0.14 web-chat --start
+# Start InterTools Pro Frontend
+cd intertools-pro-frontend
+npm run dev
+# Visit: http://localhost:5174
 
-# Enable on any website:
-# 1. Open browser developer tools (F12)
-# 2. Go to Console tab
-# 3. Paste the extension script from WEB_CHAT_GUIDE.md
-# 4. Click the chat button (💬) that appears
-# 5. Select elements and provide feedback
+# Start Chat Orchestrator Backend
+cd packages/iteragent-cli
+node dist/index.js web-chat --start
 ```
 
-### 📋 Web Chat Commands
+### 📋 **Available Commands**
 ```bash
-# Start web chat server
+# Web Chat Server (PRO Backend)
 npx intertools@1.0.14 web-chat --start
-
-# Start with custom port
 npx intertools@1.0.14 web-chat --start --port 3002
-
-# View message logs
 npx intertools@1.0.14 web-chat --logs
-
-# Clear all messages
 npx intertools@1.0.14 web-chat --clear
+
+# Agent Orchestrator (Advanced AI)
+npx intertools@1.0.14 orchestrator --start
+npx intertools@1.0.14 orchestrator --status
+npx intertools@1.0.14 orchestrator --agents
 ```
 
-### 🎯 Use Cases
-- **User Experience Testing**: Provide feedback about page usability
-- **Bug Reports**: Report issues with specific elements
-- **Design Reviews**: Share thoughts about page design and layout
-- **Accessibility Issues**: Report missing alt text or poor contrast
-- **Performance Issues**: Report slow loading or broken functionality
+### 🎯 **Use Cases**
+- **🆓 FREE**: Direct console log capture and Cursor integration
+- **💼 PRO**: Advanced AI analysis, chat orchestration, element extraction
+- **🔧 Development**: Full-stack debugging with AI-powered insights
+- **🧪 Testing**: Automated log analysis and performance monitoring
+- **📊 Analytics**: Advanced metrics and optimization recommendations
 
-**📚 Full Documentation**: See [WEB_CHAT_GUIDE.md](WEB_CHAT_GUIDE.md) for complete setup and usage instructions.
+### 🔌 **Browser Extension Integration**
+- **Chrome Extension**: Auto-inject InterTools on all websites
+- **One-Click Toggle**: Enable/disable InterTools per site
+- **Universal Support**: Works on localhost and production websites
+- **Element Extraction**: Click elements to analyze structure
+- **Real-time Sync**: Instant communication with IDEs
+
+**📚 Full Documentation**: See [WEB_CHAT_GUIDE.md](WEB_CHAT_GUIDE.md) and [intertools-pro-frontend/README.md](intertools-pro-frontend/README.md) for complete setup instructions.
 
 ## 👥 Specialized Agent Team
 
@@ -116,73 +159,358 @@ InterTools features five specialized agents that work together in continuous mon
 
 ## 🚀 Quick Start
 
-### Installation
+### **📦 Installation**
 
 ```bash
+# Install InterTools globally
+npm install -g intertools
+
+# Or install CLI separately for license management
+npm install -g @intertools/cli
+```
+
+### **🆓 FREE Version - Basic Usage**
+
+```bash
+# Install and use directly in your project
+npm install intertools
+
+# Use in your code
+const { InterTools } = require('intertools');
+
+const intertools = new InterTools();
+const logs = [
+  { type: 'error', message: 'API call failed', timestamp: new Date() },
+  { type: 'log', message: 'User logged in', timestamp: new Date() }
+];
+
+// Format for Cursor IDE
+const report = intertools.formatForCursor(logs);
+console.log(report.output);
+```
+
+### **💼 PRO Version - Advanced Features**
+
+1. **Activate Your License**:
+   ```bash
+   # Start 7-day free trial (no payment required)
+   npx @intertools/cli activate --trial
+   
+   # Or subscribe for full access
+   npx @intertools/cli activate
+   ```
+
+2. **Check License Status**:
+   ```bash
+   npx @intertools/cli status
+   ```
+
+3. **Use PRO Features**:
+   ```javascript
+   const { InterTools } = require('intertools');
+   
+   const intertools = new InterTools();
+   
+   // AI-powered analysis (PRO only)
+   const analysis = await intertools.analyzeCode(logs);
+   
+   // Performance monitoring (PRO only)
+   const metrics = await intertools.monitorPerformance();
+   
+   // Real-time IDE sync (PRO only)
+   await intertools.syncToIde(data, { ide: 'cursor' });
+   ```
+
+### **🌐 Web Integration**
+
+```javascript
+// Browser console injection
+// Copy from: https://intertools.pro
+(function() {
+  // InterTools script automatically injected
+  // Captures console.log, console.error, console.warn
+  // Provides floating 🛠️ button for analysis
+})();
+```
+
+### **🔌 Environment Setup**
+
+```bash
+# Option 1: Environment variable
+export INTERTOOLS_LICENSE="your_jwt_token_here"
+
+# Option 2: Project .env file
+echo "INTERTOOLS_LICENSE=your_token_here" >> .env
+
+# Option 3: Config file (automatic after activation)
+# ~/.config/intertools/config.json
+```
+
+## 🔧 **Installation & Setup**
+
+## 📋 **Available Commands**
+
+### **Main Package Commands**
+```bash
+# Install InterTools
+npm install -g intertools
+
+# Use in your project
+npm install intertools
+
+# Basic usage
+node -e "
+const { InterTools } = require('intertools');
+const intertools = new InterTools();
+console.log('InterTools ready!');
+"
+```
+
+### **License Management (CLI)**
+```bash
+# Install license CLI
+npm install -g @intertools/cli
+
+# Activate free trial (7 days, no payment)
+npx @intertools/cli activate --trial
+
+# Subscribe for full access
+npx @intertools/cli activate
+
+# Check license status
+npx @intertools/cli status
+
+# Clear license configuration
+npx @intertools/cli clear
+```
+
+### **Advanced Server Commands**
+```bash
+# Clone repository for development
+git clone https://github.com/luvs2spluj/intertools.git
+cd intertools
+
+# Start license server
+cd apps/server
+npm run generate-keys
+npm run dev
+
+# Start web platform
+cd intertools-pro-frontend  
+npm run dev
+```
+
+### **Feature Usage Examples**
+```bash
+# Check if you have PRO access
+node -e "
+const { hasProAccess } = require('intertools');
+hasProAccess('ai-chat-orchestrator').then(hasAccess => {
+  console.log('PRO access:', hasAccess);
+});
+"
+
+# Use PRO features with error handling
+node -e "
+const { requirePro } = require('intertools');
+requirePro('ai-chat-orchestrator')
+  .then(() => console.log('✅ PRO feature available'))
+  .catch(err => console.log('❌ Activation needed:', err.message));
+"
+```
+
+## 🆕 **Latest Components & Upgrades**
+
+### **v1.0.15 - InterTools Pro Platform with Paywall (December 2024)**
+
+#### **🌟 New Components Added:**
+- **`apps/server/`** - Complete license management server with JWT & Stripe
+- **`@intertools/cli`** - Professional CLI for license activation and management  
+- **`intertools` v1.0.15** - Enhanced runtime library with `requirePro()` feature gating
+- **JWT RS256 System** - Secure token-based license verification
+- **Stripe Integration** - 7-day free trial + $30/month subscription
+- **Rate Limiting** - Anti-abuse protection (3 trials per email per 24 hours)
+- **Cross-platform Storage** - `~/.config/intertools/config.json` token storage
+- **Offline Verification** - Built-in public key for offline license checking
+
+#### **🔧 Enhanced Components:**
+- **Feature Gating** - `requirePro()` function protects advanced features
+- **License Management** - Comprehensive activation and verification system
+- **Error Handling** - Clear activation instructions in error messages
+- **Browser Integration** - Token verification for web extensions
+- **IDE Integration** - Seamless Cursor, VS Code, WebStorm integration
+- **Production Ready** - Complete test suite and documentation
+
+#### **📦 New File Structure:**
+```
+apps/server/                      # 🆕 License management server
+├─ src/
+│  ├─ index.ts                    # Express server with JWT & Stripe
+│  ├─ routes/
+│  │  ├─ license.ts               # License activation & verification
+│  │  ├─ webhook.ts               # Stripe webhook handling
+│  │  ├─ usage.ts                 # Feature usage tracking
+│  │  └─ bridge.ts                # Extension integration
+│  └─ utils/
+│     ├─ jwt.ts                   # RS256 token management
+│     ├─ stripe.ts                # Payment processing
+│     └─ rate-limiter.ts          # Anti-abuse protection
+├─ scripts/generate-keys.js       # RSA key generation
+└─ __tests__/                     # Comprehensive test suite
+
+packages/@intertools/cli/         # 🆕 License management CLI
+├─ src/
+│  ├─ index.ts                    # CLI with Commander.js
+│  ├─ commands/
+│  │  ├─ activate.ts              # Interactive activation
+│  │  └─ status.ts                # License status checking
+│  └─ utils/
+│     ├─ storage.ts               # Cross-platform token storage
+│     ├─ api.ts                   # Server communication
+│     └─ token.ts                 # Token parsing & validation
+└─ __tests__/                     # CLI test suite
+
+packages/intertools/              # 🆕 Enhanced runtime library
+├─ src/
+│  ├─ index.ts                    # Main exports & InterTools class
+│  └─ license.ts                  # requirePro() & license verification
+└─ __tests__/                     # Runtime test suite
+```
+
+## 📁 Complete Project Structure
+
+```
+intertools/
+├─ apps/
+│  └─ server/                   # 🆕 License management server
+│     ├─ src/                   # Express server with JWT & Stripe
+│     ├─ scripts/               # Key generation utilities
+│     ├─ __tests__/             # Comprehensive test suite
+│     └─ package.json           # Server dependencies
+├─ packages/
+│  ├─ @intertools/cli/          # 🆕 License management CLI
+│  │  ├─ src/                   # Interactive activation & status
+│  │  ├─ __tests__/             # CLI test suite
+│  │  └─ package.json           # CLI dependencies
+│  └─ intertools/               # 🆕 Enhanced runtime library
+│     ├─ src/                   # requirePro() & feature gating
+│     ├─ __tests__/             # Runtime test suite
+│     └─ package.json           # Library dependencies
+├─ intertools-pro-frontend/     # Professional web platform
+│  ├─ index.html               # Landing page with PRO/FREE versions
+│  ├─ server.js                # Frontend Express server
+│  ├─ downloads/               # Download center with scripts & docs
+│  └─ package.json             # Frontend dependencies
+├─ browser-extensions/          # Browser extension support
+│  └─ chrome/                  # Chrome extension files
+├─ examples/
+│  └─ react-vite/              # Example React app
+├─ docs/
+│  ├─ README-PAYWALL.md        # 🆕 Complete paywall guide
+│  ├─ ACTIVATION.md            # 🆕 User activation instructions
+│  └─ PAYWALL-SUMMARY.md       # 🆕 Implementation summary
+├─ pnpm-workspace.yaml         # 🆕 Workspace configuration
+├─ README.md                   # This file
+├─ LICENSE
+└─ package.json                # Root package configuration
+```
+
+## 📦 **NPM Packages**
+
+InterTools is distributed as multiple NPM packages for different use cases:
+
+### **Main Package: `intertools`**
+```bash
+# Install the main library
+npm install intertools
+
+# Global installation for CLI access
 npm install -g intertools
 ```
 
-### Start InterTools Orchestrator (Big Gun Mode)
+**Features:**
+- ✅ Console log capture and formatting
+- ✅ Basic Cursor IDE integration
+- ✅ FREE features (always available)
+- ✅ PRO feature gating with `requirePro()`
+- ✅ Offline license verification
 
+**Usage:**
+```javascript
+const { InterTools, requirePro } = require('intertools');
+
+// Basic usage (FREE)
+const intertools = new InterTools();
+const report = intertools.formatForCursor(logs);
+
+// PRO features (requires license)
+const analysis = await intertools.analyzeCode(logs);
+```
+
+### **License CLI: `@intertools/cli`**
 ```bash
-# Start the specialized agent team
-intertools orchestrator --start
-
-# Check status of all agents
-intertools orchestrator --status
-
-# View specialized agents
-intertools orchestrator --agents
-
-# Monitor log analysis results
-intertools orchestrator --logs
-
-# Check Cursor chat messages
-intertools orchestrator --cursor-chat
+# Install license management CLI
+npm install -g @intertools/cli
 ```
 
-This creates a `.iteragentrc.json` configuration file and `.cursor/inbox/` directory.
+**Features:**
+- ✅ Interactive license activation
+- ✅ 7-day free trial (no payment)
+- ✅ Stripe subscription management
+- ✅ License status checking
+- ✅ Cross-platform token storage
 
-### Run the Iterative Loop
-
+**Usage:**
 ```bash
-iteragent run
+# Activate free trial
+npx @intertools/cli activate --trial
+
+# Subscribe for full access
+npx @intertools/cli activate
+
+# Check license status
+npx @intertools/cli status
 ```
 
-That's it! IterAgent will:
-- Start your dev server
-- Monitor logs and run tests
-- Show you an interactive summary
-- Let you send fix requests to Cursor with a single Enter press
-
-## 📁 Project Structure
-
+### **License Server: `@intertools/server`**
+```bash
+# For self-hosting (optional)
+npm install @intertools/server
 ```
-iteragent/
-├─ packages/
-│  └─ iteragent-cli/            # The CLI package
-│     ├─ src/
-│     │  ├─ index.ts            # CLI entry point
-│     │  ├─ runner.ts           # Dev server management
-│     │  ├─ harvester.ts        # Log capture & analysis
-│     │  ├─ tester.ts           # Playwright testing
-│     │  ├─ summarizer.ts       # Report generation
-│     │  ├─ tui.ts              # Interactive interface
-│     │  └─ utils.ts            # Utilities
-│     ├─ package.json
-│     └─ tsconfig.json
-├─ examples/
-│  └─ react-vite/               # Example React app
-├─ .iteragentrc.json            # Project configuration
-├─ .cursor/inbox/               # Cursor integration directory
-├─ README.md
-├─ LICENSE
-└─ manifest.cursor.json         # Cursor Store manifest
+
+**Features:**
+- ✅ JWT token generation and verification
+- ✅ Stripe webhook handling
+- ✅ Rate limiting and abuse protection
+- ✅ Usage tracking and analytics
+
+## 💰 **Pricing & Plans**
+
+### **🆓 FREE Plan**
+- ✅ Console log capture
+- ✅ Basic Cursor integration
+- ✅ Markdown report generation
+- ✅ No time limits
+- ✅ No feature restrictions on FREE features
+
+### **💼 PRO Plan - $30/month**
+- ✅ **7-day free trial** (no payment required)
+- ✅ AI-powered code analysis
+- ✅ Performance monitoring
+- ✅ Real-time IDE sync (Cursor, VS Code, WebStorm)
+- ✅ Element extraction and HTML analysis
+- ✅ Multi-agent coordination
+- ✅ Priority support
+- ✅ Advanced integrations
+
+**Start your free trial:**
+```bash
+npx @intertools/cli activate --trial
 ```
 
 ## ⚙️ Configuration
 
-The `.iteragentrc.json` file allows you to customize IterAgent's behavior:
+InterTools can be configured through multiple methods:
 
 ```json
 {
@@ -585,12 +913,95 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - [Inquirer.js](https://github.com/SBoudrias/Inquirer.js) for interactive prompts
 - [Chalk](https://github.com/chalk/chalk) for beautiful terminal colors
 
+## 🚀 **Getting Started (Quick)**
+
+### **1. Install InterTools**
+```bash
+npm install -g intertools
+```
+
+### **2. Activate PRO (Optional)**
+```bash
+# Start 7-day free trial
+npx @intertools/cli activate --trial
+```
+
+### **3. Use in Your Project**
+```javascript
+const { InterTools } = require('intertools');
+
+const intertools = new InterTools();
+const logs = [
+  { type: 'error', message: 'API failed', timestamp: new Date() }
+];
+
+// FREE: Format for Cursor
+const report = intertools.formatForCursor(logs);
+console.log(report.output);
+
+// PRO: AI analysis (requires license)
+try {
+  const analysis = await intertools.analyzeCode(logs);
+  console.log('AI Analysis:', analysis);
+} catch (error) {
+  console.log('Upgrade needed:', error.message);
+}
+```
+
+### **4. Browser Integration**
+```javascript
+// Copy from https://intertools.pro
+// Paste in any website's browser console
+// Provides floating 🛠️ button for log analysis
+```
+
+## 📦 **NPM Publishing Info**
+
+### **Published Packages**
+- **`intertools`** - Main library with FREE and PRO features
+- **`@intertools/cli`** - License management CLI
+- **`@intertools/server`** - Self-hosted license server (optional)
+
+### **Installation Methods**
+```bash
+# Method 1: Main package only
+npm install intertools
+
+# Method 2: Global installation with CLI
+npm install -g intertools @intertools/cli
+
+# Method 3: Project-specific with CLI
+npm install intertools
+npm install -g @intertools/cli
+
+# Method 4: Everything (for development)
+git clone https://github.com/luvs2spluj/intertools.git
+cd intertools
+pnpm install
+```
+
 ## 📞 Support
 
-- **Issues**: [GitHub Issues](https://github.com/alexhorton/iteragent/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/alexhorton/iteragent/discussions)
-- **Documentation**: [Project Wiki](https://github.com/alexhorton/iteragent/wiki)
+- **Website**: [intertools.pro](https://intertools.pro)
+- **Issues**: [GitHub Issues](https://github.com/luvs2spluj/intertools/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/luvs2spluj/intertools/discussions)
+- **Documentation**: [Complete Guides](https://github.com/luvs2spluj/intertools/tree/main/docs)
+- **Email**: support@intertools.pro
+
+### **Quick Help**
+```bash
+# Check license status
+npx @intertools/cli status
+
+# Get help
+npx @intertools/cli --help
+
+# View available features
+node -e "console.log(require('intertools'))"
+```
 
 ---
 
-**Made with ❤️ for the Cursor community**
+**🚀 Built for modern developers who want powerful console log analysis and AI-powered development insights.**
+
+**Made with ❤️ for the Cursor community and beyond.**

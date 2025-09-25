@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "InterTools PRO Frontend with subscription management",
   "main": "server.js",
+  "type": "module",
   "scripts": {
     "dev": "node server.js",
     "start": "node server.js",

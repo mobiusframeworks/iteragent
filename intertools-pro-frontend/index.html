@@ -2891,6 +2891,76 @@ Paste this report into your IDE for instant development insights!\`;
                 console.error('❌ Cannot find free-script-display element');
             }
         };
+        
+        // 🔧 DEVELOPER OVERRIDE MODE 🔧
+        // Enables full PRO access for testing without restrictions
+        window.enableDeveloperMode = function() {
+            console.log('🔧 DEVELOPER MODE ENABLED - Full PRO Access');
+            localStorage.setItem('intertools_developer_mode', 'true');
+            localStorage.setItem('intertools_pro_access', 'true');
+            localStorage.setItem('intertools_trial_active', 'true');
+            localStorage.setItem('intertools_subscription_status', 'active');
+            
+            // Show PRO version immediately
+            showProVersion();
+            
+            // Load full PRO script with all features
+            loadProScriptDeveloper();
+            
+            alert('🔧 Developer Mode Enabled!\n\n✅ Full PRO access granted\n✅ All restrictions bypassed\n✅ Chat orchestrator available\n✅ AI analysis enabled\n\nYou can now test all PRO features without limitations.');
+        };
+        
+        // Load PRO script for developer testing
+        function loadProScriptDeveloper() {
+            console.log('🔧 Loading PRO script in developer mode...');
+            const display = document.getElementById('pro-script-display');
+            
+            if (!display) {
+                console.error('❌ PRO script display element not found');
+                return;
+            }
+            
+            console.log('📡 Fetching full PRO script...');
+            fetch('/downloads/intertools-pro-complete.js')
+                .then(response => {
+                    console.log('📡 Response status:', response.status, response.statusText);
+                    if (!response.ok) {
+                        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                    }
+                    return response.text();
+                })
+                .then(script => {
+                    console.log('✅ PRO script loaded, length:', script.length);
+                    
+                    // Add developer override to the script
+                    const developerScript = `// 🔧 DEVELOPER MODE - Full PRO Access
+// All restrictions bypassed for testing
+${script}`;
+                    
+                    display.textContent = developerScript;
+                    display.dataset.loaded = 'true';
+                    display.dataset.script = developerScript;
+                    
+                    // Update UI to show PRO is ready
+                    const proButton = document.getElementById('copy-pro-btn');
+                    if (proButton) {
+                        proButton.textContent = '📋 Copy PRO Script (Developer Mode)';
+                        proButton.style.background = '#10b981';
+                        proButton.disabled = false;
+                    }
+                    
+                    console.log('✅ PRO script ready for developer testing');
+                })
+                .catch(error => {
+                    console.error('❌ Error loading PRO script:', error);
+                    display.textContent = `// ❌ Error loading PRO script: ${error.message}\n// Please check server status.`;
+                });
+        }
+        
+        // Quick developer access function
+        window.devMode = function() {
+            enableDeveloperMode();
+        };
     </script>
 </body>
 </html>

@@ -1,0 +1,52 @@
+{
+  "name": "@intertools/cli",
+  "version": "1.0.0",
+  "description": "InterTools Pro License Manager. Activate 7-day free trial (no payment). Manage PRO subscriptions ($30/month). AI analysis, performance monitoring, real-time IDE sync.",
+  "main": "dist/index.js",
+  "bin": {
+    "intertools": "dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsx watch src/index.ts",
+    "start": "node dist/index.js",
+    "test": "jest"
+  },
+  "dependencies": {
+    "commander": "^11.1.0",
+    "inquirer": "^8.2.6",
+    "chalk": "^4.1.2",
+    "ora": "^5.4.1",
+    "open": "^8.4.2",
+    "axios": "^1.6.2",
+    "jsonwebtoken": "^9.0.2",
+    "node-fetch": "^2.7.0"
+  },
+  "devDependencies": {
+    "@types/inquirer": "^8.2.6",
+    "@types/node": "^20.10.4",
+    "@types/jsonwebtoken": "^9.0.5",
+    "@types/node-fetch": "^2.6.9",
+    "typescript": "^5.3.3",
+    "tsx": "^4.6.2",
+    "jest": "^29.7.0",
+    "@types/jest": "^29.5.8",
+    "ts-jest": "^29.1.1"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "files": [
+    "dist/**/*",
+    "README.md"
+  ],
+  "keywords": [
+    "intertools",
+    "cli",
+    "license",
+    "activation",
+    "pro"
+  ],
+  "author": "InterTools Team",
+  "license": "MIT"
+}

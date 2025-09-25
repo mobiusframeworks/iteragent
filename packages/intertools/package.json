@@ -1,0 +1,63 @@
+{
+  "name": "intertools",
+  "version": "1.0.15",
+  "description": "Professional console log analysis and IDE integration. FREE: Basic formatting. PRO: AI analysis, performance monitoring, real-time IDE sync. 7-day free trial available.",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "bin": {
+    "intertools": "dist/cli.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "test": "jest",
+    "prepublishOnly": "npm run build",
+    "postinstall": "node dist/postinstall.js || echo 'Welcome to InterTools! Run: npx intertools'"
+  },
+  "dependencies": {
+    "jsonwebtoken": "^9.0.2",
+    "node-fetch": "^2.7.0"
+  },
+  "devDependencies": {
+    "@types/jsonwebtoken": "^9.0.5",
+    "@types/node": "^20.10.4",
+    "@types/node-fetch": "^2.6.9",
+    "typescript": "^5.3.3",
+    "jest": "^29.7.0",
+    "@types/jest": "^29.5.8",
+    "ts-jest": "^29.1.1"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "files": [
+    "dist/**/*",
+    "README.md",
+    "LICENSE"
+  ],
+  "keywords": [
+    "intertools",
+    "console",
+    "logs",
+    "ide",
+    "cursor",
+    "vscode",
+    "analysis",
+    "ai",
+    "debugging",
+    "monitoring",
+    "pro",
+    "trial",
+    "free"
+  ],
+  "author": "InterTools Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/luvs2spluj/iteragent.git"
+  },
+  "bugs": {
+    "url": "https://github.com/luvs2spluj/iteragent/issues"
+  },
+  "homepage": "https://github.com/luvs2spluj/iteragent#readme"
+}

@@ -1,0 +1,16 @@
+{
+  "keyRotation": {
+    "note": "For key rotation, generate new keys and update JWT_PRIVATE_KEY_PATH",
+    "steps": [
+      "1. Generate new key pair: npm run generate-keys",
+      "2. Update JWT_PRIVATE_KEY_PATH to new private key",
+      "3. Keep old public key available for existing token verification",
+      "4. Update client packages with new public key",
+      "5. Gradually phase out old tokens over 30 days"
+    ],
+    "multipleKids": {
+      "note": "To support multiple key IDs (kid) in JWT header:",
+      "implementation": "Add 'kid' to JWT header and maintain key map in server"
+    }
+  }
+}

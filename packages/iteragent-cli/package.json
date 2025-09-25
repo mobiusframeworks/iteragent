@@ -1,5 +1,5 @@
 {
-  "name": "intertools",
+  "name": "@intertools/legacy-cli",
   "version": "1.0.14",
   "description": "InterTools - Intelligent development tools with multi-agent orchestration for Cursor",
   "main": "dist/index.js",
