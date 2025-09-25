@@ -1,0 +1,54 @@
+[
+  {
+    "id": "basic",
+    "name": "Basic",
+    "price": 0,
+    "currency": "usd",
+    "interval": "month",
+    "features": [
+      "Basic log reading",
+      "Simple error detection",
+      "Community support",
+      "Basic web chat"
+    ],
+    "trialDays": 0,
+    "stripePriceId": ""
+  },
+  {
+    "id": "pro",
+    "name": "Pro",
+    "price": 3000,
+    "currency": "usd",
+    "interval": "month",
+    "features": [
+      "AI Agent Orchestration",
+      "Advanced Log Analysis",
+      "Cursor Integration",
+      "Universal Web Chat",
+      "Performance Monitoring",
+      "Security Analysis",
+      "Priority Support",
+      "Lifetime Updates",
+      "7-Day Free Trial"
+    ],
+    "trialDays": 7,
+    "stripePriceId": "price_pro_monthly"
+  },
+  {
+    "id": "enterprise",
+    "name": "Enterprise",
+    "price": 0,
+    "currency": "usd",
+    "interval": "month",
+    "features": [
+      "Everything in Pro",
+      "Custom AI Models",
+      "On-premise Deployment",
+      "Dedicated Support",
+      "SLA Guarantee",
+      "Custom Integrations"
+    ],
+    "trialDays": 14,
+    "stripePriceId": ""
+  }
+]

@@ -1,0 +1,64 @@
+{
+  "manifest_version": 3,
+  "name": "InterTools - AI-Powered Development Assistant",
+  "version": "2.0.1",
+  "description": "Connect any webpage to Cursor, extract elements, analyze code, and integrate with your dev environment",
+  
+  "permissions": [
+    "activeTab",
+    "storage",
+    "scripting",
+    "background",
+    "tabs",
+    "contextMenus"
+  ],
+  
+  "host_permissions": [
+    "http://*/*",
+    "https://*/*",
+    "http://localhost:*/*",
+    "http://127.0.0.1:*/*"
+  ],
+  
+  "background": {
+    "service_worker": "background.js"
+  },
+  
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "run_at": "document_end",
+      "all_frames": false
+    }
+  ],
+  
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "InterTools - Toggle On/Off",
+    "default_icon": {
+      "16": "icon-16.png",
+      "32": "icon-32.png",
+      "48": "icon-48.png",
+      "128": "icon-128.png"
+    }
+  },
+  
+  "icons": {
+    "16": "icon-16.png",
+    "32": "icon-32.png",
+    "48": "icon-48.png",
+    "128": "icon-128.png"
+  },
+  
+  "web_accessible_resources": [
+    {
+      "resources": ["injected.js", "cursor-bridge.js"],
+      "matches": ["<all_urls>"]
+    }
+  ],
+  
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self';"
+  }
+}

@@ -5,6 +5,12 @@ import cors from 'cors';
 import path from 'path';
 import fs from 'fs';
 import { EventEmitter } from 'events';
+import { InterToolsCursorBridge } from './cursor-bridge';
+import { InterToolsProPaymentSystem } from './payment-system';
+import { InterToolsProFeatures } from './pro-features';
+import { InterToolsProPaywall } from './paywall';
+import { InterToolsProtectedScripts } from './protected-scripts';
+import { InterToolsAuthSystem } from './auth-system';
 
 export interface WebChatMessage {
   id: string;
@@ -44,6 +50,12 @@ export class InterToolsWebChat extends EventEmitter {
   private config: WebChatConfig;
   private messages: WebChatMessage[] = [];
   private isRunning: boolean = false;
+  private cursorBridge: InterToolsCursorBridge;
+  private paymentSystem: InterToolsProPaymentSystem;
+  private proFeatures: InterToolsProFeatures;
+  private paywall: InterToolsProPaywall;
+  private protectedScripts: InterToolsProtectedScripts;
+  private authSystem: InterToolsAuthSystem;
 
   constructor(config: Partial<WebChatConfig> = {}) {
     super();
@@ -60,10 +72,25 @@ export class InterToolsWebChat extends EventEmitter {
     };
 
     this.app = express();
+    this.cursorBridge = new InterToolsCursorBridge();
+    this.paymentSystem = new InterToolsProPaymentSystem(
+      process.env.STRIPE_SECRET_KEY || 'sk_test_...'
+    );
+    this.proFeatures = new InterToolsProFeatures();
+    this.paywall = new InterToolsProPaywall(
+      this.proFeatures,
+      this.paymentSystem
+    );
+    this.protectedScripts = new InterToolsProtectedScripts();
+    this.authSystem = new InterToolsAuthSystem();
+    
     this.setupMiddleware();
     this.setupRoutes();
     this.setupSocketIO();
     this.loadMessages();
+    this.setupCursorBridge();
+    this.setupProIntegration();
+    this.setupAuthIntegration();
   }
 
   private setupMiddleware(): void {
@@ -85,6 +112,38 @@ export class InterToolsWebChat extends EventEmitter {
       res.send(this.getChatInterfaceHTML());
     });
 
+    // Serve the InterTools Pro website
+    this.app.get('/pro', (req, res) => {
+      res.sendFile(path.join(__dirname, '..', 'public', 'intertools-pro.html'));
+    });
+
+    // Serve the universal chat guide
+    this.app.get('/universal-chat-guide.html', (req, res) => {
+      res.sendFile(path.join(__dirname, '..', 'public', 'universal-chat-guide.html'));
+    });
+
+    // Serve the universal click chat script
+    this.app.get('/universal-click-chat.js', (req, res) => {
+      res.sendFile(path.join(__dirname, '..', 'public', 'universal-click-chat.js'));
+    });
+
+    // Serve the simple click chat script (guaranteed to work)
+    this.app.get('/simple-click-chat.js', (req, res) => {
+      res.sendFile(path.join(__dirname, '..', 'public', 'simple-click-chat.js'));
+    });
+
+    // Serve the FREE script (no authentication required)
+    this.app.get('/free-script.js', (req, res) => {
+      const freeScript = this.protectedScripts.generateFreeScript();
+      res.setHeader('Content-Type', 'application/javascript');
+      res.send(freeScript);
+    });
+
+    // Serve the test website
+    this.app.get('/test-website.html', (req, res) => {
+      res.sendFile(path.join(__dirname, '..', 'public', 'test-website.html'));
+    });
+
     // API endpoint to get messages
     this.app.get('/api/messages', (req, res) => {
       res.json({
@@ -100,6 +159,18 @@ export class InterToolsWebChat extends EventEmitter {
         const message = this.createMessage(req.body);
         this.messages.push(message);
         this.saveMessages();
+        
+        // Send to Cursor bridge
+        this.cursorBridge.addMessage({
+          message: message.message,
+          pageUrl: message.pageUrl,
+          pageTitle: message.pageTitle,
+          userAgent: message.userAgent,
+          elementInfo: message.elementInfo,
+          htmlContent: req.body.htmlContent,
+          sessionId: req.body.sessionId || 'unknown',
+          agentId: req.body.agentId || 'web-chat'
+        });
         
         // Emit to connected clients
         this.io.emit('newMessage', message);
@@ -167,6 +238,339 @@ export class InterToolsWebChat extends EventEmitter {
         contributors: ['alexhorton'],
         totalCommits: 47
       });
+    });
+
+    // Cursor bridge status endpoint
+    this.app.get('/api/cursor-bridge-status', (req, res) => {
+      const status = this.cursorBridge.getStatus();
+      res.json({
+        success: true,
+        ...status,
+        lastActivity: new Date().toLocaleTimeString()
+      });
+    });
+
+    // Get pending messages for Cursor
+    this.app.get('/api/pending-messages', (req, res) => {
+      const pendingMessages = this.cursorBridge.getPendingMessages();
+      res.json({
+        success: true,
+        messages: pendingMessages,
+        count: pendingMessages.length
+      });
+    });
+
+    // Create response template for a message
+    this.app.post('/api/create-response-template', (req, res) => {
+      try {
+        const { messageId } = req.body;
+        if (!messageId) {
+          return res.status(400).json({ success: false, error: 'Message ID required' });
+        }
+        
+        const responseFile = this.cursorBridge.createResponseTemplate(messageId);
+        res.json({ 
+          success: true, 
+          responseFile,
+          message: 'Response template created'
+        });
+      } catch (error) {
+        res.status(400).json({ 
+          success: false, 
+          error: error instanceof Error ? error.message : String(error) 
+        });
+      }
+    });
+
+        // Pro API endpoints
+        this.app.get('/api/pro/status', (req, res) => {
+          const stats = this.paywall.getPaywallStats();
+          res.json({
+            success: true,
+            ...stats,
+            timestamp: new Date().toISOString()
+          });
+        });
+
+        this.app.post('/api/pro/create-checkout', async (req, res) => {
+          try {
+            const { planId, successUrl, cancelUrl } = req.body;
+            const authHeader = req.headers.authorization;
+            
+            if (!authHeader || !authHeader.startsWith('Bearer ')) {
+              return res.status(401).json({ success: false, error: 'Authorization token required' });
+            }
+            
+            const token = authHeader.substring(7);
+            const session = this.authSystem.getUserBySession(token);
+            
+            if (!session) {
+              return res.status(401).json({ success: false, error: 'Invalid session token' });
+            }
+            
+            if (!planId || !successUrl || !cancelUrl) {
+              return res.status(400).json({ success: false, error: 'Missing required fields' });
+            }
+            
+            const checkoutUrl = await this.paymentSystem.createCheckoutSession(
+              session.userId,
+              planId,
+              successUrl,
+              cancelUrl
+            );
+            
+            res.json({
+              success: true,
+              checkoutUrl
+            });
+          } catch (error) {
+            res.status(500).json({ 
+              success: false, 
+              error: error instanceof Error ? error.message : String(error) 
+            });
+          }
+        });
+
+    this.app.get('/api/pro/plans', (req, res) => {
+      const plans = this.paymentSystem.getAllPlans();
+      res.json({
+        success: true,
+        plans
+      });
+    });
+
+    this.app.post('/api/pro/check-access', (req, res) => {
+      try {
+        const { userId } = req.body;
+        if (!userId) {
+          return res.status(400).json({ success: false, error: 'User ID required' });
+        }
+        
+        const access = this.paywall.checkAccess(userId);
+        res.json({
+          success: true,
+          access
+        });
+      } catch (error) {
+        res.status(400).json({ 
+          success: false, 
+          error: error instanceof Error ? error.message : String(error) 
+        });
+      }
+    });
+
+    this.app.post('/api/pro/use-feature', (req, res) => {
+      try {
+        const { userId, featureId, action, metadata } = req.body;
+        if (!userId || !featureId || !action) {
+          return res.status(400).json({ success: false, error: 'Missing required fields' });
+        }
+        
+        this.paywall.useFeatureWithPaywall(userId, featureId, action, metadata)
+          .then(result => {
+            res.json({
+              success: result.success,
+              message: result.message,
+              requiresUpgrade: result.requiresUpgrade
+            });
+          })
+          .catch(error => {
+            res.status(500).json({ 
+              success: false, 
+              error: error instanceof Error ? error.message : String(error) 
+            });
+          });
+      } catch (error) {
+        res.status(400).json({ 
+          success: false, 
+          error: error instanceof Error ? error.message : String(error) 
+        });
+      }
+    });
+
+    this.app.post('/api/pro/create-trial', (req, res) => {
+      try {
+        const { userId, email, name } = req.body;
+        if (!userId || !email || !name) {
+          return res.status(400).json({ success: false, error: 'Missing required fields' });
+        }
+        
+        this.paywall.createTrialUser(userId, email, name)
+          .then(success => {
+            res.json({
+              success,
+              message: success ? 'Trial user created successfully' : 'Failed to create trial user'
+            });
+          })
+          .catch(error => {
+            res.status(500).json({ 
+              success: false, 
+              error: error instanceof Error ? error.message : String(error) 
+            });
+          });
+      } catch (error) {
+        res.status(400).json({ 
+          success: false, 
+          error: error instanceof Error ? error.message : String(error) 
+        });
+      }
+    });
+
+    // Authentication API endpoints
+    this.app.post('/api/auth/login', async (req, res) => {
+      try {
+        const { clerkToken } = req.body;
+        if (!clerkToken) {
+          return res.status(400).json({ success: false, error: 'Clerk token required' });
+        }
+        
+        const result = await this.authSystem.authenticateUser(clerkToken);
+        res.json(result);
+      } catch (error) {
+        res.status(500).json({ 
+          success: false, 
+          error: error instanceof Error ? error.message : String(error) 
+        });
+      }
+    });
+
+    this.app.post('/api/auth/logout', (req, res) => {
+      try {
+        const { sessionToken } = req.body;
+        if (!sessionToken) {
+          return res.status(400).json({ success: false, error: 'Session token required' });
+        }
+        
+        const success = this.authSystem.logoutUser(sessionToken);
+        res.json({ success, message: success ? 'Logged out successfully' : 'Session not found' });
+      } catch (error) {
+        res.status(500).json({ 
+          success: false, 
+          error: error instanceof Error ? error.message : String(error) 
+        });
+      }
+    });
+
+    this.app.post('/api/auth/validate-session', (req, res) => {
+      try {
+        const { sessionToken } = req.body;
+        if (!sessionToken) {
+          return res.status(400).json({ success: false, error: 'Session token required' });
+        }
+        
+        const validation = this.authSystem.validateSession(sessionToken);
+        res.json(validation);
+      } catch (error) {
+        res.status(500).json({ 
+          success: false, 
+          error: error instanceof Error ? error.message : String(error) 
+        });
+      }
+    });
+
+    // Protected script API endpoints
+    this.app.post('/api/pro/validate-script', (req, res) => {
+      try {
+        const { token, domain, userAgent } = req.body;
+        if (!token || !domain) {
+          return res.status(400).json({ success: false, error: 'Token and domain required' });
+        }
+        
+        const validation = this.protectedScripts.validateScriptToken(token, domain, userAgent);
+        res.json(validation);
+      } catch (error) {
+        res.status(500).json({ 
+          success: false, 
+          error: error instanceof Error ? error.message : String(error) 
+        });
+      }
+    });
+
+    this.app.post('/api/pro/script', (req, res) => {
+      try {
+        const authHeader = req.headers.authorization;
+        if (!authHeader || !authHeader.startsWith('Bearer ')) {
+          return res.status(401).json({ success: false, error: 'Authorization token required' });
+        }
+        
+        const token = authHeader.substring(7);
+        const { features, planId } = req.body;
+        
+        // Validate token and get user session
+        const session = this.authSystem.getUserBySession(token);
+        if (!session) {
+          return res.status(401).json({ success: false, error: 'Invalid session token' });
+        }
+        
+        // Generate protected Pro script
+        const scriptToken = this.protectedScripts.generateScriptToken(
+          session.userId,
+          session.subscriptionId || '',
+          session.planId,
+          features || ['universal-web-chat'],
+          req.headers.host || 'localhost',
+          req.headers['user-agent'] || ''
+        );
+        
+        const protectedScript = this.protectedScripts.generateProtectedScript(
+          scriptToken,
+          req.headers.host || 'localhost'
+        );
+        
+        res.setHeader('Content-Type', 'application/javascript');
+        res.send(protectedScript);
+      } catch (error) {
+        res.status(500).json({ 
+          success: false, 
+          error: error instanceof Error ? error.message : String(error) 
+        });
+      }
+    });
+  }
+
+  private setupAuthIntegration(): void {
+    this.authSystem.on('userAuthenticated', (session) => {
+      console.log(`🔐 User authenticated: ${session.email}`);
+      this.io.emit('userAuthenticated', session);
+    });
+
+    this.authSystem.on('trialUserCreated', (session) => {
+      console.log(`🎉 Trial user created: ${session.email}`);
+      this.io.emit('trialUserCreated', session);
+    });
+
+    this.authSystem.on('userUpgraded', (session) => {
+      console.log(`⬆️ User upgraded: ${session.email} to ${session.planId}`);
+      this.io.emit('userUpgraded', session);
+    });
+  }
+
+  private setupProIntegration(): void {
+    this.paywall.on('upgradePrompt', (data) => {
+      console.log(`🔒 Upgrade prompt for user ${data.userId}: ${data.prompt}`);
+      this.io.emit('upgradePrompt', data);
+    });
+
+    this.proFeatures.on('featureUsed', (analytics) => {
+      console.log(`📊 Feature used: ${analytics.feature} by ${analytics.userId}`);
+      this.io.emit('featureAnalytics', analytics);
+    });
+
+    this.paymentSystem.on('subscription_created', (event) => {
+      console.log(`💳 Subscription created: ${event.subscription.id}`);
+      this.io.emit('subscriptionCreated', event.subscription);
+    });
+  }
+
+  private setupCursorBridge(): void {
+    this.cursorBridge.on('newMessage', (message) => {
+      console.log('📨 New message sent to Cursor:', message.id);
+      this.io.emit('cursorMessageCreated', message);
+    });
+
+    this.cursorBridge.on('newResponse', (response) => {
+      console.log('📤 New response from Cursor:', response.id);
+      this.io.emit('cursorResponseReceived', response);
     });
   }
 

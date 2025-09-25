@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>InterTools</title>
+  <style>
+    body {
+      width: 320px;
+      height: 400px;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+    
+    .header {
+      padding: 20px;
+      text-align: center;
+      background: rgba(255, 255, 255, 0.1);
+    }
+    
+    .header h1 {
+      margin: 0 0 5px 0;
+      font-size: 18px;
+    }
+    
+    .status {
+      font-size: 14px;
+      opacity: 0.9;
+    }
+    
+    .content {
+      padding: 20px;
+    }
+    
+    .btn {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 10px;
+      background: rgba(255, 255, 255, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      color: white;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.2s ease;
+    }
+    
+    .btn:hover {
+      background: rgba(255, 255, 255, 0.3);
+    }
+    
+    .btn.primary {
+      background: rgba(255, 255, 255, 0.9);
+      color: #667eea;
+    }
+    
+    .btn.primary:hover {
+      background: white;
+    }
+    
+    .info {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      font-size: 12px;
+    }
+    
+    .footer {
+      text-align: center;
+      padding: 15px;
+      font-size: 11px;
+      opacity: 0.7;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>🛠️ InterTools</h1>
+    <div id="status" class="status">Checking status...</div>
+  </div>
+  
+  <div class="content">
+    <div id="page-info" class="info">
+      <div><strong>Page:</strong> <span id="page-title">Loading...</span></div>
+      <div><strong>URL:</strong> <span id="page-url">Loading...</span></div>
+      <div><strong>Environment:</strong> <span id="page-env">Unknown</span></div>
+    </div>
+    
+    <button id="toggle-btn" class="btn primary">Enable InterTools</button>
+    <button id="extract-btn" class="btn">📋 Extract Element</button>
+    <button id="analyze-btn" class="btn">🔍 Analyze Page</button>
+    <button id="connect-btn" class="btn">🔗 Connect Project</button>
+  </div>
+  
+  <div class="footer">
+    <div>Right-click page for quick access</div>
+  </div>
+  
+  <script src="popup.js"></script>
+</body>
+</html>

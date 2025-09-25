@@ -25,6 +25,7 @@ import { AgentZeroContainerService } from './agent-zero-container-service';
 import { AgentZeroSeamlessIntegration } from './agent-zero-seamless-integration';
 import { InterToolsOrchestrator } from './intertools-orchestrator';
 import { InterToolsWebChat } from './web-chat-server';
+import { InterToolsCursorBridge } from './cursor-bridge';
 
 const program = new Command();
 
@@ -2023,8 +2024,117 @@ program
         console.log(chalk.white('  intertools web-chat --clear'));
       }
       
+          } catch (error) {
+            console.error(chalk.red('❌ Web chat command failed:'), error instanceof Error ? error.message : String(error));
+          }
+        });
+
+program
+  .command('cursor-integration')
+  .description('Manage Cursor AI integration for web chat messages')
+  .option('-s, --status', 'Show Cursor integration status')
+  .option('-m, --messages', 'Show pending messages for Cursor')
+  .option('-c, --create-template <messageId>', 'Create response template for a message')
+  .option('-l, --list', 'List all messages and responses')
+  .option('-r, --responses', 'Show all responses from Cursor')
+  .option('--clear', 'Clear all messages and responses')
+  .action(async (options) => {
+    try {
+      const cursorBridge = new InterToolsCursorBridge();
+
+      if (options.status) {
+        const status = cursorBridge.getStatus();
+        console.log(chalk.blue('🤖 Cursor Integration Status:'));
+        console.log(chalk.white(`   Messages: ${status.messages}`));
+        console.log(chalk.white(`   Responses: ${status.responses}`));
+        console.log(chalk.white(`   Pending: ${status.pending}`));
+        console.log(chalk.white(`   Inbox Path: ${status.inboxPath}`));
+
+      } else if (options.messages) {
+        const pendingMessages = cursorBridge.getPendingMessages();
+        console.log(chalk.blue('📨 Pending Messages for Cursor:'));
+        
+        if (pendingMessages.length === 0) {
+          console.log(chalk.yellow('   No pending messages'));
+        } else {
+          pendingMessages.forEach((msg, index) => {
+            console.log(chalk.cyan(`\n${index + 1}. ${msg.pageTitle}`));
+            console.log(chalk.white(`   ID: ${msg.id}`));
+            console.log(chalk.white(`   Message: ${msg.message}`));
+            console.log(chalk.white(`   Time: ${msg.timestamp.toLocaleTimeString()}`));
+            console.log(chalk.white(`   URL: ${msg.pageUrl}`));
+            if (msg.elementInfo) {
+              console.log(chalk.white(`   Element: ${msg.elementInfo.tagName}${msg.elementInfo.id ? '#' + msg.elementInfo.id : ''}`));
+            }
+          });
+        }
+
+      } else if (options.createTemplate) {
+        const messageId = options.createTemplate;
+        try {
+          const responseFile = cursorBridge.createResponseTemplate(messageId);
+          console.log(chalk.green('✅ Response template created:'));
+          console.log(chalk.white(`   File: ${responseFile}`));
+          console.log(chalk.cyan('   Open this file in Cursor to respond to the message'));
+        } catch (error) {
+          console.error(chalk.red('❌ Failed to create template:'), error instanceof Error ? error.message : String(error));
+        }
+
+      } else if (options.list) {
+        const messages = cursorBridge.getMessages();
+        const responses = cursorBridge.getResponses();
+        
+        console.log(chalk.blue('📋 All Messages and Responses:'));
+        console.log(chalk.white(`   Total Messages: ${messages.length}`));
+        console.log(chalk.white(`   Total Responses: ${responses.length}`));
+        
+        if (messages.length > 0) {
+          console.log(chalk.cyan('\n📨 Recent Messages:'));
+          messages.slice(-5).forEach((msg, index) => {
+            console.log(chalk.white(`   ${index + 1}. [${msg.timestamp.toLocaleTimeString()}] ${msg.message.substring(0, 50)}...`));
+          });
+        }
+
+      } else if (options.responses) {
+        const responses = cursorBridge.getResponses();
+        console.log(chalk.blue('📤 Responses from Cursor:'));
+        
+        if (responses.length === 0) {
+          console.log(chalk.yellow('   No responses yet'));
+        } else {
+          responses.forEach((resp, index) => {
+            console.log(chalk.cyan(`\n${index + 1}. Response ${resp.id}`));
+            console.log(chalk.white(`   Original Message: ${resp.originalMessageId}`));
+            console.log(chalk.white(`   Status: ${resp.status}`));
+            console.log(chalk.white(`   Time: ${resp.timestamp.toLocaleTimeString()}`));
+            console.log(chalk.white(`   Response: ${resp.response.substring(0, 100)}...`));
+          });
+        }
+
+      } else if (options.clear) {
+        cursorBridge.clearMessages();
+        cursorBridge.clearResponses();
+        console.log(chalk.green('✅ All messages and responses cleared'));
+
+      } else {
+        console.log(chalk.blue('🤖 InterTools Cursor Integration'));
+        console.log('');
+        console.log(chalk.white('Available options:'));
+        console.log(chalk.cyan('  --status           Show integration status'));
+        console.log(chalk.cyan('  --messages         Show pending messages'));
+        console.log(chalk.cyan('  --create-template  Create response template'));
+        console.log(chalk.cyan('  --list             List all messages'));
+        console.log(chalk.cyan('  --responses        Show all responses'));
+        console.log(chalk.cyan('  --clear            Clear all data'));
+        console.log('');
+        console.log(chalk.yellow('Examples:'));
+        console.log(chalk.white('  intertools cursor-integration --status'));
+        console.log(chalk.white('  intertools cursor-integration --messages'));
+        console.log(chalk.white('  intertools cursor-integration --create-template msg_1234567890_abc123'));
+      }
+      
     } catch (error) {
-      console.error(chalk.red('❌ Web chat command failed:'), error instanceof Error ? error.message : String(error));
+      console.error(chalk.red('❌ Cursor integration command failed:'), error instanceof Error ? error.message : String(error));
     }
   });
 

@@ -1,0 +1,40 @@
+{
+  "name": "intertools-railway-backend",
+  "version": "1.0.0",
+  "description": "InterTools Cloud Backend for Railway Deployment",
+  "main": "dist/railway-server.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/railway-server.js",
+    "dev": "tsc --watch",
+    "deploy": "railway up"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "helmet": "^7.0.0",
+    "compression": "^1.7.4",
+    "rate-limiter-flexible": "^3.0.8",
+    "pg": "^8.11.3",
+    "stripe": "^13.6.0",
+    "jsonwebtoken": "^9.0.2",
+    "bcryptjs": "^2.4.3",
+    "socket.io": "^4.7.2",
+    "dotenv": "^16.3.1",
+    "uuid": "^9.0.0",
+    "@types/node": "^20.5.0",
+    "typescript": "^5.1.6"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "keywords": [
+    "intertools",
+    "railway",
+    "backend",
+    "api",
+    "chrome-extension"
+  ],
+  "author": "InterTools Team",
+  "license": "MIT"
+}

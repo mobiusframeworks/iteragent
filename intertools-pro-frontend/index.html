@@ -1,0 +1,2859 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InterTools Pro - 7-Day Free Trial</title>
+    <!-- Demo mode - no external dependencies needed -->
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --error-color: #ef4444;
+            --text-primary: #1a1a1a;
+            --text-secondary: #64748b;
+            --bg-primary: #f8fafc;
+            --bg-card: #ffffff;
+            --border-color: #e2e8f0;
+            --shadow-sm: 0 2px 10px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.08);
+            --shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.12);
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+                'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+                sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+        
+        .app {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* Header */
+        .header {
+            background: var(--primary-gradient);
+            color: white;
+            padding: 1rem 0;
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .nav-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        
+        /* Trial Banner */
+        .trial-banner {
+            background: var(--warning-color);
+            color: white;
+            padding: 0.75rem 0;
+            text-align: center;
+            font-weight: 600;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+        
+        /* Buttons */
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: var(--radius-sm);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 0.875rem;
+            text-align: center;
+        }
+        
+        .btn-primary {
+            background: white;
+            color: #667eea;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+        
+        .btn-outline {
+            background: transparent;
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+        
+        .btn-outline:hover {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .btn-success {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #059669;
+            transform: translateY(-2px);
+        }
+        
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        /* Main Content */
+        .main {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+        
+        .hero {
+            text-align: center;
+            max-width: 800px;
+            width: 100%;
+        }
+        
+        .hero h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+        
+        .hero-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        /* User Dashboard */
+        .user-dashboard {
+            text-align: left;
+            max-width: 1000px;
+            width: 100%;
+        }
+        
+        .welcome {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .welcome h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+        
+        .plan-badge {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+        }
+        
+        .plan-badge.basic {
+            background: var(--border-color);
+            color: var(--text-secondary);
+        }
+        
+        .plan-badge.pro {
+            background: var(--primary-gradient);
+            color: white;
+        }
+
+        .plan-badge.trial {
+            background: var(--warning-color);
+            color: white;
+        }
+        
+        /* Setup Guide Section */
+        .setup-guide {
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border-color);
+        }
+
+        .setup-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .setup-header h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .setup-header p {
+            color: var(--text-secondary);
+        }
+
+        .setup-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .setup-step {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            padding: 1.5rem;
+            background: #f8fafc;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .setup-step:hover {
+            background: #f1f5f9;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .setup-step.completed {
+            background: #f0fdf4;
+            border-color: var(--success-color);
+        }
+
+        .step-number {
+            width: 2rem;
+            height: 2rem;
+            background: var(--primary-gradient);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.875rem;
+            flex-shrink: 0;
+        }
+
+        .setup-step.completed .step-number {
+            background: var(--success-color);
+        }
+
+        .step-content {
+            flex: 1;
+        }
+
+        .step-content h4 {
+            font-size: 1.125rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .step-content p {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+
+        .step-content a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .step-content a:hover {
+            text-decoration: underline;
+        }
+
+        .step-actions {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        /* Script Features */
+        .script-features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-tag {
+            background: #f1f5f9;
+            color: #475569;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            border: 1px solid #e2e8f0;
+        }
+
+        /* Trial Section */
+        .trial-section {
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border-color);
+        }
+
+        .trial-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .trial-header h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .trial-countdown {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .countdown-item {
+            text-align: center;
+        }
+
+        .countdown-number {
+            display: block;
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--warning-color);
+        }
+
+        .countdown-label {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .trial-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        /* Script Section */
+        .script-section {
+            margin-bottom: 3rem;
+        }
+        
+        .script-section h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            color: var(--text-primary);
+        }
+        
+        .script-card {
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+        
+        .script-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .script-card.free {
+            border-left: 4px solid var(--success-color);
+        }
+        
+        .script-card.pro {
+            border-left: 4px solid #667eea;
+        }
+        
+        .script-card h4 {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+        
+        .script-card p {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+        
+        /* Features Section */
+        .features-section h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            color: var(--text-primary);
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+        
+        .feature-item {
+            background: var(--bg-card);
+            border-radius: var(--radius-md);
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-color);
+        }
+        
+        .feature-icon {
+            font-size: 1.5rem;
+        }
+        
+        .feature-item span:nth-child(2) {
+            flex: 1;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+        
+        .status {
+            font-size: 0.875rem;
+            font-weight: 600;
+            padding: 0.25rem 0.75rem;
+            border-radius: var(--radius-sm);
+        }
+        
+        .status.available {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        
+        .status.locked {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .status.trial {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        
+        /* Footer */
+        .footer {
+            background: var(--text-primary);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+            margin-top: auto;
+        }
+        
+        .footer p {
+            margin-bottom: 0.5rem;
+        }
+        
+        .footer a {
+            color: #667eea;
+            text-decoration: none;
+        }
+        
+        .footer a:hover {
+            text-decoration: underline;
+        }
+        
+        /* Integration Methods Styles */
+        .integration-methods {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .method-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .method-benefits {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .benefit {
+            font-size: 0.875rem;
+            color: var(--success-color);
+            font-weight: 500;
+        }
+
+        /* Script Container Styles */
+        .script-container {
+            background: #1e293b;
+            border-radius: var(--radius-md);
+            margin: 1rem 0;
+            overflow: hidden;
+            border: 1px solid #334155;
+        }
+
+        .script-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            background: #334155;
+            color: white;
+            font-size: 0.875rem;
+        }
+
+        .btn-copy {
+            background: #475569;
+            color: white;
+            border: none;
+            padding: 0.25rem 0.75rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            transition: background 0.2s ease;
+        }
+
+        .btn-copy:hover {
+            background: #64748b;
+        }
+
+        .script-preview {
+            padding: 1rem;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 0.875rem;
+            color: #e2e8f0;
+            line-height: 1.5;
+            overflow-x: auto;
+        }
+
+        /* API Endpoints Styles */
+        .api-endpoints {
+            margin: 1rem 0;
+        }
+
+        .endpoint {
+            background: #f1f5f9;
+            padding: 0.5rem 0.75rem;
+            margin: 0.5rem 0;
+            border-radius: 6px;
+            font-family: monospace;
+            font-size: 0.875rem;
+            border-left: 3px solid #667eea;
+        }
+
+        .endpoint code {
+            color: #1e293b;
+            font-weight: 600;
+        }
+
+        /* Live Demo Styles */
+        .live-demo {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .demo-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .demo-website {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .demo-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.75rem 1rem;
+            background: #f8fafc;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .demo-controls {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .demo-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #cbd5e1;
+        }
+
+        .demo-dot:first-child { background: #ef4444; }
+        .demo-dot:nth-child(2) { background: #f59e0b; }
+        .demo-dot:nth-child(3) { background: #10b981; }
+
+        .demo-url {
+            font-family: monospace;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .demo-content {
+            padding: 1.5rem;
+        }
+
+        .demo-content h5 {
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .demo-content p {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        .demo-actions {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        #demo-output {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: #fef3c7;
+            border-radius: 6px;
+            border-left: 3px solid #f59e0b;
+            font-family: monospace;
+            font-size: 0.875rem;
+            display: none;
+        }
+
+        #demo-output.show {
+            display: block;
+        }
+
+        /* Files Grid Styles */
+        .files-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .file-card {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .file-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-md);
+            border-color: #667eea;
+        }
+
+        .file-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .file-card h4 {
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .file-card p {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            margin-bottom: 1rem;
+        }
+
+        .file-size {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            font-weight: 500;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav {
+                padding: 0 1rem;
+            }
+            
+            .nav-actions {
+                gap: 0.5rem;
+            }
+            
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .hero-actions {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .script-card {
+                padding: 1.5rem;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .feature-item {
+                padding: 1rem;
+            }
+
+            .trial-countdown {
+                gap: 1rem;
+            }
+
+            .countdown-number {
+                font-size: 1.5rem;
+            }
+        }
+        
+        /* Hidden elements */
+        .hidden {
+            display: none;
+        }
+
+        /* Loading animation */
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .loading {
+            animation: spin 1s linear infinite;
+        }
+
+        /* Upgrade Modal */
+        .upgrade-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .modal-content h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .modal-content p {
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="app">
+        <!-- Trial Banner -->
+        <div id="trial-banner" class="trial-banner hidden">
+            🎉 You're using InterTools Pro free for 1 week! No payment required. Upgrade anytime to continue after your trial.
+        </div>
+
+        <!-- Header -->
+        <header class="header">
+            <div class="nav">
+                <div class="logo">
+                    🚀 InterTools
+                </div>
+                <div class="nav-actions">
+                    <div id="signed-out">
+                        <button class="btn btn-secondary" onclick="app.signInDemo()">Sign In</button>
+                        <button class="btn btn-primary" onclick="app.startDemoTrial()">Try InterTools Pro Free</button>
+                    </div>
+                    <div id="signed-in" class="hidden">
+                        <span id="user-name"></span>
+                        <button class="btn btn-secondary" onclick="app.signOutDemo()">Sign Out</button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main">
+            <div class="hero">
+                <h1>🚀 InterTools</h1>
+                <h2 style="font-size: 1.5rem; color: #667eea; margin: 1rem 0; font-weight: 600;">Push Console Logs Back to Your IDE</h2>
+                <p style="font-size: 1.1rem; color: #1a1a1a; margin-bottom: 1.5rem; line-height: 1.6;">
+                    I wanted to create an app that captures console logs, errors, and page interactions from any website 
+                    and intelligently pushes them back to your integrated development environment. Using AI agents, 
+                    InterTools accelerates full-stack production by turning browser insights into actionable development tasks.
+                </p>
+                
+                <div style="background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%); padding: 1.5rem; border-radius: 12px; margin: 1.5rem 0; border-left: 4px solid #667eea;">
+                    <h3 style="margin: 0 0 1rem 0; color: #1e40af; font-size: 1.1rem;">🎯 The Vision</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; font-size: 0.95rem;">
+                        <div>
+                            <strong style="color: #1e40af;">📊 Capture Everything</strong><br>
+                            <span style="color: #64748b;">Console logs, errors, performance metrics, user interactions</span>
+                        </div>
+                        <div>
+                            <strong style="color: #1e40af;">🤖 AI Analysis</strong><br>
+                            <span style="color: #64748b;">Smart agents analyze patterns and suggest improvements</span>
+                        </div>
+                        <div>
+                            <strong style="color: #1e40af;">🔄 IDE Integration</strong><br>
+                            <span style="color: #64748b;">Push insights directly to Cursor, VS Code, and other IDEs</span>
+                        </div>
+                        <div>
+                            <strong style="color: #1e40af;">⚡ Speed Development</strong><br>
+                            <span style="color: #64748b;">Turn browser debugging into automated development tasks</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%); padding: 1.5rem; border-radius: 12px; margin: 1.5rem 0; border-left: 4px solid #10b981;">
+                    <h3 style="margin: 0 0 0.5rem 0; color: #065f46; font-size: 1.1rem;">🆓 FREE Version - Always Free!</h3>
+                    <p style="margin: 0; color: #064e3b; font-size: 1rem;">
+                        InterTools FREE is completely free and open source forever. No limits, no subscriptions.
+                        Copy the script below and start capturing console logs immediately!
+                    </p>
+                </div>
+                
+                <div style="background: linear-gradient(135deg, #fef3c7 0%, #fed7aa 100%); padding: 1.5rem; border-radius: 12px; margin: 1.5rem 0; border-left: 4px solid #f59e0b;">
+                    <h3 style="margin: 0 0 0.5rem 0; color: #92400e; font-size: 1.1rem;">🤖 PRO Version - 7-Day Free Trial</h3>
+                    <p style="margin: 0; color: #92400e; font-size: 1rem;">
+                        <strong>Try PRO free for 7 days!</strong> Advanced AI analysis, performance monitoring, and real-time IDE sync. 
+                        After trial: <strong>$30/month</strong> for professional developers who want the best tools.
+                    </p>
+                </div>
+                
+                <!-- Script Selection and Copy-Paste Section -->
+                <div style="background: white; border: 2px solid #667eea; border-radius: 16px; padding: 2rem; margin: 2rem 0; box-shadow: 0 8px 32px rgba(102, 126, 234, 0.1);">
+                    <div style="text-align: center; margin-bottom: 1.5rem;">
+                        <h3 style="margin: 0 0 0.5rem 0; color: #667eea; font-size: 1.3rem;">🚀 Choose Your Version & Copy Script</h3>
+                        <p style="margin: 0; color: #64748b; font-size: 1rem;">Select FREE or PRO version, then copy and paste into any website's console (F12)</p>
+                    </div>
+                    
+                    <!-- Version Selector -->
+                    <div style="display: flex; justify-content: center; margin-bottom: 1.5rem; gap: 1rem;">
+                        <button id="free-version-btn" onclick="showFreeVersion()" style="
+                            background: #10b981; color: white; border: none; padding: 12px 24px;
+                            border-radius: 8px; cursor: pointer; font-weight: 600; transition: all 0.2s ease;
+                        ">🆓 FREE Version</button>
+                        <button id="pro-version-btn" onclick="handleProVersionAccess()" style="
+                            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: white; border: none; padding: 12px 24px;
+                            border-radius: 8px; cursor: pointer; font-weight: 600; transition: all 0.2s ease; position: relative;
+                        ">🤖 PRO Version - 7-Day Free Trial</button>
+                    </div>
+                    
+                    <!-- FREE Version Script Display -->
+                    <div id="free-script-section" style="background: #1e293b; border-radius: 12px; overflow: hidden; margin-bottom: 1.5rem;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 1rem; background: #10b981; color: white; font-size: 0.875rem;">
+                            <span>🆓 InterTools FREE - Complete Console Log Capture (100% Free)</span>
+                            <button id="free-copy-btn" onclick="copyFreeScript()" style="
+                                background: #059669; color: white; border: none; padding: 0.5rem 1rem;
+                                border-radius: 6px; cursor: pointer; font-size: 0.75rem; font-weight: 600;
+                                transition: background 0.2s ease;
+                            ">📋 Copy FREE Script</button>
+                        </div>
+                        <div id="free-script-display" style="
+                            padding: 1.5rem; color: #e2e8f0; font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+                            font-size: 0.75rem; line-height: 1.4; max-height: 300px; overflow-y: auto;
+                            background: #1e293b; white-space: pre-wrap;
+                        ">Loading FREE script...</div>
+                    </div>
+                    
+                    <!-- PRO Version Subscription Interface -->
+                    <div id="pro-script-section" style="background: #1e293b; border-radius: 12px; overflow: hidden; margin-bottom: 1.5rem; display: none;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 1rem; background: #f59e0b; color: white; font-size: 0.875rem;">
+                            <span>🤖 InterTools PRO - Start Your Free Trial</span>
+                            <div style="background: rgba(255,255,255,0.2); padding: 4px 8px; border-radius: 12px; font-size: 10px; font-weight: bold;">7-DAY TRIAL</div>
+                        </div>
+                        
+                        <!-- Trial/Subscription Interface -->
+                        <div id="pro-subscription-interface" style="padding: 2rem; background: linear-gradient(135deg, #1e293b 0%, #374151 100%); color: white; text-align: center;">
+                            
+                            <!-- Not Signed In State -->
+                            <div id="pro-not-signed-in" style="display: block;">
+                                <div style="font-size: 2rem; margin-bottom: 1rem;">🚀</div>
+                                <h3 style="margin: 0 0 1rem 0; color: #f59e0b;">Start Your 7-Day Free Trial</h3>
+                                <p style="margin: 0 0 1.5rem 0; color: #d1d5db; line-height: 1.6;">
+                                    Get instant access to AI-powered error analysis, performance monitoring, 
+                                    real-time IDE sync, and advanced debugging tools.
+                                </p>
+                                
+                                <div style="background: rgba(249, 158, 11, 0.1); padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem; border: 1px solid rgba(249, 158, 11, 0.3);">
+                                    <div style="font-weight: bold; color: #f59e0b; margin-bottom: 0.5rem;">🎯 What You Get:</div>
+                                    <div style="font-size: 0.875rem; color: #e5e7eb; text-align: left;">
+                                        ✅ 7 days completely free<br>
+                                        ✅ AI-powered error analysis & fix suggestions<br>
+                                        ✅ Advanced performance monitoring<br>
+                                        ✅ Real-time IDE synchronization<br>
+                                        ✅ Element extraction & page analysis<br>
+                                        ✅ Priority support & updates
+                                    </div>
+                                </div>
+                                
+                                <button onclick="startFreeTrial()" style="
+                                    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: white;
+                                    border: none; padding: 15px 30px; border-radius: 8px; cursor: pointer;
+                                    font-weight: 600; font-size: 1rem; margin-bottom: 1rem; transition: all 0.2s ease;
+                                    box-shadow: 0 4px 12px rgba(249, 158, 11, 0.3);
+                                ">🚀 Start Free Trial (No Credit Card)</button>
+                                
+                                <div style="font-size: 0.75rem; color: #9ca3af; margin-top: 1rem;">
+                                    After 7 days: $30/month • Cancel anytime • No hidden fees
+                                </div>
+                            </div>
+                            
+                            <!-- Trial Active State -->
+                            <div id="pro-trial-active" style="display: none;">
+                                <div style="font-size: 2rem; margin-bottom: 1rem;">🎉</div>
+                                <h3 style="margin: 0 0 1rem 0; color: #10b981;">Free Trial Active!</h3>
+                                <p style="margin: 0 0 1.5rem 0; color: #d1d5db;">
+                                    Your 7-day free trial is active. Full PRO script access granted!
+                                </p>
+                                
+                                <div style="background: rgba(16, 185, 129, 0.1); padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem; border: 1px solid rgba(16, 185, 129, 0.3);">
+                                    <div style="color: #10b981; font-weight: bold; margin-bottom: 0.5rem;">⏰ Trial Status:</div>
+                                    <div id="trial-days-remaining" style="color: #e5e7eb; font-size: 0.875rem;">6 days remaining</div>
+                                </div>
+                                
+                                <button id="pro-copy-btn" onclick="copyProScript()" style="
+                                    background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white;
+                                    border: none; padding: 15px 30px; border-radius: 8px; cursor: pointer;
+                                    font-weight: 600; font-size: 1rem; margin-bottom: 1rem; transition: all 0.2s ease;
+                                ">📋 Copy PRO Script</button>
+                                
+                                <div style="font-size: 0.75rem; color: #9ca3af;">
+                                    <button onclick="manageBilling()" style="background: none; border: none; color: #f59e0b; cursor: pointer; text-decoration: underline;">
+                                        Manage Billing
+                                    </button> • 
+                                    <button onclick="cancelTrial()" style="background: none; border: none; color: #ef4444; cursor: pointer; text-decoration: underline;">
+                                        Cancel Trial
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- Subscription Active State -->
+                            <div id="pro-subscription-active" style="display: none;">
+                                <div style="font-size: 2rem; margin-bottom: 1rem;">💎</div>
+                                <h3 style="margin: 0 0 1rem 0; color: #8b5cf6;">PRO Subscription Active</h3>
+                                <p style="margin: 0 0 1.5rem 0; color: #d1d5db;">
+                                    You have full access to all PRO features and the complete script.
+                                </p>
+                                
+                                <div style="background: rgba(139, 92, 246, 0.1); padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem; border: 1px solid rgba(139, 92, 246, 0.3);">
+                                    <div style="color: #8b5cf6; font-weight: bold; margin-bottom: 0.5rem;">💳 Billing Status:</div>
+                                    <div style="color: #e5e7eb; font-size: 0.875rem;">$30/month • Next billing: Jan 15, 2025</div>
+                                </div>
+                                
+                                <button id="pro-copy-btn-paid" onclick="copyProScript()" style="
+                                    background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%); color: white;
+                                    border: none; padding: 15px 30px; border-radius: 8px; cursor: pointer;
+                                    font-weight: 600; font-size: 1rem; margin-bottom: 1rem; transition: all 0.2s ease;
+                                ">📋 Copy PRO Script</button>
+                                
+                                <div style="font-size: 0.75rem; color: #9ca3af;">
+                                    <button onclick="manageBilling()" style="background: none; border: none; color: #f59e0b; cursor: pointer; text-decoration: underline;">
+                                        Manage Billing
+                                    </button> • 
+                                    <button onclick="downloadProFiles()" style="background: none; border: none; color: #10b981; cursor: pointer; text-decoration: underline;">
+                                        Download Files
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- Trial Expired State -->
+                            <div id="pro-trial-expired" style="display: none;">
+                                <div style="font-size: 2rem; margin-bottom: 1rem;">⏰</div>
+                                <h3 style="margin: 0 0 1rem 0; color: #ef4444;">Trial Expired</h3>
+                                <p style="margin: 0 0 1.5rem 0; color: #d1d5db;">
+                                    Your 7-day free trial has ended. Subscribe to continue using PRO features.
+                                </p>
+                                
+                                <div style="background: rgba(239, 68, 68, 0.1); padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem; border: 1px solid rgba(239, 68, 68, 0.3);">
+                                    <div style="color: #ef4444; font-weight: bold; margin-bottom: 0.5rem;">💳 Subscribe for $30/month:</div>
+                                    <div style="color: #e5e7eb; font-size: 0.875rem; text-align: left;">
+                                        ✅ All PRO features unlocked<br>
+                                        ✅ Unlimited script access<br>
+                                        ✅ Priority support<br>
+                                        ✅ Cancel anytime
+                                    </div>
+                                </div>
+                                
+                                <button onclick="subscribeToPro()" style="
+                                    background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%); color: white;
+                                    border: none; padding: 15px 30px; border-radius: 8px; cursor: pointer;
+                                    font-weight: 600; font-size: 1rem; margin-bottom: 1rem; transition: all 0.2s ease;
+                                ">💎 Subscribe for $30/month</button>
+                                
+                                <div style="font-size: 0.75rem; color: #9ca3af;">
+                                    Secure payment via Stripe • Cancel anytime
+                                </div>
+                            </div>
+                            
+                        </div>
+                        
+                        <!-- Hidden Script Display (only shown when user has access) -->
+                        <div id="pro-script-display" style="
+                            padding: 1.5rem; color: #e2e8f0; font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+                            font-size: 0.75rem; line-height: 1.4; max-height: 300px; overflow-y: auto;
+                            background: #1e293b; white-space: pre-wrap; display: none;
+                        ">Loading PRO script...</div>
+                    </div>
+                    
+                    <!-- Feature Comparison -->
+                    <div id="version-features" style="background: #f8fafc; padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem;">
+                        <div id="free-features" style="display: block;">
+                            <h4 style="margin: 0 0 0.5rem 0; color: #10b981;">🆓 FREE Version Features:</h4>
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.5rem; font-size: 0.875rem; color: #374151;">
+                                <span>✅ Complete console log capture</span>
+                                <span>✅ Error monitoring & analysis</span>
+                                <span>✅ IDE-ready reports</span>
+                                <span>✅ Professional floating UI</span>
+                                <span>✅ No limits or subscriptions</span>
+                                <span>✅ Open source & forever free</span>
+                            </div>
+                        </div>
+                        <div id="pro-features" style="display: none;">
+                            <h4 style="margin: 0 0 0.5rem 0; color: #8b5cf6;">🤖 PRO Version Features:</h4>
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0.5rem; font-size: 0.875rem; color: #374151;">
+                                <span>✅ Everything in FREE +</span>
+                                <span>🤖 AI-powered error analysis</span>
+                                <span>⚡ Advanced performance monitoring</span>
+                                <span>📋 Element extraction & analysis</span>
+                                <span>🔄 Real-time IDE synchronization</span>
+                                <span>💡 AI-generated code suggestions</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
+                        <div style="text-align: center; padding: 1rem; background: #f8fafc; border-radius: 8px;">
+                            <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">1️⃣</div>
+                            <strong style="color: #1e293b;">Select Version</strong><br>
+                            <span style="color: #64748b; font-size: 0.875rem;">Choose FREE or PRO above</span>
+                        </div>
+                        <div style="text-align: center; padding: 1rem; background: #f8fafc; border-radius: 8px;">
+                            <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">2️⃣</div>
+                            <strong style="color: #1e293b;">Copy Script</strong><br>
+                            <span style="color: #64748b; font-size: 0.875rem;">Click copy button</span>
+                        </div>
+                        <div style="text-align: center; padding: 1rem; background: #f8fafc; border-radius: 8px;">
+                            <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">3️⃣</div>
+                            <strong style="color: #1e293b;">Paste & Run</strong><br>
+                            <span style="color: #64748b; font-size: 0.875rem;">F12 → Console → Paste</span>
+                        </div>
+                    </div>
+                    
+                    <div style="text-align: center;">
+                        <button onclick="showQuickDemo()" style="
+                            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;
+                            border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer;
+                            font-weight: 600; margin-right: 1rem; transition: all 0.2s ease;
+                        ">🎮 See Quick Demo</button>
+                        <button onclick="scrollToIntegration()" style="
+                            background: transparent; color: #667eea; border: 2px solid #667eea;
+                            padding: 12px 24px; border-radius: 8px; cursor: pointer; font-weight: 600;
+                            transition: all 0.2s ease;
+                        ">📁 Download Files</button>
+                    </div>
+                </div>
+
+                <div id="signed-out-content" style="display: none;">
+                    <div class="hero-actions">
+                        <button class="btn btn-primary" onclick="app.startDemoTrial()">Try InterTools Pro Free</button>
+                        <button class="btn btn-secondary" onclick="app.signInDemo()">Sign In</button>
+                    </div>
+                </div>
+
+                <div id="signed-in-content" class="hidden">
+                    <div class="user-dashboard">
+                        <div class="welcome">
+                            <h2 id="welcome-message">Welcome!</h2>
+                            <p>Current Plan: <span id="plan-badge" class="plan-badge basic">BASIC</span></p>
+                        </div>
+
+                        <!-- Setup Guide Section -->
+                        <div id="setup-guide" class="setup-guide">
+                            <div class="setup-header">
+                                <h3>🚀 Get Started with InterTools</h3>
+                                <p>Follow these steps to set up Cursor, GitHub, and Stripe integration</p>
+                            </div>
+                            
+                            <div class="setup-steps">
+                                <div class="setup-step">
+                                    <div class="step-number">1</div>
+                                    <div class="step-content">
+                                        <h4>Install Cursor IDE</h4>
+                                        <p>Download and install Cursor from <a href="https://cursor.sh" target="_blank">cursor.sh</a></p>
+                                        <div class="step-actions">
+                                            <button class="btn btn-outline" onclick="app.openCursorDownload()">Download Cursor</button>
+                                            <button class="btn btn-secondary" onclick="app.markStepComplete(1)">✓ Done</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="setup-step">
+                                    <div class="step-number">2</div>
+                                    <div class="step-content">
+                                        <h4>Connect GitHub Account</h4>
+                                        <p>Sign in to Cursor with your GitHub account for seamless integration</p>
+                                        <div class="step-actions">
+                                            <button class="btn btn-outline" onclick="app.openGitHubAuth()">Connect GitHub</button>
+                                            <button class="btn btn-secondary" onclick="app.markStepComplete(2)">✓ Done</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="setup-step">
+                                    <div class="step-number">3</div>
+                                    <div class="step-content">
+                                        <h4>Set up Stripe (Optional)</h4>
+                                        <p>Connect Stripe for payment processing and subscription management</p>
+                                        <div class="step-actions">
+                                            <button class="btn btn-outline" onclick="app.openStripeSetup()">Setup Stripe</button>
+                                            <button class="btn btn-secondary" onclick="app.markStepComplete(3)">✓ Done</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="setup-step">
+                                    <div class="step-number">4</div>
+                                    <div class="step-content">
+                                        <h4>Get Your Free Script</h4>
+                                        <p>Copy the free script and paste it into any website's console to start</p>
+                                        <div class="step-actions">
+                                            <button class="btn btn-primary" onclick="app.getFreeScript()">Get Free Script</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Trial Section -->
+                        <div id="trial-section" class="trial-section hidden">
+                            <div class="trial-header">
+                                <h3>🎉 Using InterTools Pro Free</h3>
+                                <p>You're using InterTools Pro free for 1 week. No payment required. Upgrade anytime to continue after your trial.</p>
+                            </div>
+                            <div id="trial-countdown" class="trial-countdown">
+                                <!-- Countdown will be populated by JavaScript -->
+                            </div>
+                            <div class="trial-actions">
+                                <button class="btn btn-success" onclick="app.upgradeToPro()">Continue for $30/month</button>
+                                <button class="btn btn-outline" onclick="app.getProScript()">Get Pro Script</button>
+                            </div>
+                        </div>
+
+                        <div class="script-section">
+                            <h3>Get Your Scripts</h3>
+                            
+                            <div class="script-card free">
+                                <h4>🆓 InterTools Basic - Always Free</h4>
+                                <p>Open source console log analysis and Cursor integration. Perfect for getting started!</p>
+                                <div class="script-features">
+                                    <span class="feature-tag">✓ Console log analysis</span>
+                                    <span class="feature-tag">✓ Cursor integration</span>
+                                    <span class="feature-tag">✓ Basic error detection</span>
+                                    <span class="feature-tag">✓ Open source</span>
+                                </div>
+                                <button onclick="app.getFreeScript()" class="btn btn-outline">
+                                    Get Basic Script
+                                </button>
+                            </div>
+
+                            <div class="script-card pro">
+                                <h4>🚀 InterTools Pro - Try Free for 1 Week</h4>
+                                <p>Advanced click-to-chat, AI agents, and protected features. Complete the setup guide above first!</p>
+                                <div class="script-features">
+                                    <span class="feature-tag">✓ Everything in Basic</span>
+                                    <span class="feature-tag">✓ Click-to-chat</span>
+                                    <span class="feature-tag">✓ AI agents</span>
+                                    <span class="feature-tag">✓ Protected scripts</span>
+                                </div>
+                                <button id="pro-script-btn" onclick="app.getProScript()" class="btn btn-primary">
+                                    Try Pro Free
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="features-section">
+                            <h3>Your Features</h3>
+                            <div class="features-grid">
+                                <div class="feature-item">
+                                    <span class="feature-icon">📊</span>
+                                    <span>Console Log Analysis</span>
+                                    <span class="status available">✅ Available</span>
+                                </div>
+                                <div class="feature-item">
+                                    <span class="feature-icon">🤖</span>
+                                    <span>Cursor Integration</span>
+                                    <span class="status available">✅ Available</span>
+                                </div>
+                                <div class="feature-item">
+                                    <span class="feature-icon">🖱️</span>
+                                    <span>Click-to-Chat</span>
+                                    <span id="click-chat-status" class="status locked">🔒 Pro Only</span>
+                                </div>
+                                <div class="feature-item">
+                                    <span class="feature-icon">🧠</span>
+                                    <span>AI Agents</span>
+                                    <span id="ai-agents-status" class="status locked">🔒 Pro Only</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Integration Section -->
+                <section id="integration-section" class="setup-guide">
+                    <div class="setup-header">
+                        <h3>🛠️ All Methods are FREE - Choose What Works Best</h3>
+                        <p>Every option is completely free and open source. Pick your preferred way to start capturing console logs!</p>
+                    </div>
+                    
+                    <div class="integration-methods">
+                        <!-- Browser Extension Method -->
+                        <div class="setup-step">
+                            <div class="step-number">🔌</div>
+                            <div class="step-content">
+                                <h4>Browser Extension (FREE)</h4>
+                                <p>Auto-capture console logs, errors, and interactions from any website. Instantly push insights to your IDE with AI analysis.</p>
+                                <div class="method-actions">
+                                    <button class="btn btn-primary" onclick="downloadExtension('chrome')">
+                                        📥 Download FREE Chrome Extension
+                                    </button>
+                                    <button class="btn btn-outline" onclick="downloadExtension('firefox')">
+                                        🦊 Firefox Extension (FREE)
+                                    </button>
+                                </div>
+                                <div class="method-benefits">
+                                    <span class="benefit">✅ 100% Free & Open Source</span>
+                                    <span class="benefit">✅ All Features Included</span>
+                                    <span class="benefit">✅ No Limits or Trials</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Manual Script Method -->
+                        <div class="setup-step">
+                            <div class="step-number">📋</div>
+                            <div class="step-content">
+                                <h4>Copy & Paste Script (Free Forever)</h4>
+                                <p>Instantly start capturing console logs and errors. Copy analysis to clipboard for pasting into your IDE.</p>
+                                <div class="script-container">
+                                    <div class="script-header">
+                                        <span>InterTools Free Script</span>
+                                        <button class="btn-copy" onclick="copyFreeScript()">📋 Copy</button>
+                                    </div>
+                                    <div class="script-preview">
+                                        <code id="script-preview">// Click "Copy" to get the latest InterTools script...</code>
+                                    </div>
+                                </div>
+                                <div class="method-actions">
+                                    <button class="btn btn-primary" onclick="copyFreeScript()">
+                                        📋 Copy Free Script
+                                    </button>
+                                    <button class="btn btn-outline" onclick="showScriptDemo()">
+                                        ▶️ See Live Demo
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- API Integration Method -->
+                        <div class="setup-step">
+                            <div class="step-number">🔗</div>
+                            <div class="step-content">
+                                <h4>API Integration (For Developers)</h4>
+                                <p>Build console log streaming directly into your development workflow. Real-time IDE integration via REST API.</p>
+                                <div class="api-endpoints">
+                                    <div class="endpoint">
+                                        <code>GET /api/health</code> - Health check
+                                    </div>
+                                    <div class="endpoint">
+                                        <code>POST /api/messages</code> - Send analysis request
+                                    </div>
+                                    <div class="endpoint">
+                                        <code>GET /free-script.js</code> - Get latest script
+                                    </div>
+                                </div>
+                                <div class="method-actions">
+                                    <button class="btn btn-primary" onclick="showAPIKey()">
+                                        🔑 Get API Key
+                                    </button>
+                                    <button class="btn btn-outline" onclick="downloadFiles()">
+                                        📦 Download All Files
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Live Demo Section -->
+                    <div class="live-demo">
+                        <h4>🎮 Live Console Log Demo</h4>
+                        <p>See how InterTools captures console logs and creates IDE-ready analysis</p>
+                        
+                        <div class="demo-container">
+                            <div class="demo-website">
+                                <div class="demo-header">
+                                    <div class="demo-controls">
+                                        <span class="demo-dot"></span>
+                                        <span class="demo-dot"></span>
+                                        <span class="demo-dot"></span>
+                                    </div>
+                                    <span class="demo-url">intertools.pro/demo</span>
+                                </div>
+                                <div class="demo-content">
+                                    <h5>Demo Website</h5>
+                                    <p>Click the button to generate console logs and see how InterTools captures and analyzes them for your IDE.</p>
+                                    <button id="demo-error-btn" class="btn btn-outline" onclick="triggerDemoError()">
+                                        📊 Generate Console Logs
+                                    </button>
+                                    <div id="demo-output"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="demo-actions">
+                                <button class="btn btn-primary" onclick="loadDemoInterTools()">
+                                    🚀 Load InterTools Demo
+                                </button>
+                                <button class="btn btn-outline" onclick="clearDemo()">
+                                    🗑️ Clear Demo
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Downloadable Files Section -->
+                <section id="files-section" class="setup-guide">
+                    <div class="setup-header">
+                        <h3>📁 Download Files</h3>
+                        <p>Get all the files you need for integration</p>
+                    </div>
+                    
+                    <div class="files-grid">
+                        <div class="file-card">
+                            <div class="file-icon">🔌</div>
+                            <h4>Chrome Extension</h4>
+                            <p>Browser extension with auto-injection on all websites</p>
+                            <div class="file-size">~150KB</div>
+                            <button class="btn btn-primary" onclick="downloadFile('chrome-extension')">
+                                📥 Download Extension
+                            </button>
+                        </div>
+                        
+                        <div class="file-card">
+                            <div class="file-icon">🆓</div>
+                            <h4>FREE Script (Complete)</h4>
+                            <p>Full-featured console log capture and IDE integration</p>
+                            <div class="file-size">~25KB</div>
+                            <button class="btn btn-primary" onclick="downloadFile('free-script')">
+                                📥 Download FREE
+                            </button>
+                        </div>
+                        
+                        <div class="file-card">
+                            <div class="file-icon">🤖</div>
+                            <h4>PRO Script (AI-Powered)</h4>
+                            <p>Advanced features with AI analysis and performance monitoring</p>
+                            <div class="file-size">~45KB</div>
+                            <button class="btn btn-primary" onclick="downloadFile('pro-script')">
+                                📥 Download PRO
+                            </button>
+                        </div>
+                        
+                        <div class="file-card">
+                            <div class="file-icon">📚</div>
+                            <h4>Complete Documentation</h4>
+                            <p>Full technical docs, API reference, and troubleshooting</p>
+                            <div class="file-size">~50KB</div>
+                            <button class="btn btn-primary" onclick="downloadFile('api-docs')">
+                                📥 Download Docs
+                            </button>
+                        </div>
+                        
+                        <div class="file-card">
+                            <div class="file-icon">⚡</div>
+                            <h4>Quick Start Guide</h4>
+                            <p>5-minute setup guide for new users</p>
+                            <div class="file-size">~10KB</div>
+                            <button class="btn btn-primary" onclick="downloadFile('quick-guide')">
+                                📥 Download Guide
+                            </button>
+                        </div>
+                        
+                        <div class="file-card">
+                            <div class="file-icon">📁</div>
+                            <h4>Browse All Files</h4>
+                            <p>Access all downloads, scripts, and documentation</p>
+                            <div class="file-size">Complete collection</div>
+                            <button class="btn btn-primary" onclick="downloadFile('complete-package')">
+                                📁 Browse Files
+                            </button>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>&copy; 2024 InterTools Pro. All rights reserved.</p>
+            <p>
+                <a href="http://localhost:3001/pro" target="_blank" rel="noopener noreferrer">
+                    Visit Pro Website
+                </a>
+            </p>
+        </footer>
+    </div>
+
+    <script>
+        // Modern ES6+ InterTools Pro Frontend with Trial Management
+        class InterToolsProApp {
+            constructor() {
+                // Demo mode - no real keys needed for testing
+                this.PUBLISHABLE_KEY = 'pk_test_demo_mode';
+                this.STRIPE_PUBLISHABLE_KEY = 'pk_test_demo_mode';
+                this.clerk = null;
+                this.stripe = null;
+                this.userPlan = 'basic';
+                this.sessionToken = null;
+                this.trialInfo = null;
+                this.isTrialActive = false;
+                this.isDemoMode = true; // Enable demo mode
+                
+                this.init();
+            }
+
+            async init() {
+                try {
+                    // Always use demo mode for now
+                    this.setupDemoMode();
+                    this.setupEventListeners();
+                } catch (error) {
+                    console.error('Failed to initialize app:', error);
+                    this.showError('Failed to initialize application. Please refresh the page.');
+                }
+            }
+
+            setupDemoMode() {
+                console.log('🎭 Demo mode enabled - no real authentication required');
+                this.showSignedOutState();
+                
+                // Add demo buttons
+                this.addDemoButtons();
+            }
+
+            addDemoButtons() {
+                const signedOutContent = document.getElementById('signed-out-content');
+                const heroActions = signedOutContent.querySelector('.hero-actions');
+                
+                // Add demo buttons
+                const demoButtons = document.createElement('div');
+                demoButtons.innerHTML = `
+                    <div style="margin-top: 1rem; padding: 1rem; background: #f0f9ff; border-radius: 8px; border: 1px solid #0ea5e9;">
+                        <h4 style="margin-bottom: 0.5rem; color: #0c4a6e;">🎭 Demo Mode</h4>
+                        <p style="margin-bottom: 1rem; color: #0c4a6e; font-size: 0.875rem;">Test the complete setup guide and try InterTools Pro free for 1 week</p>
+                        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                            <button class="btn btn-primary" onclick="app.startDemoTrial()">Try InterTools Pro Free</button>
+                            <button class="btn btn-secondary" onclick="app.signInDemo()">Sign In</button>
+                        </div>
+                    </div>
+                `;
+                heroActions.appendChild(demoButtons);
+            }
+
+            startDemoTrial() {
+                // Simulate trial start
+                this.userPlan = 'trial';
+                this.isTrialActive = true;
+                this.trialInfo = {
+                    trialStart: new Date().toISOString(),
+                    trialEnd: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString()
+                };
+                
+                this.showSignedInState({
+                    firstName: 'Demo',
+                    emailAddresses: [{ emailAddress: 'demo@intertools.com' }]
+                });
+                
+                alert('🎉 You\'re now using InterTools Pro free for 1 week! No payment required.');
+            }
+
+            signInDemo() {
+                // Simulate sign in
+                this.userPlan = 'basic';
+                this.isTrialActive = false;
+                
+                this.showSignedInState({
+                    firstName: 'Demo',
+                    emailAddresses: [{ emailAddress: 'demo@intertools.com' }]
+                });
+                
+                alert('✅ Sign in successful! Try InterTools Pro free for 1 week with no payment required.');
+            }
+
+            signOutDemo() {
+                // Simulate sign out
+                this.userPlan = 'basic';
+                this.isTrialActive = false;
+                this.trialInfo = null;
+                
+                this.showSignedOutState();
+                alert('👋 Demo sign out successful!');
+            }
+
+            // Setup guide methods
+            openCursorDownload() {
+                window.open('https://cursor.sh', '_blank');
+                alert('📥 Cursor download opened! Install Cursor and come back to continue setup.');
+            }
+
+            openGitHubAuth() {
+                window.open('https://github.com/login', '_blank');
+                alert('🔗 GitHub login opened! Sign in to GitHub and then sign in to Cursor with your GitHub account.');
+            }
+
+            openStripeSetup() {
+                window.open('https://dashboard.stripe.com/register', '_blank');
+                alert('💳 Stripe setup opened! Create a Stripe account for payment processing.');
+            }
+
+            markStepComplete(stepNumber) {
+                const step = document.querySelector('.setup-step:nth-child(' + stepNumber + ')');
+                if (step) {
+                    step.classList.add('completed');
+                    const doneBtn = step.querySelector('.btn-secondary');
+                    if (doneBtn) {
+                        doneBtn.textContent = '✓ Completed';
+                        doneBtn.disabled = true;
+                    }
+                }
+                
+                // Check if all steps are completed
+                const completedSteps = document.querySelectorAll('.setup-step.completed').length;
+                if (completedSteps >= 3) {
+                    alert('🎉 Great! You\'ve completed the setup. Now you can try InterTools free for 1 week!');
+                }
+            }
+
+            setupEventListeners() {
+                // Add any additional event listeners here
+                document.addEventListener('DOMContentLoaded', () => {
+                    this.updateTrialCountdown();
+                    setInterval(() => this.updateTrialCountdown(), 60000); // Update every minute
+                });
+            }
+
+            async showSignedInState(user) {
+                this.updateUI(() => {
+                    document.getElementById('signed-out').classList.add('hidden');
+                    document.getElementById('signed-in').classList.remove('hidden');
+                    document.getElementById('signed-out-content').classList.add('hidden');
+                    document.getElementById('signed-in-content').classList.remove('hidden');
+                    
+                    // Update user info
+                    const userName = user.firstName || user.emailAddresses[0]?.emailAddress || 'User';
+                    document.getElementById('user-name').textContent = `👤 ${userName}`;
+                    document.getElementById('welcome-message').textContent = `Welcome, ${userName}!`;
+                });
+                
+                await this.getSessionToken();
+                await this.loadUserData();
+            }
+
+            showSignedOutState() {
+                this.updateUI(() => {
+                    document.getElementById('signed-out').classList.remove('hidden');
+                    document.getElementById('signed-in').classList.add('hidden');
+                    document.getElementById('signed-out-content').classList.remove('hidden');
+                    document.getElementById('signed-in-content').classList.add('hidden');
+                });
+            }
+
+            updateUI(callback) {
+                // Use requestAnimationFrame for smooth UI updates
+                requestAnimationFrame(callback);
+            }
+
+            async getSessionToken() {
+                try {
+                    // Demo mode - simulate session token
+                    this.sessionToken = 'demo_session_token_' + Date.now();
+                    await this.validateSession();
+                } catch (error) {
+                    console.error('Failed to get session token:', error);
+                }
+            }
+
+            async validateSession() {
+                if (!this.sessionToken) return;
+                
+                try {
+                    const response = await fetch('http://localhost:3001/api/auth/validate-session', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${this.sessionToken}`
+                        },
+                        body: JSON.stringify({ sessionToken: this.sessionToken })
+                    });
+                    
+                    const data = await response.json();
+                    if (data.valid && data.session) {
+                        this.userPlan = data.session.planId;
+                        this.trialInfo = data.session.trialInfo;
+                        this.isTrialActive = data.session.isTrialActive;
+                        this.updatePlanDisplay();
+                        this.updateTrialDisplay();
+                    }
+                } catch (error) {
+                    console.error('Session validation failed:', error);
+                }
+            }
+
+            async loadUserData() {
+                if (!this.sessionToken) return;
+                
+                try {
+                    // Load user subscription info
+                    const response = await fetch('http://localhost:3001/api/pro/status', {
+                        headers: {
+                            'Authorization': `Bearer ${this.sessionToken}`
+                        }
+                    });
+                    
+                    const data = await response.json();
+                    if (data.success) {
+                        this.userPlan = data.userPlan || 'basic';
+                        this.trialInfo = data.trialInfo;
+                        this.isTrialActive = data.isTrialActive;
+                        this.updatePlanDisplay();
+                        this.updateTrialDisplay();
+                    }
+                } catch (error) {
+                    console.error('Failed to load user data:', error);
+                }
+            }
+
+            updatePlanDisplay() {
+                const planBadge = document.getElementById('plan-badge');
+                const proScriptBtn = document.getElementById('pro-script-btn');
+                const clickChatStatus = document.getElementById('click-chat-status');
+                const aiAgentsStatus = document.getElementById('ai-agents-status');
+                
+                if (this.isTrialActive) {
+                    planBadge.textContent = 'TRIAL';
+                    planBadge.className = 'plan-badge trial';
+                } else {
+                    planBadge.textContent = this.userPlan.toUpperCase();
+                    planBadge.className = `plan-badge ${this.userPlan}`;
+                }
+                
+                if (this.userPlan === 'pro' || this.isTrialActive) {
+                    proScriptBtn.textContent = 'Copy Pro Script';
+                    proScriptBtn.onclick = () => this.getProScript();
+                    clickChatStatus.textContent = '✅ Available';
+                    clickChatStatus.className = 'status available';
+                    aiAgentsStatus.textContent = '✅ Available';
+                    aiAgentsStatus.className = 'status available';
+                } else {
+                    proScriptBtn.textContent = 'Try Pro Free';
+                    proScriptBtn.onclick = () => this.startFreeTrial();
+                    clickChatStatus.textContent = '🔒 Try Pro Free for 1 Week';
+                    clickChatStatus.className = 'status locked';
+                    aiAgentsStatus.textContent = '🔒 Try Pro Free for 1 Week';
+                    aiAgentsStatus.className = 'status locked';
+                }
+            }
+
+            updateTrialDisplay() {
+                const trialBanner = document.getElementById('trial-banner');
+                const trialSection = document.getElementById('trial-section');
+                
+                if (this.isTrialActive && this.trialInfo) {
+                    trialBanner.classList.remove('hidden');
+                    trialSection.classList.remove('hidden');
+                    this.updateTrialCountdown();
+                } else {
+                    trialBanner.classList.add('hidden');
+                    trialSection.classList.add('hidden');
+                }
+            }
+
+            updateTrialCountdown() {
+                if (!this.isTrialActive || !this.trialInfo) return;
+
+                const trialEnd = new Date(this.trialInfo.trialEnd);
+                const now = new Date();
+                const timeLeft = trialEnd - now;
+
+                if (timeLeft <= 0) {
+                    // Trial expired
+                    this.handleTrialExpired();
+                    return;
+                }
+
+                const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+
+                const countdownElement = document.getElementById('trial-countdown');
+                if (countdownElement) {
+                    countdownElement.innerHTML = `
+                        <div class="countdown-item">
+                            <span class="countdown-number">${days}</span>
+                            <span class="countdown-label">Days</span>
+                        </div>
+                        <div class="countdown-item">
+                            <span class="countdown-number">${hours}</span>
+                            <span class="countdown-label">Hours</span>
+                        </div>
+                        <div class="countdown-item">
+                            <span class="countdown-number">${minutes}</span>
+                            <span class="countdown-label">Minutes</span>
+                        </div>
+                    `;
+                }
+            }
+
+            async startFreeTrial() {
+                if (this.isDemoMode) {
+                    this.startDemoTrial();
+                    return;
+                }
+
+                if (!this.sessionToken) {
+                    alert('Please sign in to start your free trial');
+                    return;
+                }
+
+                try {
+                    const response = await fetch('http://localhost:3001/api/pro/create-trial', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${this.sessionToken}`
+                        },
+                        body: JSON.stringify({
+                            userId: 'demo_user_' + Date.now(),
+                            email: 'demo@intertools.com',
+                            name: 'Demo User'
+                        })
+                    });
+
+                    const data = await response.json();
+                    if (data.success) {
+                        alert('🎉 Your 7-day free trial has started! Enjoy Pro features!');
+                        await this.loadUserData(); // Refresh user data
+                    } else {
+                        alert(`❌ Failed to start trial: ${data.message}`);
+                    }
+                } catch (error) {
+                    alert(`❌ Error starting trial: ${error.message}`);
+                }
+            }
+
+            async upgradeToPro() {
+                if (this.isDemoMode) {
+                    alert('🎭 Demo Mode: This would redirect to Stripe checkout to continue using InterTools for $30/month');
+                    return;
+                }
+
+                if (!this.sessionToken) {
+                    alert('Please sign in to upgrade to Pro');
+                    return;
+                }
+
+                try {
+                    const response = await fetch('http://localhost:3001/api/pro/create-checkout', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${this.sessionToken}`
+                        },
+                        body: JSON.stringify({
+                            planId: 'pro',
+                            successUrl: window.location.href,
+                            cancelUrl: window.location.href
+                        })
+                    });
+
+                    const data = await response.json();
+                    if (data.success && data.checkoutUrl) {
+                        window.location.href = data.checkoutUrl;
+                    } else {
+                        alert(`❌ Failed to create checkout: ${data.message}`);
+                    }
+                } catch (error) {
+                    alert(`❌ Error creating checkout: ${error.message}`);
+                }
+            }
+
+            handleTrialExpired() {
+                this.isTrialActive = false;
+                this.userPlan = 'basic';
+                this.updatePlanDisplay();
+                this.updateTrialDisplay();
+                
+                // Show upgrade prompt
+                this.showUpgradePrompt();
+            }
+
+            showUpgradePrompt() {
+                const modal = document.createElement('div');
+                modal.className = 'upgrade-modal';
+                modal.innerHTML = `
+                    <div class="modal-content">
+                        <h3>🚀 Your Pro Free Week Has Ended</h3>
+                        <p>Continue using InterTools Pro for $30/month to keep all features</p>
+                        <div class="modal-actions">
+                            <button class="btn btn-primary" onclick="app.upgradeToPro()">Continue for $30/month</button>
+                            <button class="btn btn-secondary" onclick="this.closest('.upgrade-modal').remove()">Maybe Later</button>
+                        </div>
+                    </div>
+                `;
+                document.body.appendChild(modal);
+            }
+
+            getFreeScript() {
+                const freeScript = `// InterTools Basic Script - Always Free and Open Source
+// Copy and paste this into any website's console
+
+fetch('http://localhost:3001/free-script.js')
+  .then(response => response.text())
+  .then(script => {
+    const scriptElement = document.createElement('script');
+    scriptElement.textContent = script;
+    document.head.appendChild(scriptElement);
+    console.log('✅ InterTools Basic loaded!');
+  })
+  .catch(error => console.error('Failed to load InterTools Basic:', error));`;
+
+                navigator.clipboard.writeText(freeScript)
+                    .then(() => alert('✅ InterTools Basic script copied to clipboard! Paste it into any website console.'))
+                    .catch(() => alert('❌ Failed to copy to clipboard. Please copy manually.'));
+            }
+
+            async getProScript() {
+                if (this.isDemoMode) {
+                    const demoProScript = `// InterTools Pro Demo Script
+// This is a demo version - real Pro script requires authentication
+
+console.log('🎭 Demo Pro Script Loaded!');
+console.log('✅ Advanced click-to-chat enabled');
+console.log('✅ AI agents activated');
+console.log('✅ Protected features unlocked');
+
+// In production, this would be a protected script from the server
+alert('🎭 Demo Pro Script copied! In production, this would be a protected script.');`;
+
+                    navigator.clipboard.writeText(demoProScript)
+                        .then(() => alert('🎭 Demo Pro script copied! In production, this would be a protected script.'))
+                        .catch(() => alert('❌ Failed to copy to clipboard. Please copy manually.'));
+                    return;
+                }
+
+                if (!this.sessionToken) {
+                    alert('Please sign in to access Pro features');
+                    return;
+                }
+
+                if (this.userPlan !== 'pro' && !this.isTrialActive) {
+                    alert('Pro features require an active subscription or trial');
+                    return;
+                }
+
+                try {
+                    const response = await fetch('http://localhost:3001/api/pro/script', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${this.sessionToken}`
+                        },
+                        body: JSON.stringify({
+                            features: ['universal-web-chat', 'advanced-log-analysis'],
+                            planId: this.userPlan
+                        })
+                    });
+
+                    if (response.ok) {
+                        const proScript = await response.text();
+                        navigator.clipboard.writeText(proScript)
+                            .then(() => alert('✅ Pro script copied to clipboard! Paste it into any website console.'))
+                            .catch(() => alert('❌ Failed to copy to clipboard. Please copy manually.'));
+                    } else {
+                        const error = await response.json();
+                        alert(`❌ Failed to get Pro script: ${error.error}`);
+                    }
+                } catch (error) {
+                    alert(`❌ Error: ${error.message}`);
+                }
+            }
+
+            showError(message) {
+                const errorDiv = document.createElement('div');
+                errorDiv.className = 'error-message';
+                errorDiv.textContent = message;
+                errorDiv.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    background: #fee2e2;
+                    color: #991b1b;
+                    padding: 1rem;
+                    border-radius: 8px;
+                    z-index: 1000;
+                    max-width: 300px;
+                `;
+                document.body.appendChild(errorDiv);
+                
+                setTimeout(() => errorDiv.remove(), 5000);
+            }
+        }
+
+        // Initialize the app
+        const app = new InterToolsProApp();
+        // Integration and Download Functions
+        function downloadExtension(browser) {
+            if (browser === 'chrome') {
+                downloadFile('chrome-extension');
+            } else if (browser === 'firefox') {
+                downloadFile('firefox-extension');
+            }
+        }
+
+        function copyFreeScript() {
+            const freeScript = `// InterTools Free Script - Always Free and Open Source
+// Copy and paste this into any website's console
+
+(function() {
+  'use strict';
+  
+  if (window.interToolsLoaded) {
+    console.log('InterTools already loaded!');
+    return;
+  }
+  
+  console.log('🚀 Loading InterTools Free...');
+  
+  // Try Railway backend first, fallback to localhost
+  const API_ENDPOINTS = [
+    'https://your-app.railway.app',
+    'http://localhost:3001',
+    'https://intertools.pro/api'
+  ];
+  
+  let currentEndpoint = 0;
+  
+  function tryLoadScript() {
+    const endpoint = API_ENDPOINTS[currentEndpoint];
+    
+    fetch(endpoint + '/free-script.js')
+      .then(response => {
+        if (!response.ok) throw new Error('Network response was not ok');
+        return response.text();
+      })
+      .then(script => {
+        const scriptElement = document.createElement('script');
+        scriptElement.textContent = script.replace('https://your-app.railway.app', endpoint);
+        document.head.appendChild(scriptElement);
+        window.interToolsLoaded = true;
+        console.log('✅ InterTools Free loaded successfully from:', endpoint);
+      })
+      .catch(error => {
+        console.warn('Failed to load from:', endpoint, error);
+        currentEndpoint++;
+        if (currentEndpoint < API_ENDPOINTS.length) {
+          console.log('Trying next endpoint...');
+          tryLoadScript();
+        } else {
+          console.error('❌ Failed to load InterTools from all endpoints');
+          console.log('💡 Visit https://intertools.pro for help');
+        }
+      });
+  }
+  
+  tryLoadScript();
+})();`;
+            
+            navigator.clipboard.writeText(freeScript).then(() => {
+                const scriptPreview = document.getElementById('script-preview');
+                if (scriptPreview) {
+                    scriptPreview.textContent = freeScript;
+                }
+                
+                alert('✅ InterTools Free script copied to clipboard!\\n\\n📝 Instructions:\\n1. Open any website\\n2. Press F12 (Developer Tools)\\n3. Go to Console tab\\n4. Paste and press Enter\\n\\n🎯 InterTools will appear as a floating chat button!');
+            }).catch(() => {
+                const textArea = document.createElement('textarea');
+                textArea.value = freeScript;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                alert('✅ InterTools Free script copied to clipboard!');
+            });
+        }
+
+        function downloadFile(fileType) {
+            const files = {
+                'chrome-extension': { 
+                    name: 'intertools-chrome-extension.zip', 
+                    url: '/downloads/intertools-chrome-extension.zip',
+                    description: 'Complete Chrome extension with auto-injection'
+                },
+                'firefox-extension': { 
+                    name: 'intertools-firefox-extension.xpi', 
+                    url: '/downloads/intertools-firefox-extension.xpi',
+                    description: 'Firefox extension (coming soon)'
+                },
+                'free-script': { 
+                    name: 'intertools-free-complete.js', 
+                    url: '/downloads/intertools-free-complete.js',
+                    description: 'Complete FREE script with all features'
+                },
+                'pro-script': { 
+                    name: 'intertools-pro-complete.js', 
+                    url: '/downloads/intertools-pro-complete.js',
+                    description: 'Complete PRO script with AI features'
+                },
+                'api-docs': { 
+                    name: 'COMPLETE-DOCUMENTATION.md', 
+                    url: '/downloads/COMPLETE-DOCUMENTATION.md',
+                    description: 'Complete technical documentation and API reference'
+                },
+                'quick-guide': { 
+                    name: 'QUICK-START-GUIDE.md', 
+                    url: '/downloads/QUICK-START-GUIDE.md',
+                    description: '5-minute setup guide for new users'
+                },
+                'complete-package': { 
+                    name: 'all-files', 
+                    url: '/downloads/',
+                    description: 'Browse all available files and documentation'
+                }
+            };
+
+            const file = files[fileType];
+            if (!file) return;
+
+            if (fileType === 'complete-package') {
+                // Open downloads folder
+                window.open('/downloads/', '_blank');
+                alert('📦 Opening downloads folder with all InterTools files!\\n\\nYou can download:\\n• Chrome extension (.zip)\\n• Free script (.js)\\n• Documentation (README.md)');
+            } else {
+                // Direct file download
+                const a = document.createElement('a');
+                a.href = file.url;
+                a.download = file.name;
+                a.target = '_blank';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+
+                alert(`✅ ${file.description} downloading!\\n\\nFile: ${file.name}\\n\\n💡 Check your Downloads folder.`);
+            }
+        }
+
+        function showScriptDemo() {
+            alert('🎮 Script Demo\\n\\nThe script adds:\\n1. Floating chat button (💬)\\n2. Console error capture\\n3. Click-to-chat functionality\\n4. Cursor integration\\n\\nTry it on any website!');
+        }
+
+        function showAPIKey() {
+            const apiKey = 'it_' + Math.random().toString(36).substring(2, 15);
+            navigator.clipboard.writeText(apiKey).then(() => {
+                alert(`🔑 API Key: ${apiKey}\\n\\n✅ Copied to clipboard!`);
+            });
+        }
+
+        function downloadFiles() {
+            alert('📦 Downloading all files...');
+            setTimeout(() => downloadFile('chrome-extension'), 100);
+            setTimeout(() => downloadFile('firefox-extension'), 200);
+            setTimeout(() => downloadFile('free-script'), 300);
+        }
+
+        function loadDemoInterTools() {
+            const demoOutput = document.getElementById('demo-output');
+            if (demoOutput) {
+                demoOutput.innerHTML = '🚀 InterTools Console Logger Active!\\n\\n📊 Monitoring: console.log, console.error, console.warn\\n🤖 AI Analysis: Ready to process logs\\n🔄 IDE Integration: Connected to Cursor/VS Code\\n\\n✅ Ready to capture and push console logs to your IDE!';
+                demoOutput.classList.add('show');
+            }
+            alert('🎉 Console log capture activated! Click "Generate Console Logs" to see the magic.');
+        }
+
+        function triggerDemoError() {
+            const demoOutput = document.getElementById('demo-output');
+            if (!demoOutput?.classList.contains('show')) {
+                alert('Please load InterTools Console Logger first!');
+                return;
+            }
+            
+            // Simulate console logs being generated
+            console.log('Demo: User clicked generate logs button');
+            console.warn('Demo: Simulating a warning message');
+            console.error('Demo: TypeError - Cannot read property of undefined');
+            
+            demoOutput.innerHTML = `📊 Console Logs Captured!
+
+🔍 Detected Logs:
+[LOG] User clicked generate logs button
+[WARN] Simulating a warning message  
+[ERROR] TypeError - Cannot read property of undefined
+
+🤖 AI Analysis Complete:
+- Error suggests missing null check
+- Warning indicates potential performance issue
+- User interaction logged for UX analysis
+
+📋 IDE-Ready Report Generated:
+✅ Formatted for Cursor/VS Code
+✅ Includes suggested fixes
+✅ Context and stack trace included
+
+🚀 Ready to push to your IDE!`;
+
+            setTimeout(() => {
+                if (confirm('🤖 InterTools captured 3 console logs and created an AI analysis!\\n\\nWould you like to:\\n1. Copy the full report to clipboard\\n2. See how it integrates with your IDE\\n\\nClick OK to copy the report.')) {
+                    const report = `🛠️ InterTools Console Log Analysis
+
+📊 Captured from: intertools.pro/demo
+⏰ Timestamp: ${new Date().toLocaleString()}
+
+🔍 Console Logs:
+[LOG] User clicked generate logs button
+[WARN] Simulating a warning message
+[ERROR] TypeError - Cannot read property of undefined
+
+🤖 AI Analysis:
+- Error Type: TypeError - Null/undefined access
+- Suggested Fix: Add null check before property access
+- Performance Impact: Low
+- User Experience Impact: High
+
+💡 Recommended Actions:
+1. Add defensive null checks
+2. Implement proper error boundaries
+3. Consider user feedback for this interaction
+
+🎯 This is how InterTools pushes browser insights directly to your IDE for faster full-stack development!`;
+                    
+                    navigator.clipboard.writeText(report).then(() => {
+                        alert('✅ Console log analysis copied to clipboard!\\n\\nThis report is now ready to paste into Cursor, VS Code, or any IDE. InterTools automatically formats browser insights for your development workflow.');
+                    });
+                }
+            }, 1500);
+        }
+
+        function clearDemo() {
+            const demoOutput = document.getElementById('demo-output');
+            if (demoOutput) {
+                demoOutput.classList.remove('show');
+                demoOutput.innerHTML = '';
+            }
+            alert('🗑️ Demo cleared!');
+        }
+
+        function scrollToIntegration() {
+            document.getElementById('integration-section')?.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Version switching functions
+        function showFreeVersion() {
+            // Update button states
+            document.getElementById('free-version-btn').style.background = '#10b981';
+            document.getElementById('free-version-btn').style.color = 'white';
+            document.getElementById('pro-version-btn').style.background = '#f3f4f6';
+            document.getElementById('pro-version-btn').style.color = '#6b7280';
+            document.getElementById('pro-version-btn').style.border = '2px solid #e5e7eb';
+            
+            // Show/hide sections
+            document.getElementById('free-script-section').style.display = 'block';
+            document.getElementById('pro-script-section').style.display = 'none';
+            document.getElementById('free-features').style.display = 'block';
+            document.getElementById('pro-features').style.display = 'none';
+            
+            // Load FREE script
+            loadFreeScript();
+        }
+        
+        // User subscription state
+        let userSubscriptionState = {
+            status: 'none', // 'none', 'trial', 'active', 'expired'
+            trialStartDate: null,
+            trialDaysRemaining: 0,
+            subscriptionId: null,
+            nextBillingDate: null
+        };
+
+        function handleProVersionAccess() {
+            // Check user's subscription status
+            checkSubscriptionStatus();
+            
+            // Update button states  
+            document.getElementById('pro-version-btn').style.background = 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)';
+            document.getElementById('pro-version-btn').style.color = 'white';
+            document.getElementById('pro-version-btn').style.border = 'none';
+            document.getElementById('free-version-btn').style.background = '#f3f4f6';
+            document.getElementById('free-version-btn').style.color = '#6b7280';
+            
+            // Show/hide sections
+            document.getElementById('free-script-section').style.display = 'none';
+            document.getElementById('pro-script-section').style.display = 'block';
+            document.getElementById('free-features').style.display = 'none';
+            document.getElementById('pro-features').style.display = 'block';
+            
+            // Show appropriate PRO interface based on subscription status
+            showProInterface();
+        }
+
+        function showProInterface() {
+            // Hide all states first
+            document.getElementById('pro-not-signed-in').style.display = 'none';
+            document.getElementById('pro-trial-active').style.display = 'none';
+            document.getElementById('pro-subscription-active').style.display = 'none';
+            document.getElementById('pro-trial-expired').style.display = 'none';
+            document.getElementById('pro-script-display').style.display = 'none';
+            
+            // Show appropriate state
+            switch (userSubscriptionState.status) {
+                case 'trial':
+                    document.getElementById('pro-trial-active').style.display = 'block';
+                    document.getElementById('trial-days-remaining').textContent = 
+                        `${userSubscriptionState.trialDaysRemaining} days remaining`;
+                    // Load and show script for trial users
+                    loadProScript();
+                    document.getElementById('pro-script-display').style.display = 'block';
+                    break;
+                    
+                case 'active':
+                    document.getElementById('pro-subscription-active').style.display = 'block';
+                    // Load and show script for paying users
+                    loadProScript();
+                    document.getElementById('pro-script-display').style.display = 'block';
+                    break;
+                    
+                case 'expired':
+                    document.getElementById('pro-trial-expired').style.display = 'block';
+                    break;
+                    
+                default:
+                    document.getElementById('pro-not-signed-in').style.display = 'block';
+                    break;
+            }
+        }
+        
+        function checkSubscriptionStatus() {
+            // Check localStorage for subscription data
+            const savedState = localStorage.getItem('intertools-pro-subscription');
+            if (savedState) {
+                userSubscriptionState = JSON.parse(savedState);
+                
+                // Check if trial has expired
+                if (userSubscriptionState.status === 'trial') {
+                    const now = new Date();
+                    const trialStart = new Date(userSubscriptionState.trialStartDate);
+                    const daysSinceStart = Math.floor((now - trialStart) / (1000 * 60 * 60 * 24));
+                    
+                    if (daysSinceStart >= 7) {
+                        userSubscriptionState.status = 'expired';
+                        userSubscriptionState.trialDaysRemaining = 0;
+                        saveSubscriptionState();
+                    } else {
+                        userSubscriptionState.trialDaysRemaining = 7 - daysSinceStart;
+                    }
+                }
+            }
+            
+            // In production, this would also check with your backend API
+            // to verify subscription status with Stripe
+        }
+        
+        function saveSubscriptionState() {
+            localStorage.setItem('intertools-pro-subscription', JSON.stringify(userSubscriptionState));
+        }
+        
+        function startFreeTrial() {
+            // In production, this would create a user account and start trial
+            userSubscriptionState = {
+                status: 'trial',
+                trialStartDate: new Date().toISOString(),
+                trialDaysRemaining: 7,
+                subscriptionId: null,
+                nextBillingDate: null
+            };
+            
+            saveSubscriptionState();
+            showProInterface();
+            
+            // Show success message
+            setTimeout(() => {
+                alert('🎉 Free trial started!\\n\\n✅ 7-day trial activated\\n✅ Full PRO script access granted\\n✅ All advanced features unlocked\\n\\nYour PRO script is now available below!');
+            }, 500);
+        }
+        
+        function subscribeToPro() {
+            // In production, this would integrate with Stripe
+            alert('🚀 Redirecting to Stripe checkout...\\n\\nSecure payment processing:\\n• $30/month subscription\\n• Cancel anytime\\n• Instant access to PRO features');
+            
+            // Simulate successful subscription for demo
+            setTimeout(() => {
+                if (confirm('Demo: Simulate successful payment?')) {
+                    userSubscriptionState = {
+                        status: 'active',
+                        trialStartDate: userSubscriptionState.trialStartDate,
+                        trialDaysRemaining: 0,
+                        subscriptionId: 'sub_demo_12345',
+                        nextBillingDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString()
+                    };
+                    
+                    saveSubscriptionState();
+                    showProInterface();
+                    alert('💎 Subscription activated!\\n\\n✅ PRO features unlocked\\n✅ Full script access\\n✅ Priority support included');
+                }
+            }, 1000);
+        }
+        
+        function manageBilling() {
+            alert('🔗 Opening billing portal...\\n\\n• Update payment method\\n• View billing history\\n• Cancel subscription\\n• Download invoices');
+            
+            // In production, this would redirect to Stripe customer portal
+        }
+        
+        function cancelTrial() {
+            if (confirm('Cancel your free trial?\\n\\nYou will lose access to PRO features immediately.')) {
+                userSubscriptionState = {
+                    status: 'none',
+                    trialStartDate: null,
+                    trialDaysRemaining: 0,
+                    subscriptionId: null,
+                    nextBillingDate: null
+                };
+                
+                saveSubscriptionState();
+                showProInterface();
+                alert('❌ Trial cancelled. You can start a new trial anytime!');
+            }
+        }
+        
+        function downloadProFiles() {
+            alert('📁 PRO file downloads:\\n\\n• intertools-pro-complete.js\\n• Advanced documentation\\n• Premium support resources\\n• API reference');
+        }
+
+        function showProVersion() {
+            // Legacy function - redirect to new handler
+            handleProVersionAccess();
+        }
+        
+        // Load and display scripts
+        function loadFreeScript() {
+            const display = document.getElementById('free-script-display');
+            if (display && !display.dataset.loaded) {
+                fetch('/downloads/intertools-free-complete.js')
+                    .then(response => response.text())
+                    .then(script => {
+                        display.textContent = script;
+                        display.dataset.loaded = 'true';
+                    })
+                    .catch(() => {
+                        display.textContent = '// Error loading script. Please try downloading the file directly.';
+                    });
+            }
+        }
+        
+        function loadProScript() {
+            const display = document.getElementById('pro-script-display');
+            if (display && !display.dataset.loaded) {
+                fetch('/downloads/intertools-pro-complete.js')
+                    .then(response => response.text())
+                    .then(script => {
+                        display.textContent = script;
+                        display.dataset.loaded = 'true';
+                    })
+                    .catch(() => {
+                        display.textContent = '// Error loading script. Please try downloading the file directly.';
+                    });
+            }
+        }
+        
+        // Copy functions
+        function copyFreeScript() {
+            const display = document.getElementById('free-script-display');
+            const script = display.textContent;
+            
+            navigator.clipboard.writeText(script).then(() => {
+                // Update button
+                const btn = document.getElementById('free-copy-btn');
+                const originalText = btn.textContent;
+                btn.textContent = '✅ Copied!';
+                btn.style.background = '#059669';
+                
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                    btn.style.background = '#059669';
+                }, 2000);
+                
+                // Show success message
+                alert('🎉 InterTools FREE script copied to clipboard!\\n\\n📝 Instructions:\\n1. Go to any website\\n2. Press F12 (Developer Tools)\\n3. Go to Console tab\\n4. Paste and press Enter\\n\\n🛠️ InterTools will appear with a floating button!\\n\\n💡 Completely free - no limits, no subscriptions!');
+            }).catch(() => {
+                // Fallback
+                const textArea = document.createElement('textarea');
+                textArea.value = script;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                alert('✅ InterTools FREE script copied to clipboard!');
+            });
+        }
+        
+        function copyProScript() {
+            const display = document.getElementById('pro-script-display');
+            const script = display.textContent;
+            
+            navigator.clipboard.writeText(script).then(() => {
+                // Update button
+                const btn = document.getElementById('pro-copy-btn');
+                const originalText = btn.textContent;
+                btn.textContent = '✅ Copied!';
+                btn.style.background = '#7c3aed';
+                
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                    btn.style.background = '#7c3aed';
+                }, 2000);
+                
+                // Show success message
+                alert('🚀 InterTools PRO script copied to clipboard!\\n\\n📝 Instructions:\\n1. Go to any website\\n2. Press F12 (Developer Tools)\\n3. Go to Console tab\\n4. Paste and press Enter\\n\\n🤖 InterTools PRO will appear with advanced AI features!\\n\\n✨ Features: AI analysis, performance monitoring, element extraction, and more!');
+            }).catch(() => {
+                // Fallback
+                const textArea = document.createElement('textarea');
+                textArea.value = script;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                alert('✅ InterTools PRO script copied to clipboard!');
+            });
+        }
+        
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Default to FREE version
+            showFreeVersion();
+        });
+
+        // Main script copy function (legacy - keeping for compatibility)
+        function copyMainScript() {
+            const mainScript = `// 🚀 InterTools - Free Console Log to IDE Bridge
+// Capture console logs and push them to your development environment
+// 100% Free and Open Source - No limits, no subscriptions!
+
+(function() {
+  'use strict';
+  
+  if (window.interToolsActive) {
+    console.log('🛠️ InterTools already active on this page!');
+    return;
+  }
+  
+  console.log('🚀 InterTools Loading - Free Console Log Capture');
+  window.interToolsActive = true;
+  
+  // Console log capture system
+  const logBuffer = [];
+  const originalLog = console.log;
+  const originalError = console.error;
+  const originalWarn = console.warn;
+  const originalInfo = console.info;
+  
+  function captureLog(type, args, stack) {
+    const entry = {
+      type: type,
+      message: Array.from(args).map(arg => 
+        typeof arg === 'object' ? JSON.stringify(arg, null, 2) : String(arg)
+      ).join(' '),
+      timestamp: new Date().toISOString(),
+      url: window.location.href,
+      stack: stack
+    };
+    
+    logBuffer.push(entry);
+    if (logBuffer.length > 100) logBuffer.shift(); // Keep last 100 logs
+  }
+  
+  // Override console methods
+  console.log = function(...args) {
+    captureLog('log', args, new Error().stack);
+    originalLog.apply(console, args);
+  };
+  
+  console.error = function(...args) {
+    captureLog('error', args, new Error().stack);
+    originalError.apply(console, args);
+  };
+  
+  console.warn = function(...args) {
+    captureLog('warn', args, new Error().stack);
+    originalWarn.apply(console, args);
+  };
+  
+  console.info = function(...args) {
+    captureLog('info', args, new Error().stack);
+    originalInfo.apply(console, args);
+  };
+  
+  // Error monitoring
+  window.addEventListener('error', (event) => {
+    captureLog('error', [event.message], event.error?.stack || 'No stack trace');
+  });
+  
+  window.addEventListener('unhandledrejection', (event) => {
+    captureLog('error', ['Unhandled Promise Rejection:', event.reason], 'Promise rejection');
+  });
+  
+  // Create InterTools UI
+  function createInterToolsUI() {
+    const button = document.createElement('div');
+    button.id = 'intertools-button';
+    button.innerHTML = '🛠️';
+    button.title = 'InterTools - Click to analyze logs and push to IDE';
+    button.style.cssText = \`
+      position: fixed; top: 20px; right: 20px; width: 60px; height: 60px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      font-size: 24px; cursor: pointer; z-index: 10000; color: white;
+      box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4); transition: all 0.3s ease;
+      border: 3px solid white; font-weight: bold;
+    \`;
+    
+    button.addEventListener('mouseenter', () => {
+      button.style.transform = 'scale(1.1)';
+      button.style.boxShadow = '0 6px 30px rgba(102, 126, 234, 0.6)';
+    });
+    
+    button.addEventListener('mouseleave', () => {
+      button.style.transform = 'scale(1)';
+      button.style.boxShadow = '0 4px 20px rgba(102, 126, 234, 0.4)';
+    });
+    
+    button.addEventListener('click', showInterToolsPanel);
+    document.body.appendChild(button);
+  }
+  
+  function showInterToolsPanel() {
+    const existing = document.getElementById('intertools-panel');
+    if (existing) {
+      existing.remove();
+      return;
+    }
+    
+    const panel = document.createElement('div');
+    panel.id = 'intertools-panel';
+    panel.style.cssText = \`
+      position: fixed; top: 90px; right: 20px; width: 380px; max-width: calc(100vw - 40px);
+      background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+      z-index: 10001; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      border: 2px solid #667eea; overflow: hidden;
+    \`;
+    
+    const logCount = logBuffer.length;
+    const errorCount = logBuffer.filter(log => log.type === 'error').length;
+    const warnCount = logBuffer.filter(log => log.type === 'warn').length;
+    
+    panel.innerHTML = \`
+      <div style="padding: 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+        <h3 style="margin: 0 0 8px 0; font-size: 18px;">🛠️ InterTools Console Capture</h3>
+        <div style="font-size: 14px; opacity: 0.9;">
+          \${logCount} logs captured • \${errorCount} errors • \${warnCount} warnings
+        </div>
+      </div>
+      
+      <div style="padding: 20px;">
+        <div style="margin-bottom: 15px;">
+          <strong style="color: #1e293b;">📊 Current Page:</strong><br>
+          <div style="font-size: 12px; color: #64748b; word-break: break-all;">\${window.location.href}</div>
+        </div>
+        
+        <div style="display: grid; gap: 10px; margin-bottom: 20px;">
+          <button onclick="generateIDEReport()" style="
+            width: 100%; padding: 12px; background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;
+            transition: all 0.2s ease;
+          ">📋 Copy Full Report for IDE</button>
+          
+          <button onclick="generateQuickAnalysis()" style="
+            width: 100%; padding: 12px; background: #f1f5f9; color: #334155;
+            border: 1px solid #e2e8f0; border-radius: 8px; cursor: pointer; font-weight: 600;
+            transition: all 0.2s ease;
+          ">⚡ Quick Analysis</button>
+          
+          <button onclick="clearLogs()" style="
+            width: 100%; padding: 12px; background: #fef2f2; color: #dc2626;
+            border: 1px solid #fecaca; border-radius: 8px; cursor: pointer; font-weight: 600;
+            transition: all 0.2s ease;
+          ">🗑️ Clear Logs</button>
+        </div>
+        
+        <div style="background: #f8fafc; padding: 12px; border-radius: 8px; font-size: 12px; color: #64748b;">
+          <strong>💡 How to use:</strong> Copy the report and paste it into Cursor, VS Code, or any IDE chat. 
+          InterTools formats everything for instant development insights!
+        </div>
+      </div>
+    \`;
+    
+    document.body.appendChild(panel);
+  }
+  
+  // Generate comprehensive IDE report
+  window.generateIDEReport = function() {
+    const now = new Date().toLocaleString();
+    const recentLogs = logBuffer.slice(-20);
+    
+    const report = \`🛠️ InterTools Console Log Report
+    
+📊 Generated: \${now}
+📄 Page: \${document.title}
+🔗 URL: \${window.location.href}
+🖥️ Environment: \${window.location.hostname === 'localhost' ? 'Development' : 'Production'}
+
+📈 Summary:
+• Total Logs: \${logBuffer.length}
+• Errors: \${logBuffer.filter(l => l.type === 'error').length}
+• Warnings: \${logBuffer.filter(l => l.type === 'warn').length}
+• Info/Debug: \${logBuffer.filter(l => l.type === 'log' || l.type === 'info').length}
+
+🔍 Recent Console Activity:
+\${recentLogs.map(log => \`[\${log.type.toUpperCase()}] \${log.timestamp.split('T')[1].split('.')[0]} - \${log.message}\`).join('\\n')}
+
+\${logBuffer.filter(l => l.type === 'error').length > 0 ? \`
+❌ Error Details:
+\${logBuffer.filter(l => l.type === 'error').slice(-5).map(log => \`• \${log.message}\\n  Stack: \${log.stack?.split('\\n')[1] || 'No stack trace'}\`).join('\\n')}
+\` : '✅ No errors detected'}
+
+💡 AI Analysis Suggestions:
+\${logBuffer.filter(l => l.type === 'error').length > 0 ? 
+  '• Review error patterns and add proper error handling\\n• Consider implementing error boundaries\\n• Add debugging information for error tracking' : 
+  '• Console usage looks healthy\\n• Consider adding more structured logging\\n• Implement performance monitoring'}
+
+🎯 Recommended Actions:
+1. Review and fix any errors shown above
+2. Implement proper error handling
+3. Add structured logging for better debugging
+4. Consider adding performance monitoring
+
+---
+Generated by InterTools - Free Console Log to IDE Bridge
+Paste this report into your IDE for instant development insights!\`;
+    
+    navigator.clipboard.writeText(report).then(() => {
+      showNotification('✅ Complete IDE report copied to clipboard!\\n\\nPaste this into Cursor, VS Code, or any IDE chat for instant analysis.');
+      document.getElementById('intertools-panel')?.remove();
+    }).catch(() => {
+      alert('Report ready but clipboard access failed. Please copy manually.');
+    });
+  };
+  
+  // Quick analysis
+  window.generateQuickAnalysis = function() {
+    const errorCount = logBuffer.filter(l => l.type === 'error').length;
+    const analysis = \`🔍 Quick Analysis - \${window.location.hostname}
+    
+\${errorCount > 0 ? \`⚠️ Found \${errorCount} errors that need attention\` : '✅ No errors detected'}
+📊 \${logBuffer.length} total console messages captured
+⏰ Last activity: \${logBuffer.length > 0 ? logBuffer[logBuffer.length - 1].timestamp.split('T')[1].split('.')[0] : 'No activity'}
+
+💡 Paste this into your IDE along with the full report for complete analysis.\`;
+    
+    navigator.clipboard.writeText(analysis).then(() => {
+      showNotification('⚡ Quick analysis copied! Use "Copy Full Report" for detailed insights.');
+    });
+  };
+  
+  // Clear logs
+  window.clearLogs = function() {
+    if (confirm('Clear all captured console logs?')) {
+      logBuffer.length = 0;
+      showNotification('🗑️ Console logs cleared');
+      document.getElementById('intertools-panel')?.remove();
+    }
+  };
+  
+  // Notification system
+  function showNotification(message) {
+    const notification = document.createElement('div');
+    notification.style.cssText = \`
+      position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+      background: #10b981; color: white; padding: 15px 25px; border-radius: 10px;
+      z-index: 10003; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      font-size: 14px; box-shadow: 0 6px 25px rgba(16, 185, 129, 0.4);
+      max-width: 400px; text-align: center; line-height: 1.4;
+    \`;
+    notification.textContent = message;
+    document.body.appendChild(notification);
+    
+    setTimeout(() => notification.remove(), 4000);
+  }
+  
+  // Initialize
+  createInterToolsUI();
+  
+  // Welcome message
+  console.log('🎉 InterTools is now capturing all console logs!');
+  console.log('📊 Click the 🛠️ button to analyze logs and push them to your IDE');
+  console.log('💡 This is completely free and open source - no limits!');
+  
+  showNotification('🚀 InterTools loaded! Click the 🛠️ button to start.');
+})();`;
+
+            // Update the display
+            const display = document.getElementById('main-script-display');
+            if (display) {
+                display.textContent = mainScript;
+            }
+
+            // Copy to clipboard
+            navigator.clipboard.writeText(mainScript).then(() => {
+                // Update button
+                const btn = document.getElementById('main-copy-btn');
+                const originalText = btn.textContent;
+                btn.textContent = '✅ Copied!';
+                btn.style.background = '#10b981';
+                
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                    btn.style.background = '#475569';
+                }, 2000);
+                
+                // Show success message
+                alert('🎉 InterTools script copied to clipboard!\\n\\n📝 Instructions:\\n1. Go to any website\\n2. Press F12 (Developer Tools)\\n3. Go to Console tab\\n4. Paste and press Enter\\n\\n🛠️ InterTools will appear with a floating button!\\n\\n💡 Completely free - no limits, no subscriptions!');
+            }).catch(() => {
+                // Fallback
+                const textArea = document.createElement('textarea');
+                textArea.value = mainScript;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                alert('✅ InterTools script copied to clipboard!');
+            });
+        }
+
+        // Quick demo function
+        function showQuickDemo() {
+            alert('🎮 Quick Demo\\n\\n1. Copy the script above\\n2. Open a new tab (try YouTube, GitHub, any site)\\n3. Press F12 to open Developer Tools\\n4. Go to Console tab\\n5. Paste the script and press Enter\\n6. Look for the 🛠️ button in the top-right\\n7. Click it to see captured console logs!\\n\\n💡 InterTools will capture all console.log, console.error, and console.warn messages, then format them perfectly for your IDE!');
+        }
+    </script>
+</body>
+</html>

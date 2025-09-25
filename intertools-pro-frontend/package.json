@@ -1,0 +1,27 @@
+{
+  "name": "intertools-pro-frontend",
+  "version": "1.0.0",
+  "description": "InterTools PRO Frontend with subscription management",
+  "main": "server.js",
+  "scripts": {
+    "dev": "node server.js",
+    "start": "node server.js",
+    "pro-api": "node pro-api.js",
+    "dev-full": "concurrently \"npm run dev\" \"npm run pro-api\""
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "concurrently": "^7.6.0"
+  },
+  "devDependencies": {},
+  "keywords": [
+    "intertools",
+    "console",
+    "debugging",
+    "ide",
+    "subscription"
+  ],
+  "author": "InterTools",
+  "license": "MIT"
+}

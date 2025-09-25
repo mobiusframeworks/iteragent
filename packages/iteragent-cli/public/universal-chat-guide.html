@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InterTools Universal Click-to-Chat</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .section {
+            margin-bottom: 30px;
+        }
+        
+        .section h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+        
+        .step {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 0 10px 10px 0;
+        }
+        
+        .step h3 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 10px;
+            font-family: 'Fira Code', 'Consolas', monospace;
+            font-size: 14px;
+            overflow-x: auto;
+            margin: 15px 0;
+            position: relative;
+        }
+        
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        
+        .copy-btn:hover {
+            background: #5a6fd8;
+        }
+        
+        .feature-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .feature {
+            background: #e8f5e9;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #4caf50;
+        }
+        
+        .feature h3 {
+            color: #2e7d32;
+            margin-bottom: 10px;
+        }
+        
+        .demo-button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 20px 0;
+            transition: all 0.3s ease;
+        }
+        
+        .demo-button:hover {
+            background: #5a6fd8;
+            transform: translateY(-2px);
+        }
+        
+        .warning {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            color: #856404;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .success {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 InterTools Universal Click-to-Chat</h1>
+            <p>Click any element on any website to capture HTML and send to Cursor</p>
+        </div>
+        
+        <div class="content">
+            <div class="section">
+                <h2>🎯 What This Does</h2>
+                <p>This tool allows you to click on any element on any website and instantly capture its HTML code, add your feedback, and send it directly to Cursor AI for analysis and improvement suggestions.</p>
+            </div>
+            
+            <div class="section">
+                <h2>✨ Features</h2>
+                <div class="feature-list">
+                    <div class="feature">
+                        <h3>🖱️ Universal Click</h3>
+                        <p>Works on any website - just click any element to capture it</p>
+                    </div>
+                    <div class="feature">
+                        <h3>📄 HTML Capture</h3>
+                        <p>Instantly captures the complete HTML code of clicked elements</p>
+                    </div>
+                    <div class="feature">
+                        <h3>💬 Smart Feedback</h3>
+                        <p>Add your thoughts and suggestions about the element</p>
+                    </div>
+                    <div class="feature">
+                        <h3>🤖 Cursor Integration</h3>
+                        <p>Formatted messages ready to paste into Cursor AI chat</p>
+                    </div>
+                    <div class="feature">
+                        <h3>📋 One-Click Copy</h3>
+                        <p>Copy HTML code or formatted messages to clipboard</p>
+                    </div>
+                    <div class="feature">
+                        <h3>🎨 Visual Highlighting</h3>
+                        <p>See exactly which element you're capturing with visual highlights</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h2>🚀 Quick Start</h2>
+                
+                <div class="step">
+                    <h3>Step 1: Start InterTools Server</h3>
+                    <p>Make sure the InterTools web chat server is running:</p>
+                    <div class="code-block">
+                        npx intertools@1.0.14 web-chat --start
+                        <button class="copy-btn" onclick="copyToClipboard('npx intertools@1.0.14 web-chat --start')">Copy</button>
+                    </div>
+                </div>
+                
+                <div class="step">
+                    <h3>Step 2: Inject the Script</h3>
+                    <p>On ANY website, open Developer Tools (F12) → Console tab, then paste this script:</p>
+                    <div class="code-block" id="script-code">
+                        <button class="copy-btn" onclick="copyScript()">Copy Script</button>
+                        <div id="script-content">Loading script...</div>
+                    </div>
+                </div>
+                
+                <div class="step">
+                    <h3>Step 3: Start Clicking!</h3>
+                    <p>Click on any element on the page. A chat box will appear with the HTML code and a message field. Add your feedback and send to Cursor!</p>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h2>⌨️ Keyboard Shortcuts</h2>
+                <ul>
+                    <li><strong>Escape</strong> - Close the chat box</li>
+                    <li><strong>Ctrl + Enter</strong> - Send message to Cursor</li>
+                </ul>
+            </div>
+            
+            <div class="section">
+                <h2>🧪 Try It Now</h2>
+                <p>Test the functionality on this page:</p>
+                <button class="demo-button" onclick="loadUniversalChat()">🚀 Load Universal Click-to-Chat</button>
+                <div id="demo-status"></div>
+            </div>
+            
+            <div class="warning">
+                <strong>⚠️ Note:</strong> This tool requires the InterTools web chat server to be running on localhost:3001. Make sure to start it first!
+            </div>
+            
+            <div class="success">
+                <strong>✅ Pro Tip:</strong> The script works on any website once injected. You can use it to provide feedback on any web page, capture HTML for analysis, or report issues to developers.
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function loadScript() {
+            try {
+                const response = await fetch('/universal-click-chat.js');
+                const script = await response.text();
+                document.getElementById('script-content').textContent = script;
+            } catch (error) {
+                document.getElementById('script-content').textContent = 'Error loading script. Please check if the server is running.';
+            }
+        }
+        
+        function copyScript() {
+            const scriptContent = document.getElementById('script-content').textContent;
+            navigator.clipboard.writeText(scriptContent).then(() => {
+                showNotification('✅ Script copied to clipboard!', 'success');
+            }).catch(err => {
+                showNotification('❌ Failed to copy script', 'error');
+            });
+        }
+        
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                showNotification('✅ Command copied to clipboard!', 'success');
+            }).catch(err => {
+                showNotification('❌ Failed to copy command', 'error');
+            });
+        }
+        
+        function loadUniversalChat() {
+            const script = document.createElement('script');
+            script.src = '/universal-click-chat.js';
+            script.onload = () => {
+                document.getElementById('demo-status').innerHTML = '<div class="success">✅ Universal Click-to-Chat loaded! Try clicking on any element on this page.</div>';
+            };
+            script.onerror = () => {
+                document.getElementById('demo-status').innerHTML = '<div class="warning">❌ Failed to load script. Make sure the InterTools server is running.</div>';
+            };
+            document.head.appendChild(script);
+        }
+        
+        function showNotification(message, type) {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: ${type === 'success' ? '#4caf50' : '#f44336'};
+                color: white;
+                padding: 15px 20px;
+                border-radius: 10px;
+                box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+                z-index: 10000;
+                animation: slideIn 0.3s ease-out;
+            `;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+        
+        // Load the script content when page loads
+        loadScript();
+    </script>
+</body>
+</html>
+
