@@ -1,7 +1,7 @@
 {
-  "name": "@intertools/legacy-cli",
-  "version": "1.0.14",
-  "description": "InterTools - Intelligent development tools with multi-agent orchestration for Cursor",
+  "name": "@intertools/cli",
+  "version": "1.0.15",
+  "description": "🛠️ InterTools CLI - License Manager & Activation Tool. Activate 7-day free trial (no payment). Manage PRO subscriptions ($30/month). AI analysis, performance monitoring, real-time IDE sync.",
   "main": "dist/index.js",
   "bin": {
     "intertools": "dist/index.js"
