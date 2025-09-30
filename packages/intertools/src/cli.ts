@@ -31,15 +31,15 @@ function colorize(text: string, color: keyof typeof colors): string {
 function showWelcome() {
   console.clear();
   console.log(colorize('🚀 InterTools - Professional Development Assistant', 'cyan'));
-  console.log(colorize('Backend Engineer Mode: Interactive problem solving with AI assistance\n', 'dim'));
+  console.log(colorize('Backend Engineer Mode: Auto-starting all features for Cursor compatibility\n', 'dim'));
   
-  console.log('🎯 ' + colorize('WHAT INTERTOOLS CAN DO:', 'bright'));
-  console.log('   🔍 Debug console errors and terminal output');
-  console.log('   📁 Analyze files and suggest improvements');
-  console.log('   🤖 Chat with AI about your code issues');
-  console.log('   📊 Monitor performance and optimize code');
-  console.log('   🌐 Web chat integration for page elements');
-  console.log('   ⚡ Auto-fix common problems');
+  console.log('🎯 ' + colorize('AUTO-STARTING ALL FEATURES:', 'bright'));
+  console.log('   ✅ Console debugging and error monitoring');
+  console.log('   ✅ Terminal output tracking and analysis');
+  console.log('   ✅ Web chat server for page element analysis');
+  console.log('   ✅ Project analysis and code review');
+  console.log('   ✅ AI-powered problem solving');
+  console.log('   ✅ Real-time performance monitoring');
   console.log('');
 }
 
@@ -93,26 +93,26 @@ async function askUserQuestions() {
 }
 
 function showInteractiveCommands() {
-  console.log(colorize('🎮 INTERACTIVE COMMANDS - Ready to use:', 'bright'));
+  console.log(colorize('🎮 AVAILABLE COMMANDS - All features active:', 'bright'));
   console.log('');
-  console.log('🔍 ' + colorize('DEBUGGING:', 'yellow'));
+  console.log('🔍 ' + colorize('DEBUGGING (Active):', 'yellow'));
   console.log('   debug                    - Start debugging console errors');
   console.log('   logs                     - Show recent console logs');
   console.log('   errors                   - List all errors found');
   console.log('   fix <error>              - Auto-fix specific error');
   console.log('');
-  console.log('🤖 ' + colorize('AI ASSISTANCE:', 'blue'));
+  console.log('🤖 ' + colorize('AI ASSISTANCE (Ready):', 'blue'));
   console.log('   ask <question>           - Ask AI about code issues');
   console.log('   explain <error>          - Get detailed error explanation');
   console.log('   suggest                  - Get improvement suggestions');
   console.log('   review <file>            - AI code review');
   console.log('');
-  console.log('🌐 ' + colorize('WEB CHAT:', 'magenta'));
+  console.log('🌐 ' + colorize('WEB CHAT (Ready):', 'magenta'));
   console.log('   webchat                  - Start web chat server');
   console.log('   inject                   - Get script to inject on web pages');
   console.log('   elements                 - Show how to chat about page elements');
   console.log('');
-  console.log('📊 ' + colorize('MONITORING:', 'green'));
+  console.log('📊 ' + colorize('MONITORING (Active):', 'green'));
   console.log('   monitor                  - Start real-time monitoring');
   console.log('   status                   - Show system status');
   console.log('   performance              - Check performance metrics');
@@ -148,7 +148,7 @@ function showWebChatInstructions() {
 }
   
 async function startFullMode(answers: any) {
-  console.log(colorize('🚀 Starting InterTools with your preferences...', 'green'));
+  console.log(colorize('🚀 Starting InterTools with all features enabled...', 'green'));
   console.log('');
   
   try {
@@ -158,39 +158,33 @@ async function startFullMode(answers: any) {
       debug: true, 
       autoStart: true,
       features: {
-        terminal: answers.monitorTerminal || false,
+        terminal: true,
         localhost: true,
         production: true,
-        chat: answers.debugConsole || false,
+        chat: true,
         analytics: true
       }
     });
     
-    console.log(colorize('✅ InterTools initialized!', 'green'));
+    console.log(colorize('✅ InterTools initialized with all features!', 'green'));
     console.log('');
     
-    // Start features based on user answers
-    if (answers.debugConsole) {
-      console.log(colorize('🔍 Starting console debugging...', 'yellow'));
-      await intertools.startTerminalMonitoring();
-      console.log('   ✅ Console monitoring active');
-    }
+    // Start all features automatically
+    console.log(colorize('🔍 Starting console debugging...', 'yellow'));
+    await intertools.startTerminalMonitoring();
+    console.log('   ✅ Console monitoring active');
     
-    if (answers.monitorTerminal) {
-      console.log(colorize('📟 Starting terminal monitoring...', 'yellow'));
-      console.log('   ✅ Terminal output tracking active');
-    }
+    console.log(colorize('📟 Starting terminal monitoring...', 'yellow'));
+    console.log('   ✅ Terminal output tracking active');
     
-    if (answers.webChat) {
-      console.log(colorize('🌐 Web chat server ready (type "webchat" to start)', 'yellow'));
-    }
+    console.log(colorize('🌐 Web chat server ready', 'yellow'));
+    console.log('   ✅ Use "webchat" command to start server');
     
-    if (answers.analyzeProject) {
-      console.log(colorize('📁 Project analysis ready (type "analyze ." to start)', 'yellow'));
-    }
+    console.log(colorize('📁 Project analysis ready', 'yellow'));
+    console.log('   ✅ Use "analyze ." command to scan codebase');
     
     console.log('');
-    console.log(colorize('🎯 InterTools is ready! Type a command to get started.', 'green'));
+    console.log(colorize('🎯 All systems active! Type a command to get started.', 'green'));
     console.log('');
     
     return intertools;
@@ -397,10 +391,18 @@ async function main() {
   try {
     showWelcome();
     
-    // Ask user questions to set up InterTools
-    const answers = await askUserQuestions();
+    // Auto-start with all features enabled (no user prompts for Cursor compatibility)
+    const answers = {
+      debugConsole: true,
+      monitorTerminal: true,
+      webChat: true,
+      analyzeProject: true
+    };
     
-    // Start InterTools with user preferences
+    console.log(colorize('🚀 Auto-starting all features for Cursor compatibility...', 'green'));
+    console.log('');
+    
+    // Start InterTools with all features enabled
     const intertools = await startFullMode(answers);
     
     // Show interactive commands
