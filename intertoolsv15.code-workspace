@@ -1,0 +1,18 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"terminal.integrated.env.osx": {
+			"PATH": "${env:PATH}:/Users/alexhorton/.local/bin"
+		},
+		"terminal.integrated.env.linux": {
+			"PATH": "${env:PATH}:/Users/alexhorton/.local/bin"
+		},
+		"terminal.integrated.env.windows": {
+			"PATH": "${env:PATH};/Users/alexhorton/.local/bin"
+		}
+	}
+}
