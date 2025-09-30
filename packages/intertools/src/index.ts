@@ -583,8 +583,8 @@ export class InterTools {
     components: Record<string, any>;
   } {
     return {
-      version: '1.1.0',
-      license: 'FREE - All features available',
+      version: '1.1.1',
+      license: 'FREE and Open Source - All features available',
       features: this.config.features || {},
       components: {
         terminalMonitor: this.terminalMonitor ? 'initialized' : 'not_initialized',

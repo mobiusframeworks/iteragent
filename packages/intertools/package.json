@@ -1,7 +1,7 @@
 {
   "name": "intertools",
-  "version": "1.1.0",
-  "description": "🚀 Professional development assistant with Backend Engineer Mode. Auto-starts with full functionality, no prompts, iterative problem solving. Features: AI chat orchestrator, terminal monitoring, file analysis, error correction, performance optimization. Completely FREE!",
+  "version": "1.1.1",
+  "description": "🚀 Professional development assistant with Backend Engineer Mode. Auto-starts with full functionality, no prompts, iterative problem solving. Features: AI chat orchestrator, terminal monitoring, file analysis, error correction, performance optimization. Completely FREE and Open Source!",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "bin": {
