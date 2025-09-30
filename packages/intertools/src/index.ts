@@ -583,7 +583,7 @@ export class InterTools {
     components: Record<string, any>;
   } {
     return {
-      version: '1.1.3',
+      version: '1.1.4',
       license: 'FREE and Open Source - All features available',
       features: this.config.features || {},
       components: {

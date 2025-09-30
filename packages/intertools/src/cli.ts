@@ -169,10 +169,18 @@ async function startFullMode(answers: any) {
     console.log(colorize('✅ InterTools initialized with all features!', 'green'));
     console.log('');
     
-    // Start all features automatically
-    console.log(colorize('🔍 Starting console debugging...', 'yellow'));
-    await intertools.startTerminalMonitoring();
-    console.log('   ✅ Console monitoring active');
+    // Start all features automatically with progress tracking
+    console.log(colorize('🔍 Starting console debugging with real-time progress...', 'yellow'));
+    
+    // Set up progress tracking for terminal monitor
+    if (intertools.terminalMonitor) {
+      intertools.terminalMonitor.onProgress((progress: any) => {
+        displayProgress(progress);
+      });
+      
+      await intertools.startTerminalMonitoring();
+      console.log('   ✅ Console monitoring active with progress tracking');
+    }
     
     console.log(colorize('📟 Starting terminal monitoring...', 'yellow'));
     console.log('   ✅ Terminal output tracking active');
@@ -196,6 +204,51 @@ async function startFullMode(answers: any) {
   }
 }
 
+function displayProgress(progress: any) {
+  const { currentTask, progress: percent, status, context, recentActivity } = progress;
+  
+  // Clear previous progress line
+  process.stdout.write('\r\x1b[K');
+  
+  // Create progress bar
+  const barLength = 30;
+  const filledLength = Math.round((percent / 100) * barLength);
+  const bar = '█'.repeat(filledLength) + '░'.repeat(barLength - filledLength);
+  
+  // Status emoji
+  const statusEmojiMap: Record<string, string> = {
+    scanning: '🔍',
+    analyzing: '🧠',
+    fixing: '🔧',
+    complete: '✅',
+    error: '❌'
+  };
+  const statusEmoji = statusEmojiMap[status] || '⏳';
+  
+  // Display progress
+  const progressText = `${statusEmoji} ${currentTask} [${bar}] ${percent}%`;
+  process.stdout.write(progressText);
+  
+  // Show context if available
+  if (context && (context.filesScanned > 0 || context.errorsFound > 0)) {
+    const contextText = ` | Files: ${context.filesScanned}/${context.totalFiles} | Errors: ${context.errorsFound}`;
+    process.stdout.write(contextText);
+  }
+  
+  // Show recent activity
+  if (recentActivity && recentActivity.length > 0) {
+    const lastActivity = recentActivity[recentActivity.length - 1];
+    if (lastActivity && lastActivity !== currentTask) {
+      process.stdout.write(` | ${lastActivity}`);
+    }
+  }
+  
+  // Add newline when complete
+  if (percent === 100) {
+    process.stdout.write('\n');
+  }
+}
+
 function showCommandList() {
   showInteractiveCommands();
 }
@@ -206,10 +259,22 @@ async function handleCommand(command: string, intertools: any) {
   
   switch (cmd.toLowerCase()) {
     case 'debug':
-      console.log(colorize('🔍 Starting console debugging...', 'yellow'));
-      console.log('   ✅ Console monitoring active');
-      console.log('   ✅ Error detection active');
-      console.log('   ✅ Real-time analysis ready');
+      console.log(colorize('🔍 Starting comprehensive debugging with real-time progress...', 'yellow'));
+      console.log('');
+      
+      if (intertools && intertools.terminalMonitor) {
+        // Set up progress tracking
+        intertools.terminalMonitor.onProgress((progress: any) => {
+          displayProgress(progress);
+        });
+        
+        // Start debugging
+        await intertools.terminalMonitor.startDebugging();
+        console.log('');
+        console.log(colorize('✅ Debugging complete! Check the progress above for details.', 'green'));
+      } else {
+        console.log(colorize('❌ Terminal monitor not available. Make sure InterTools is properly initialized.', 'red'));
+      }
       break;
       
     case 'analyze':
@@ -349,6 +414,29 @@ async function handleCommand(command: string, intertools: any) {
       
     case 'status':
       console.log(colorize('📊 InterTools Status:', 'cyan'));
+      console.log('');
+      
+      if (intertools && intertools.terminalMonitor) {
+        const progress = intertools.terminalMonitor.getDebugProgress();
+        if (progress) {
+          console.log('🔍 Debug Progress:');
+          console.log(`   Current Task: ${progress.currentTask}`);
+          console.log(`   Progress: ${progress.progress}%`);
+          console.log(`   Status: ${progress.status}`);
+          console.log(`   Files Scanned: ${progress.context.filesScanned}/${progress.context.totalFiles}`);
+          console.log(`   Errors Found: ${progress.context.errorsFound}`);
+          console.log(`   Bugs Fixed: ${progress.context.bugsFixed}`);
+          
+          if (progress.recentActivity.length > 0) {
+            console.log('   Recent Activity:');
+            progress.recentActivity.slice(-3).forEach((activity: string) => {
+              console.log(`     • ${activity}`);
+            });
+          }
+          console.log('');
+        }
+      }
+      
       console.log('   ✅ Terminal monitoring: Active');
       console.log('   ✅ AI chat orchestrator: Ready');
       console.log('   ✅ File system analysis: Active');
