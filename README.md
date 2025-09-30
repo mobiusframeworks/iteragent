@@ -1,17 +1,17 @@
 # InterTools 🚀
 
-**Professional Development Assistant with Backend Engineer Mode** - Auto-starts with full functionality, no prompts, iterative problem solving. Features: AI chat orchestrator, terminal monitoring, file analysis, error correction, performance optimization. **Completely FREE** with all features available to everyone!
+**Professional Development Assistant with Backend Engineer Mode** - Auto-starts with full functionality, no prompts, iterative problem solving. Features: AI chat orchestrator, terminal monitoring, file analysis, error correction, performance optimization. **Completely FREE and Open Source** with all features available to everyone!
 
 [![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://choosealicense.com/licenses/mit/)
 [![Node.js Version](https://img.shields.io/badge/node-%3E%3D18.0.0-brightgreen)](https://nodejs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.3+-blue)](https://www.typescriptlang.org/)
 [![InterTools](https://img.shields.io/badge/InterTools-FREE-brightgreen)](https://intertools.pro)
 [![Version](https://img.shields.io/badge/Version-1.1.0-blue)](https://www.npmjs.com/package/intertools)
-[![All Features Free](https://img.shields.io/badge/All%20Features-FREE-success)](https://www.npmjs.com/package/intertools)
+[![All Features Free](https://img.shields.io/badge/All%20Features-FREE%20%26%20Open%20Source-success)](https://www.npmjs.com/package/intertools)
 
 ## ✨ What is InterTools?
 
-InterTools is a **Backend Engineer Mode** development assistant that auto-starts with full functionality, no prompts required. It provides iterative problem solving with file and terminal references, AI-powered error correction, and comprehensive monitoring. **ALL features are completely FREE** - no limits, no subscriptions, no payments required.
+InterTools is a **Backend Engineer Mode** development assistant that auto-starts with full functionality, no prompts required. It provides iterative problem solving with file and terminal references, AI-powered error correction, and comprehensive monitoring. **ALL features are completely FREE and Open Source** - no limits, no subscriptions, no payments required.
 
 ### 🎯 **Backend Engineer Mode Features**
 1. **🚀 Auto-Start** - Full functionality with no prompts or setup
@@ -269,9 +269,10 @@ console.log(answer);
 
 ### **Version Information**
 - **Current Version**: 1.1.0
-- **License**: MIT (Completely FREE)
+- **License**: MIT (Completely FREE and Open Source)
 - **Node.js**: >=18.0.0
 - **TypeScript**: 5.3+
+- **Repository**: Open source on GitHub
 
 ## 🎉 Why InterTools?
 
@@ -282,11 +283,12 @@ console.log(answer);
 - **Terminal Integration**: Real-time monitoring
 - **AI-Powered**: Intelligent error correction
 
-### **💡 Completely FREE**
+### **💡 Completely FREE and Open Source**
 - **No Limits**: All features available to everyone
 - **No Subscriptions**: No payment required
 - **No Restrictions**: Full functionality included
-- **Open Source**: MIT License
+- **Open Source**: MIT License - view, modify, and contribute
+- **Community Driven**: Built by developers, for developers
 
 ### **🔧 Professional Grade**
 - **Production Ready**: Used by professional developers
@@ -302,12 +304,21 @@ MIT License - see [LICENSE](LICENSE) file for details.
 
 ## 🤝 Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+Contributions are welcome! InterTools is open source and community-driven. Please feel free to submit a Pull Request.
+
+### **How to Contribute**
+- **🐛 Report Issues**: Found a bug? Let us know!
+- **💡 Suggest Features**: Have ideas? We'd love to hear them!
+- **🔧 Submit PRs**: Fix bugs or add features
+- **📚 Improve Docs**: Help others by improving documentation
+- **⭐ Star the Repo**: Show your support!
 
 ## ⭐ Star This Repository
 
-If you find InterTools helpful, please give it a star on GitHub!
+If you find InterTools helpful, please give it a star on GitHub! Your support helps us continue developing this free and open source tool for the community.
 
 ---
 
 **InterTools v1.1.0** - Professional Development Assistant with Backend Engineer Mode
+
+*Completely FREE and Open Source - No trials, no subscriptions, no payments required.*
