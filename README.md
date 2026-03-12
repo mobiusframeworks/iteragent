@@ -1,324 +1,70 @@
-# InterTools 🚀
+# iteragent
 
-**Professional Development Assistant with Backend Engineer Mode** - Auto-starts with full functionality, no prompts, iterative problem solving. Features: AI chat orchestrator, terminal monitoring, file analysis, error correction, performance optimization. **Completely FREE and Open Source** with all features available to everyone!
+A developer tool that gives AI coding assistants (Claude, Cursor) awareness of your running web application by capturing console logs, errors, and network activity from the browser and feeding them back into your development workflow.
 
-[![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://choosealicense.com/licenses/mit/)
-[![Node.js Version](https://img.shields.io/badge/node-%3E%3D18.0.0-brightgreen)](https://nodejs.org/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.3+-blue)](https://www.typescriptlang.org/)
-[![InterTools](https://img.shields.io/badge/InterTools-FREE-brightgreen)](https://intertools.pro)
-[![Version](https://img.shields.io/badge/Version-1.1.0-blue)](https://www.npmjs.com/package/intertools)
-[![All Features Free](https://img.shields.io/badge/All%20Features-FREE%20%26%20Open%20Source-success)](https://www.npmjs.com/package/intertools)
+## The Problem
 
-## ✨ What is InterTools?
+AI coding assistants are blind to the front end. When you're building a web app, Claude Code and Cursor can read your source files and terminal output — but they can't see what's actually happening in the browser. Runtime errors, failed API calls, console warnings, and UI state are invisible unless you manually copy-paste them.
 
-InterTools is a **Backend Engineer Mode** development assistant that auto-starts with full functionality, no prompts required. It provides iterative problem solving with file and terminal references, AI-powered error correction, and comprehensive monitoring. **ALL features are completely FREE and Open Source** - no limits, no subscriptions, no payments required.
+Tools like Playwright solve this for testing, but they're heavyweight for iterative development. You don't need a headless browser — you need a lightweight bridge between your running app and your AI assistant.
 
-### 🎯 **Backend Engineer Mode Features**
-1. **🚀 Auto-Start** - Full functionality with no prompts or setup
-2. **🔧 Iterative Problem Solving** - Step-by-step error resolution with file references
-3. **📁 File System Analysis** - Tracks files, lines, and specific issues
-4. **📟 Terminal Integration** - Real-time terminal output monitoring
-5. **🤖 AI-Powered Error Correction** - Intelligent analysis and auto-fix suggestions
-6. **⚡ Performance Optimization** - Continuous monitoring and improvement insights
-7. **🎯 Backend Engineer Workflow** - Professional debugging approach
-8. **📊 Real-time Monitoring** - Live system status and error detection
-9. **🔄 Auto-Correction** - Suggests and implements fixes automatically
-10. **💡 Zero Configuration** - Run `npx intertools` and get full functionality immediately
+## How It Works
 
-## 🚀 Quick Start (Backend Engineer Mode)
+iteragent runs a local server that captures output from your web application and makes it available to your AI development environment:
 
-### **Installation**
+```
+Browser (localhost:3000)  →  iteragent (captures logs)  →  Claude / Cursor (reads context)
+```
+
+1. A small script in your web app sends console logs, errors, and network requests to iteragent's local endpoint
+2. iteragent aggregates and formats the output
+3. Your AI assistant reads the captured context to understand what's happening at runtime
+
+## Quick Start
+
 ```bash
-# Install InterTools
 npm install intertools
-
-# Or run directly without installation
 npx intertools
 ```
 
-### **Immediate Usage**
-When you run `npx intertools`, you get:
+Add the capture script to your web app:
 
-```bash
-🚀 InterTools - Professional Development Assistant
-Backend Engineer Mode: Full functionality, no prompts, iterative problem solving
-
-🎯 AUTO-STARTING ALL FEATURES:
-   ✅ Console log capture and analysis
-   ✅ Terminal monitoring and error detection
-   ✅ File system analysis and references
-   ✅ AI-powered iterative problem solving
-   ✅ Backend engineer debugging approach
-   ✅ Real-time error correction suggestions
-   ✅ Performance optimization insights
-   ✅ Build process analysis and fixes
-
-🔧 InterTools> help
-[Comprehensive command list shown]
+```html
+<script src="http://localhost:4000/capture.js"></script>
 ```
 
-### **Available Commands**
+Or programmatically:
 
-#### **🔍 Analysis Commands**
-- `analyze <path>` - Analyze codebase for issues
-- `logs` - Show recent console logs
-- `errors` - List all errors found
-- `performance` - Check performance metrics
-- `build` - Analyze build process
-
-#### **🛠️ Fix Commands**
-- `fix <error>` - Auto-fix specific error
-- `optimize <file>` - Optimize specific file
-- `refactor <pattern>` - Refactor code pattern
-- `test <component>` - Run tests and fix issues
-
-#### **🤖 AI Commands**
-- `ask <question>` - Ask AI about code issues
-- `explain <error>` - Get detailed error explanation
-- `suggest <context>` - Get improvement suggestions
-- `review <file>` - AI code review
-
-#### **📊 Monitoring Commands**
-- `monitor` - Start real-time monitoring
-- `watch <file>` - Watch specific file for changes
-- `status` - Show system status
-- `dashboard` - Open monitoring dashboard
-
-#### **⚡ Quick Commands**
-- `help` - Show command list
-- `exit` - Exit InterTools
-- `clear` - Clear screen
-## 💻 Code Examples
-
-### **Basic Usage**
 ```javascript
 const { InterTools } = require('intertools');
 
-// Initialize InterTools (auto-starts all features)
 const intertools = new InterTools();
-
-// Start comprehensive monitoring
-await intertools.startDevelopmentMonitoring({
-  terminal: true,
-  localhost: 'http://localhost:3000',
-  production: 'https://yoursite.com',
-  analytics: 'GA_TRACKING_ID'
-});
-
-// Use AI chat orchestrator
-const chat = await intertools.startChatOrchestrator();
-const answer = await intertools.askAI('Why is my app slow?');
-console.log(answer);
-```
-
-### **Backend Engineer Mode Commands**
-```javascript
-// Analyze codebase for issues
-const analysis = await intertools.analyzeCodebase('./src');
-console.log(analysis.issues);
-
-// Auto-fix specific error
-const fixResult = await intertools.autoFixError('connection timeout');
-console.log(fixResult.changes);
-
-// Get iterative problem solving suggestions
-const suggestions = await intertools.getIterativeSuggestions({
-  error: 'unhandled promise rejection',
-  file: 'src/api.js'
-});
-console.log(suggestions.steps);
-
-// Backend engineer style code review
-const review = await intertools.reviewCode('src/database.js');
-console.log(review.issues);
-```
-
-### **Advanced Features**
-```javascript
-// Terminal monitoring
-const logs = await intertools.captureTerminalLogs();
-
-// Localhost analysis
-const localhostData = await intertools.monitorLocalhost('http://localhost:3000');
-
-// Production monitoring
-const prodData = await intertools.monitorProductionSite('https://yoursite.com');
-
-// Google Analytics
-const analytics = await intertools.integrateGoogleAnalytics({ trackingId: 'GA_ID' });
-
-// Generate insights
-const insights = await intertools.generateInsights();
-console.log(insights.recommendations);
-## 🎯 Backend Engineer Workflow
-
-InterTools works like a professional backend engineer:
-
-1. **🔍 Captures** console logs automatically
-2. **📁 References** files and terminal output
-3. **🧠 Analyzes** errors iteratively
-4. **🛠️ Suggests** fixes with specific file locations
-5. **📊 Monitors** results and provides follow-up actions
-6. **⚡ Optimizes** performance continuously
-
-### **Iterative Problem Solving**
-- **Step 1**: Analyze error and stack trace
-- **Step 2**: Check related files and dependencies
-- **Step 3**: Implement fix and test solution
-- **Step 4**: Monitor results and performance impact
-- **Step 5**: Review and optimize for future prevention
-
-### **File and Terminal References**
-- Tracks specific files, lines, and code patterns
-- Monitors terminal output in real-time
-- Provides context-aware suggestions
-- Links errors to specific code locations
-## 📦 Installation & Usage
-
-### **Installation**
-```bash
-# Install InterTools
-npm install intertools
-
-# Or run directly without installation
-npx intertools
-```
-
-### **Quick Start**
-```bash
-# Run InterTools in Backend Engineer Mode
-npx intertools
-
-# You'll immediately get:
-# 🚀 InterTools - Professional Development Assistant
-# Backend Engineer Mode: Full functionality, no prompts, iterative problem solving
-# 
-# 🎯 AUTO-STARTING ALL FEATURES:
-#    ✅ Console log capture and analysis
-#    ✅ Terminal monitoring and error detection
-#    ✅ File system analysis and references
-#    ✅ AI-powered iterative problem solving
-#    ✅ Backend engineer debugging approach
-#    ✅ Real-time error correction suggestions
-#    ✅ Performance optimization insights
-#    ✅ Build process analysis and fixes
-# 
-# 🔧 InterTools> help
-# [Comprehensive command list shown]
-```
-
-### **Programmatic Usage**
-```javascript
-const { InterTools } = require('intertools');
-
-// Initialize with auto-start (default)
-const intertools = new InterTools();
-
-// All features are immediately available
 await intertools.startDevelopmentMonitoring({
   terminal: true,
   localhost: 'http://localhost:3000'
 });
-
-// Use AI chat orchestrator
-const answer = await intertools.askAI('Analyze this error');
-console.log(answer);
 ```
 
-## 🎯 Key Features
+## What It Captures
 
-### **🚀 Backend Engineer Mode**
-- **Auto-Start**: Full functionality with no prompts or setup
-- **Iterative Problem Solving**: Step-by-step error resolution with file references
-- **File System Analysis**: Tracks files, lines, and specific issues
-- **Terminal Integration**: Real-time terminal output monitoring
-- **AI-Powered Error Correction**: Intelligent analysis and auto-fix suggestions
-- **Performance Optimization**: Continuous monitoring and improvement insights
+- **Console output** — logs, warnings, errors from the browser
+- **Runtime errors** — uncaught exceptions with stack traces
+- **Network requests** — failed API calls, slow responses, status codes
+- **Build errors** — webpack/vite build failures and warnings
 
-### **🤖 AI Chat Orchestrator**
-- **Interactive Debugging**: Real-time conversation with AI about your code
-- **Error Analysis**: Deep stack trace analysis and intelligent suggestions
-- **Performance Insights**: Memory usage, CPU metrics, and optimization recommendations
-- **Code Review**: Backend engineer style analysis and suggestions
+## Why I Built This
 
-### **📊 Monitoring & Analytics**
-- **Terminal Monitoring**: Real-time terminal log capture and analysis
-- **Localhost Analysis**: HTML and console log capture from development servers
-- **Production Monitoring**: Live site performance tracking, SEO analysis, security scanning
-- **Google Analytics Integration**: Traffic insights, user behavior analysis, conversion tracking
+I ship full-stack products using Claude Code and Cursor as my primary development environments. The biggest friction point was the feedback loop: I'd make a change, check the browser, see an error, then have to describe or paste it back to Claude. iteragent closes that loop automatically.
 
-### **🔧 Development Tools**
-- **Build Process Analysis**: Build time optimization and bundle size analysis
-- **Error Tracking**: Comprehensive error detection and resolution
-- **Performance Monitoring**: Advanced metrics and optimization insights
-- **IDE Integration**: Cursor, VS Code, WebStorm support with formatted reports
+Built with TypeScript. MIT License.
 
-## 📚 Documentation & Support
+## Tech Stack
 
-### **Resources**
-- **📦 NPM Package**: https://www.npmjs.com/package/intertools
-- **📚 GitHub Repository**: https://github.com/luvs2spluj/intertools
-- **🐛 Issues & Support**: https://github.com/luvs2spluj/intertools/issues
-- **💬 Discussions**: https://github.com/luvs2spluj/intertools/discussions
+- TypeScript / Node.js
+- WebSocket for real-time log streaming
+- Express for the local capture server
+- Works with any web framework (React, Next.js, vanilla JS)
 
-### **Getting Help**
-- **🎯 Run this menu**: `npx intertools`
-- **📖 Check status**: `intertools.getStatus()`
-- **🔍 List features**: `intertools.getFeatures()`
-- **💬 Ask AI**: `intertools.askAI('your question')`
+## Contributing
 
-### **Version Information**
-- **Current Version**: 1.1.0
-- **License**: MIT (Completely FREE and Open Source)
-- **Node.js**: >=18.0.0
-- **TypeScript**: 5.3+
-- **Repository**: Open source on GitHub
-
-## 🎉 Why InterTools?
-
-### **🚀 Backend Engineer Mode**
-- **No Prompts**: Auto-starts with full functionality
-- **Iterative Solving**: Step-by-step problem resolution
-- **File References**: Tracks specific files and lines
-- **Terminal Integration**: Real-time monitoring
-- **AI-Powered**: Intelligent error correction
-
-### **💡 Completely FREE and Open Source**
-- **No Limits**: All features available to everyone
-- **No Subscriptions**: No payment required
-- **No Restrictions**: Full functionality included
-- **Open Source**: MIT License - view, modify, and contribute
-- **Community Driven**: Built by developers, for developers
-
-### **🔧 Professional Grade**
-- **Production Ready**: Used by professional developers
-- **Cross-Platform**: Works on Windows, macOS, Linux
-- **IDE Integration**: Cursor, VS Code, WebStorm support
-- **Real-time**: Instant analysis and feedback
-
----
-
-## 📄 License
-
-MIT License - see [LICENSE](LICENSE) file for details.
-
-## 🤝 Contributing
-
-Contributions are welcome! InterTools is open source and community-driven. Please feel free to submit a Pull Request.
-
-### **How to Contribute**
-- **🐛 Report Issues**: Found a bug? Let us know!
-- **💡 Suggest Features**: Have ideas? We'd love to hear them!
-- **🔧 Submit PRs**: Fix bugs or add features
-- **📚 Improve Docs**: Help others by improving documentation
-- **⭐ Star the Repo**: Show your support!
-
-## ⭐ Star This Repository
-
-If you find InterTools helpful, please give it a star on GitHub! Your support helps us continue developing this free and open source tool for the community.
-
----
-
-**InterTools v1.1.0** - Professional Development Assistant with Backend Engineer Mode
-
-*Completely FREE and Open Source - No trials, no subscriptions, no payments required.*
+Issues and PRs welcome.
